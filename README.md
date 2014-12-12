@@ -10,9 +10,10 @@ Convention attendee management software (registration/check in)
 Requirements
 ============
 
-- Apache (Todo: version?)
-- PHP (Todo: version?)
-- MySQL (Todo: version?)
+- Apache 2
+- PHP 5
+- PEAR
+- MySQL 5.1
 
 
 Installation
