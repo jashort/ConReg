@@ -1,0 +1,13 @@
+[24-Aug-2014 21:09:08 America/Los_Angeles] PHP Parse error:  syntax error, unexpected T_ECHO in /home/timothyz/public_html/tablet/tablet_add.php on line 25
+[24-Aug-2014 21:09:14 America/Los_Angeles] PHP Parse error:  syntax error, unexpected T_ECHO in /home/timothyz/public_html/tablet/tablet_add.php on line 25
+[25-Aug-2014 21:35:50 America/Los_Angeles] PHP Parse error:  syntax error, unexpected T_VARIABLE in /home/timothyz/public_html/tablet/tablet_add.php on line 18
+[25-Aug-2014 21:37:20 America/Los_Angeles] PHP Warning:  require(../includes/funcitons.php) [<a href='function.require'>function.require</a>]: failed to open stream: No such file or directory in /home/timothyz/public_html/tablet/tablet_add.php on line 3
+[25-Aug-2014 21:37:20 America/Los_Angeles] PHP Warning:  require(../includes/funcitons.php) [<a href='function.require'>function.require</a>]: failed to open stream: No such file or directory in /home/timothyz/public_html/tablet/tablet_add.php on line 3
+[25-Aug-2014 21:37:20 America/Los_Angeles] PHP Fatal error:  require() [<a href='function.require'>function.require</a>]: Failed opening required '../includes/funcitons.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/timothyz/public_html/tablet/tablet_add.php on line 3
+[25-Aug-2014 21:37:51 America/Los_Angeles] PHP Fatal error:  Uncaught exception 'PDOException' with message 'SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens' in /home/timothyz/public_html/tablet/tablet_add.php:12
+Stack trace:
+#0 /home/timothyz/public_html/tablet/tablet_add.php(12): PDOStatement->execute(Array)
+#1 /home/timothyz/public_html/tablet/tablet_add.php(19): tabletadd('Test', 'Guy', '1234', 'testguy@example...', '123-123-1234', 1981, 'Jason', '123-123-1234', 'true', 'Jason', '123-123-1234', 'weekend')
+#2 {main}
+  thrown in /home/timothyz/public_html/tablet/tablet_add.php on line 12
+[25-Aug-2014 22:14:41 America/Los_Angeles] PHP Fatal error:  Call to a member function prepare() on a non-object in /home/timothyz/public_html/tablet/tablet_add.php on line 30

@@ -1,0 +1,35 @@
+<form id="signup-form" ng-submit="processForm('form.confirm')">
+
+<div class="form-group">
+    <label for="passtype">Pass Type</label>
+    <select class="form-control" ng-model="formData.PassType" focus auto-focus>
+        <option value="weekend">Full Weekend Pass ($55)</option>
+        <option value="day">Single Day Pass ($25 Friday, $35 Saturday, $35 Sunday, $25 Monday)</option>
+        <option value="weekend">Under 12 - Full Weekend Pass ($35)</option>
+        <option value="day">Under 12 - Single Day Pass ($15 Friday, $25 Saturday, $25 Sunday, $15 Monday)</option>
+        <option value="weekend">5 or Under - Free)</option>
+    </select>
+</div>
+
+<div class="form-group row top-buffer">
+<div class="col-sm-2">
+    <a ui-sref="form.name" class="btn btn-block btn-danger" ng-click="clearForm()">
+    Start Over
+    </a>
+</div>
+
+<div class="col-sm-3 col-sm-offset-4">
+    <a ui-sref="form.consent" class="btn btn-block btn-info">
+    <span class="glyphicon glyphicon-circle-arrow-left"></span> Previous Section 
+    </a>
+</div>
+
+<div class="col-sm-3">
+    <button class="btn btn-block btn-info" id="nextbutton">Next Section</button>
+</div>
+</div>
+
+
+
+</form>
+

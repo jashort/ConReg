@@ -1,0 +1,47 @@
+<form id="signup-form" ng-submit="processForm('form.passtype')">
+
+<div class="form-group">
+    <label for="birtmonth">Birthday</label>
+    <input type="number" class="form-control" style="width: 5em; display: inline-block; margin-left: 2em;" name="birthmonth" ng-model="formData.BirthMonth" placeholder="MM" autocomplete="off" max="12" min="1" maxlength="2" required focus auto-focus> /
+    <input type="number" class="form-control" style="width: 5em; display: inline-block;" name="birthday" ng-model="formData.BirthDay" placeholder="DD" autocomplete="off" min="1" max="31" maxlength="2" required focus> /
+    <input type="number" class="form-control" style="width: 7em; display: inline-block;" name="birthyear" ng-model="formData.BirthYear" placeholder="YYYY" autocomplete="off" min="1900" max="2014" maxlength="4" required focus>
+</div>
+
+
+<div class="form-group top-buffer">
+    <label for="same">Use Emergency<br>Contact Information</label>
+    <input type="checkbox" class="form-control" style="width: 5em; display: inline-block; margin-left: 2em;" name="same" ng-model="formData.Same" ng-change="copyContact()" autocomplete="off" >
+</div>
+
+
+
+<div class="form-group">
+    <label for="parentname">Parent Name (Required for attendees under 18)</label>
+    <input type="text" class="form-control" name="parentname" ng-model="formData.PCFullName" autocomplete="off" focus>
+</div>
+
+<div class="form-group">
+    <label for="parentname">Parent Phone Number (Required for attendees under 18)</label>
+    <input type="tel" class="form-control" name="parentphone" ng-model="formData.PCPhoneNumber" autocomplete="off" focus>
+</div>
+
+
+<div class="form-group row top-buffer">
+<div class="col-sm-2">
+    <a ui-sref="form.name" class="btn btn-block btn-danger" ng-click="clearForm()">
+    Start Over
+    </a>
+</div>
+
+<div class="col-sm-3 col-sm-offset-4">
+    <a ui-sref="form.contact" class="btn btn-block btn-info">
+    <span class="glyphicon glyphicon-circle-arrow-left"></span> Previous Section 
+    </a>
+</div>
+
+<div class="col-sm-3">
+    <button class="btn btn-block btn-info" id="nextbutton">Next Section</button>
+</div>
+</div>
+
+</form>
