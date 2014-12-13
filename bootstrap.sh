@@ -20,7 +20,7 @@ apt-get install mysql-server -y > /dev/null
 
 echo Dropping database
 mysql -uroot -p$MYSQL_ROOT_PWD -h$DB_HOSTNAME -e "DROP USER '$APP_DB_USER'@'$DB_HOSTNAME'"
-mysql -uroot -p$MYSQL_ROOT_PWD -h$DB_HOSTNAME -e "DROP DATABASE $APP_DATABASE IF EXISTS"
+mysql -uroot -p$MYSQL_ROOT_PWD -h$DB_HOSTNAME -e "DROP DATABASE $APP_DATABASE"
 echo Creating database
 mysql -uroot -p$MYSQL_ROOT_PWD -h$DB_HOSTNAME -e "CREATE DATABASE $APP_DATABASE"
 mysql -uroot -p$MYSQL_ROOT_PWD -h$DB_HOSTNAME -e "grant SELECT, UPDATE, DELETE on $APP_DATABASE.* to '$APP_DB_USER'@'localhost' identified by '$APP_DB_PWD'"
