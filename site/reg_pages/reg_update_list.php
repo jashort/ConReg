@@ -9,7 +9,7 @@ if ($_GET['field'] == "ln") {
 $query_rs_update_list = sprintf("SELECT * FROM kumo_reg_data WHERE kumo_reg_data_lname LIKE '%s'", mysql_real_escape_string($colname_rs_checkin_list));
 }
 
-mysql_select_db($database_kumo_conn, $kumo_conn);
+mysql_select_db($db_name, $kumo_conn);
 //$query_rs_update_list = sprintf("SELECT * FROM kumo_reg_data WHERE kumo_reg_data_bnumber = %s", mysql_real_escape_string($colname_rs_update_list));
 $rs_update_list = mysql_query($query_rs_update_list, $kumo_conn) or die(mysql_error());
 $row_rs_update_list = mysql_fetch_assoc($rs_update_list);

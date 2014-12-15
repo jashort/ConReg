@@ -2,7 +2,7 @@
 <?php
 require('../includes/authcheck.php');
 
-mysql_select_db($database_kumo_conn, $kumo_conn);
+mysql_select_db($db_name, $kumo_conn);
 $query_rsAdminList = "SELECT * FROM kumo_reg_admin ORDER BY kumo_reg_admin_timestamp DESC";
 $rsAdminList = mysql_query($query_rsAdminList, $kumo_conn) or die(mysql_error());
 $row_rsAdminList = mysql_fetch_assoc($rsAdminList);

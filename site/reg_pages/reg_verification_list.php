@@ -5,7 +5,7 @@ require('../includes/authcheck.php');
 if (isset($_GET['letter'])) {
   $colname_rs_verification_list = $_GET['letter'];
 
-mysql_select_db($database_kumo_conn, $kumo_conn);
+mysql_select_db($db_name, $kumo_conn);
 $query_rs_verification_list = "SELECT * FROM kumo_reg_data WHERE kumo_reg_data_bnumber like '" .$colname_rs_verification_list . "%' order by kumo_reg_data_bnumber ASC";
 $rs_verification_list = mysql_query($query_rs_verification_list, $kumo_conn) or die(mysql_error());
 $row_rs_verification_list = mysql_fetch_assoc($rs_verification_list);

@@ -6,7 +6,7 @@ $colname_rs_attendee = "-1";
 if (isset($_GET['id'])) {
   $colname_rs_attendee = $_GET['id'];
 }
-mysql_select_db($database_kumo_conn, $kumo_conn);
+mysql_select_db($db_name, $kumo_conn);
 $query_rs_attendee = sprintf("SELECT * FROM kumo_reg_data WHERE kumo_reg_data_id = %s", mysql_real_escape_string($colname_rs_attendee));
 $rs_attendee = mysql_query($query_rs_attendee, $kumo_conn) or die(mysql_error());
 $row_rs_attendee = mysql_fetch_assoc($rs_attendee);

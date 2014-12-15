@@ -6,7 +6,7 @@ require('../includes/functions.php');
 if (isset($_GET['bn'])) {
   $colname_rs_checkin_list = $_GET['bn'];
 
-mysql_select_db($database_kumo_conn, $kumo_conn);
+mysql_select_db($db_name, $kumo_conn);
 $query_rs_checkin_list = sprintf("SELECT kumo_reg_quick_data_id, kumo_reg_quick_data_fname, kumo_reg_quick_data_lname, kumo_reg_quick_data_bnumber, kumo_reg_quick_data_completed FROM kumo_reg_quick_data WHERE kumo_reg_quick_data_bnumber = '%s'", mysql_real_escape_string($colname_rs_checkin_list));
 $rs_checkin_list = mysql_query($query_rs_checkin_list, $kumo_conn) or die(mysql_error());
 $row_rs_checkin_list = mysql_fetch_assoc($rs_checkin_list);
@@ -16,7 +16,7 @@ $totalRows_rs_checkin_list = mysql_num_rows($rs_checkin_list);
 
 if (isset($_GET['id'])) {
 	
-mysql_select_db($database_kumo_conn, $kumo_conn);
+mysql_select_db($db_name, $kumo_conn);
 $query_rs_complete_list = sprintf("SELECT kumo_reg_quick_data_fname, kumo_reg_quick_data_lname, kumo_reg_quick_data_bnumber FROM kumo_reg_quick_data WHERE kumo_reg_quick_data_id = '%s'", mysql_real_escape_string($_GET['id']));
 $rs_complete_list = mysql_query($query_rs_complete_list, $kumo_conn) or die(mysql_error());
 $row_rs_complete_list = mysql_fetch_assoc($rs_complete_list);

@@ -69,7 +69,7 @@ function badgeNumberUpdate() {
 //Deprecated but leaving for time being
 function regquickadd($FirstName, $LastName, $BadgeNumber) {
 	
-global $hostname_kumo_conn, $database_kumo_conn, $kumo_conn;
+global $db_hostname, $db_name, $kumo_conn;
 	
 	$insertSQL = sprintf("INSERT INTO kumo_reg_quick_data (kumo_reg_quick_data_fname, kumo_reg_quick_data_lname, kumo_reg_quick_data_bnumber, kumo_reg_quick_data_staff_add, kumo_reg_quick_data_completed) VALUES ('%s', '%s', '%s', '%s', 'N')",
                        mysql_real_escape_string($FirstName),
@@ -77,7 +77,7 @@ global $hostname_kumo_conn, $database_kumo_conn, $kumo_conn;
                        mysql_real_escape_string($BadgeNumber),
                        $_SESSION["MM_Username"]);
 
-  mysql_select_db($database_kumo_conn, $kumo_conn);
+  mysql_select_db($db_name, $kumo_conn);
   $Result1 = mysql_query($insertSQL, $kumo_conn) or die(mysql_error());
 
 unset ($_SESSION['var']);

@@ -6,7 +6,7 @@ require('../includes/authcheck.php');
 if (isset($_GET['id'])) {
 $colname_rs_lastyear_complete = $_GET['id'];
 
-mysql_select_db($database_kumo_conn, $kumo_conn);
+mysql_select_db($db_name, $kumo_conn);
 $query_rs_lastyear_complete = sprintf("SELECT * FROM kumo_reg_data_lastyear WHERE kumo_reg_data_lastyear_id = '%s'", mysql_real_escape_string($colname_rs_lastyear_complete));
 $rs_lastyear_complete = mysql_query($query_rs_lastyear_complete, $kumo_conn) or die(mysql_error());
 $row_rs_lastyear_complete = mysql_fetch_assoc($rs_lastyear_complete);
@@ -32,7 +32,7 @@ redirect("/reg_pages/reg_add.php");
 if (isset($_GET['ln'])) {
 $colname_rs_checkin_list = $_GET['ln'];
 
-mysql_select_db($database_kumo_conn, $kumo_conn);
+mysql_select_db($db_name, $kumo_conn);
 $query_rs_lastyear_list = sprintf("SELECT * FROM kumo_reg_data_lastyear WHERE kumo_reg_data_lastyear_lname LIKE '%s'", mysql_real_escape_string($colname_rs_checkin_list));
 $rs_lastyear_list = mysql_query($query_rs_lastyear_list, $kumo_conn) or die(mysql_error());
 $row_rs_lastyear_list = mysql_fetch_assoc($rs_lastyear_list);
