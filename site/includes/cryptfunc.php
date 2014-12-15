@@ -59,4 +59,3 @@ function crypt_decrypt($encrypted_string,$iv) {
     return $decrypted_string;
 }
 
-?>

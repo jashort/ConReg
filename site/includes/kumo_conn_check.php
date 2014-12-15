@@ -25,4 +25,3 @@ if (!$kumo_conn2) {
 else {
   $Database2 = "DATABASE SERVER 2 IS OK";
 }
-?>

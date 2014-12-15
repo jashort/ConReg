@@ -192,4 +192,3 @@ function redirect($location){
   header(sprintf("Location: %s", $insertGoTo));
 }
 
-?>

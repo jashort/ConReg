@@ -39,4 +39,3 @@ try {
     echo 'ERROR: ' . $e->getMessage();
 }
 
-?>

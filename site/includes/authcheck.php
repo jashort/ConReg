@@ -30,4 +30,3 @@ if (!(isset($_SESSION['username']))) {
   header("Location: " . $restrictGoTo); 
   exit;
 }
-?>

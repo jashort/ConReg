@@ -11,4 +11,3 @@ unset($_SESSION['access']);
 if ($logoutGoTo != "") {header("Location: $logoutGoTo");
 exit;
 }
-?>
