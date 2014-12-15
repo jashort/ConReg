@@ -25,14 +25,22 @@ echo Creating database
 mysql -uroot -p$MYSQL_ROOT_PWD -h$DB_HOSTNAME -e "CREATE DATABASE $APP_DATABASE"
 mysql -uroot -p$MYSQL_ROOT_PWD -h$DB_HOSTNAME -e "grant SELECT, UPDATE, DELETE on $APP_DATABASE.* to '$APP_DB_USER'@'localhost' identified by '$APP_DB_PWD'"
 
+
+echo Creating tables
+mysql -uroot -p$MYSQL_ROOT_PWD -h$DB_HOSTNAME < /vagrant/install/01-tables.sql
+
+
+
 echo Installing Apache and PHP
 apt-get install -y apache2 libapache2-mod-php5 php5-mysql php-db > /dev/null
+
 
 echo Mounting shared directories
 if ! [ -L /var/www ]; then
   rm -rf /var/www
   ln -fs /vagrant-site /var/www
 fi
+
 
 echo Writing configuration environment variables to /etc/apache2/conf.d/conreg.conf
 echo "# ConReg database connection information" > /etc/apache2/conf.d/conreg.conf
