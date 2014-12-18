@@ -24,6 +24,7 @@ CREATE TABLE registration.kumo_reg_data
     kumo_reg_data_id         INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     kumo_reg_data_fname      VARCHAR(60)     NOT NULL,
     kumo_reg_data_lname      VARCHAR(60)     NOT NULL,
+    kumo_reg_data_bname      VARCHAR(60) COMMENT 'Badge Name',
     kumo_reg_data_bnumber    VARCHAR(10),
     kumo_reg_data_phone      VARCHAR(60),
     kumo_reg_data_zip        VARCHAR(10),
@@ -42,8 +43,22 @@ CREATE TABLE registration.kumo_reg_data
     kumo_reg_data_paytype    VARCHAR(50),
     kumo_reg_data_checkedin  BOOLEAN,
     kumo_reg_data_notes      TEXT,
-    kumo_reg_data_staff_add  VARCHAR(60)
+    kumo_reg_data_staff_add  VARCHAR(60),
+    kumo_reg_data_timestamp  TIMESTAMP
 );
+
+
+CREATE TABLE kumo_reg_quick_data (
+    kumo_reg_quick_data_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    kumo_reg_quick_data_fname VARCHAR(60) NOT NULL,
+    kumo_reg_quick_data_lname VARCHAR(60) NOT NULL,
+    kumo_reg_quick_data_bnumber VARCHAR(10) NOT NULL,
+    kumo_reg_quick_data_staff_add VARCHAR(60) NOT NULL,
+    kumo_reg_quick_data_completed BOOLEAN,
+    kumo_reg_quick_data_timestamp TIMESTAMP
+);
+ALTER TABLE registration.kumo_reg_quick_data ADD CONSTRAINT unique_kumo_reg_quick_data_id UNIQUE (kumo_reg_quick_data_id);
+
 
 
 CREATE TABLE registration.orders
