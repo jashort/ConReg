@@ -23,11 +23,13 @@ mysql -uroot -p$MYSQL_ROOT_PWD -h$DB_HOSTNAME -e "DROP USER '$APP_DB_USER'@'$DB_
 mysql -uroot -p$MYSQL_ROOT_PWD -h$DB_HOSTNAME -e "DROP DATABASE $APP_DATABASE"
 echo Creating database
 mysql -uroot -p$MYSQL_ROOT_PWD -h$DB_HOSTNAME -e "CREATE DATABASE $APP_DATABASE"
-mysql -uroot -p$MYSQL_ROOT_PWD -h$DB_HOSTNAME -e "grant SELECT, UPDATE, DELETE on $APP_DATABASE.* to '$APP_DB_USER'@'localhost' identified by '$APP_DB_PWD'"
+mysql -uroot -p$MYSQL_ROOT_PWD -h$DB_HOSTNAME -e "grant SELECT, INSERT, UPDATE, DELETE on $APP_DATABASE.* to '$APP_DB_USER'@'localhost' identified by '$APP_DB_PWD'"
 
 
 echo Creating tables
 mysql -uroot -p$MYSQL_ROOT_PWD -h$DB_HOSTNAME < /vagrant/install/01-tables.sql
+echo "Adding default user (Username: admin, Password: password)"
+mysql -uroot -p$MYSQL_ROOT_PWD -h$DB_HOSTNAME < /vagrant/install/02-defaultuser.sql
 
 
 

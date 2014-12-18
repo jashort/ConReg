@@ -15,8 +15,9 @@ or set directly in /Connections/kumo_conn.php
 | REG_DB_PWD         | Database connection password       |
 
 
-3. Create database tables by running the script **TODO**
-4. Log in with the username "admin" and password "password"
+3. Create database tables by running the script install/01-tables.sql
+4. Create the initial user by running the SQL script install/02-defaultuser.sql
+5. Log in to the site with the username "admin" and password "password"
 
 
 Additional Configuration:
