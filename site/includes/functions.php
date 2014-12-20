@@ -45,6 +45,14 @@ unset ($_SESSION["PayType"]);
 unset ($_SESSION["Notes"]);
 }
 
+/**
+ * Returns the next available badge number for the logged in user
+ *
+ * Each staff member has their own badge number count. So after they have created two attendees,
+ * their badge number count would be 2.
+ *
+ * @return int
+ */
 function badgeNumberSelect() {
 	
 	global $conn;
@@ -65,6 +73,20 @@ function badgeNumberUpdate() {
     $stmt->execute(array('bnumber' => $badgeNumber, 'uname' => $_SESSION['username']));
 
 }
+
+/**
+ * Set the badge number for the logged in user to the given number
+ *
+ * @param $Number
+ */
+function badgeNumberSet($Number) {
+	global $conn;
+
+	$stmt = $conn->prepare("UPDATE kumo_reg_staff SET kumo_reg_staff_bnumber=:bnumber WHERE kumo_reg_staff_username=:uname");
+	$stmt->execute(array('bnumber' => $Number, 'uname' => $_SESSION['username']));
+
+}
+
 
 //Deprecated but leaving for time being
 function regquickadd($FirstName, $LastName, $BadgeNumber) {

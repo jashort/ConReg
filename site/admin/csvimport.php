@@ -8,10 +8,7 @@ if ($_FILES && $_FILES['csv']['size'] > 0) {
     $file = $_FILES['csv']['tmp_name'];
     $handle = fopen($file,"r");
 	
-	$stmt = $conn->prepare("SELECT kumo_reg_staff_bnumber FROM kumo_reg_staff WHERE kumo_reg_staff_username = :uname");
-    $stmt->execute(array('uname' => $_SESSION['username']));
-	$results = $stmt->fetch(PDO::FETCH_ASSOC);
-	$BNumber = $results['kumo_reg_staff_bnumber']+1;
+	$BNumber = badgeNumberSelect();
     
     //loop through the csv file and insert into database
 	$count = 0;
@@ -54,6 +51,9 @@ if ($_FILES && $_FILES['csv']['size'] > 0) {
 			$BNumber++;
 		}
     }
+
+	// Update the logged in user's last-created badge number.
+	badgeNumberSet($BNumber-1);
 
     //redirect
     header('Location: csvimport.php?success=1&count=' . $count); die;
@@ -135,13 +135,19 @@ function MM_goToURL() { //v3.0
 </div> 
 <div id="content"><!-- InstanceBeginEditable name="Content" -->
 <div>
-<?php if (!empty($_GET['success'])) { echo $_GET['count'] . " lines imported.</b><br><br>"; } // success notice ?>
-<form action="" method="post" enctype="multipart/form-data" name="form1" id="form1">
-	<p>Import Pre-registered Attendees</p>
-  Choose CSV file: <br />
-  <input name="csv" type="file" id="csv" />
-  <input type="submit" name="Submit" value="Submit" />
-</form>
+<?php if (!empty($_GET['success'])) { ?>
+
+	<? echo $_GET['count'] ?> lines imported. <a href="/">Continue</a><br>
+
+<? } else { ?>
+	<form action="" method="post" enctype="multipart/form-data" name="form1" id="form1">
+		<p>Import Pre-registered Attendees. Note: Importing the same file multiple times will create duplicates.</p>
+		Choose CSV file: <br />
+		<input name="csv" type="file" id="csv" />
+		<input type="submit" name="Submit" value="Submit" />
+	</form>
+
+<? }  ?>
 </div>
 <!-- InstanceEndEditable --></div>
 <div id="footer">&copy; Tim Zuidema</div> 
