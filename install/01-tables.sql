@@ -15,7 +15,6 @@ CREATE TABLE registration.kumo_reg_staff
     kumo_reg_staff_accesslevel INT DEFAULT 1 NOT NULL
 );
 ALTER TABLE registration.kumo_reg_staff ADD CONSTRAINT unique_kumo_reg_staff_id UNIQUE (kumo_reg_staff_id);
-ALTER TABLE registration.kumo_reg_staff ADD CONSTRAINT unique_kumo_reg_staff_bnumber UNIQUE (kumo_reg_staff_bnumber);
 ALTER TABLE registration.kumo_reg_staff ADD CONSTRAINT unique_kumo_reg_staff_initials UNIQUE (kumo_reg_staff_initials);
 
 
