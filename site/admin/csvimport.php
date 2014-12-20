@@ -25,7 +25,7 @@ if ($_FILES && $_FILES['csv']['size'] > 0) {
 
 			$BadgeNumber = "ONL" . $BNumber;
 
-			$PhoneNumber = $data[17];
+			$PhoneNumber = $data[16];
 			$Phone_Stripped = preg_replace("/[^a-zA-Z0-9s]/","",$PhoneNumber);
 
 			$date = explode("/",$data[18]);
