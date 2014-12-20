@@ -119,8 +119,6 @@ if (isset($_GET['id'])) {
       <?php
         } while ($row_rs_checkin_list = mysql_fetch_assoc($rs_checkin_list));
       ?>
-
-      ?>
     </table>
   <?php
     mysql_free_result($rs_checkin_list);
