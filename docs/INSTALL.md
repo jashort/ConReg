@@ -18,7 +18,9 @@ or set directly in /Connections/kumo_conn.php
 3. Create database tables by running the script install/01-tables.sql
 4. Create the initial user by running the SQL script install/02-defaultuser.sql
 5. Log in to the site with the username "admin" and password "password"
-
+6. Click Import CSV to import pre-registered attendees. See [example.csv](example.csv) for an example
+   data file. (You will probably have to customize csvimport.php with the current format
+   of the CSV file.)
 
 Additional Configuration:
 -------------------------
