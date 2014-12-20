@@ -6,9 +6,9 @@ if (!isset($_SESSION)) {
   session_start();
 }
 
-if ($_GET["action"] == "clear") {
-regclear();
-redirect("/index.php");
+if (array_key_exists('action',$_GET) && $_GET["action"] == "clear") {
+	regclear();
+	redirect("/index.php");
 }
 
 function regadd($FirstName, $LastName, $BadgeNumber, $PhoneNumber, $Zip, $BDate, $ECFullName, $ECPhoneNumber, $Same, $PCFullName, $PCPhoneNumber, $PForm, $Paid, $Amount, $PassType, $RegType, $PayType, $CheckedIn, $Notes) {
