@@ -17,8 +17,8 @@ if ($_FILES && $_FILES['csv']['size'] > 0) {
 	$count = 0;
 
 	while (($data = fgetcsv($handle,1000,",","'")) !== FALSE) {
-
-        if (count($data) > 1) {
+		// Skip empty lines and lines where the first field starts with "#"
+        if (count($data) > 1 && substr($data[0], 0, 1) != '#') {
 			$name = explode(" ",$data[0]);
 			$FirstName = $name[0];
 			$LastName = $name[1];
@@ -48,12 +48,11 @@ if ($_FILES && $_FILES['csv']['size'] > 0) {
 					$Amount = 300;
 					break;
 			}
-			
 			$stmt = $conn->prepare("INSERT INTO kumo_reg_data (kumo_reg_data_fname, kumo_reg_data_lname, kumo_reg_data_bnumber, kumo_reg_data_bname, kumo_reg_data_address, kumo_reg_data_city, kumo_reg_data_state, kumo_reg_data_zip, kumo_reg_data_phone, kumo_reg_data_email, kumo_reg_data_bdate, kumo_reg_data_ecfullname, kumo_reg_data_ecphone, kumo_reg_data_same, kumo_reg_data_parent, kumo_reg_data_parentphone, kumo_reg_data_parentform, kumo_reg_data_paid, kumo_reg_data_paidamount, kumo_reg_data_passtype, kumo_reg_data_regtype, kumo_reg_data_paytype, kumo_reg_data_checkedin, kumo_reg_data_staff_add) VALUES (:firstname, :lastname, :bnumber, :bname, :address, :city, :state, :zip, :phone, :email, :bdate, :ecname, :ecphone, 'No', :pcname, :pcphone, 'No', 'Yes', :amount, 'Weekend', 'PreReg', 'Credit/Debit', 'No', 'ONLINE')");
 			$stmt->execute(array('firstname' => $FirstName, 'lastname' => $LastName, 'bnumber' => $BadgeNumber, 'bname' => $data[11], 'address' => $data[12], 'city' => $data[13], 'state' => $data[14],'zip' => $data[15], 'phone' => $Phone_Stripped, 'email' => $data[17], 'bdate' => $BDate, 'ecname' => $data[20], 'ecphone' => $data[21], 'pcname' => $data[22], 'pcphone' => $data[23], 'amount' => $Amount));
 			$count += 1;
+			$BNumber++;
 		}
-		$BNumber++;
     }
 
     //redirect
