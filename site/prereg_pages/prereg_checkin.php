@@ -2,6 +2,23 @@
 require('../includes/functions.php');
 require('../includes/authcheck.php');
 
+if (isset($_POST["Update"])) {
+  if (isset($_POST["checkin"]) && $_POST["checkin"] == true) {
+    regcheckin($_POST["Id"]);
+    redirect("/index.php");
+    die();
+  } else {
+    /*
+     * TODO: Move error handing in to the form so the site is still displayed instead of
+     * just showing an error message
+     *
+     */
+    echo('Error: Attendee Information not verified. Click back and check "Verified Info" after verifying attendee information');
+    die();
+  }
+}
+
+
 $colname_rs_update = "-1";
 if (isset($_GET['id'])) {
   $colname_rs_update = $_GET['id'];
@@ -22,12 +39,6 @@ $BirthMonth = $Birthdate_array[1];
 $BirthDay = $Birthdate_array[2];
 
 $BDate = $BirthYear . "-" . $BirthMonth . "-" . $BirthDay;
-//
-//$year_diff = date("Y") - $_SESSION["BirthYear"];
-//$month_diff = date("m") - $_SESSION["BirthMonth"];
-//$day_diff = date("d") - $_SESSION["BirthDay"];
-//if (($month_diff < 0) && (($month_diff < 0) && ($day_diff < 0)) || (($month_diff <= 0) && ($day_diff < 0)))
-//$year_diff--;
 
 $year_diff = floor( (strtotime(date('Y-m-d')) - strtotime($BDate)) / 31556926);
 if ((date("m") == $BirthMonth) && (date("d") == $BirthDay) && ($BirthYear == "2012")) {
@@ -51,27 +62,8 @@ $Sunday = 30;
 $Monday = 25;
 }  
 
-$BDate = $_POST["BirthYear"] . "-" . $_POST["BirthMonth"] . "-" . $_POST["BirthDay"];
 
-switch ($_POST["PassType"]){
-	case "Weekend":
-		$PaidAmount = "45.00";
-		break;
-	case "Saturday":
-		$PaidAmount = "30.00";
-		break;	
-	case "Sunday":
-		$PaidAmount = "30.00";
-		break;	
-	case "Monday":
-		$PaidAmount = "25.00";
-		break;
-}
 
-if (isset($_POST["Update"])) {
-regcheckin($_POST["Id"]);
-redirect("/index.php");
-}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/main.dwt.php" codeOutsideHTMLIsLocked="false" -->
@@ -81,68 +73,7 @@ redirect("/index.php");
 <title>Kumoricon Registration</title>
 <!-- InstanceEndEditable -->
 <link href="../assets/css/kumoreg.css" rel="stylesheet" type="text/css" /> 
-</script>
-<script type="text/javascript">
-function MM_goToURL() { //v3.0
-  var i, args=MM_goToURL.arguments; document.MM_returnValue = false;
-  for (i=0; i<(args.length-1); i+=2) eval(args[i]+".location='"+args[i+1]+"'");
-}
-</script>
 <!-- InstanceBeginEditable name="head" -->
-<script type="text/javascript">
-function MM_validateForm() { //v4.0
-  if (document.getElementById){
-    var i,p,q,nm,test,num,min,max,errors='',args=MM_validateForm.arguments;
-    for (i=0; i<(args.length-2); i+=3) { test=args[i+2]; val=document.getElementById(args[i]);
-      if (val) { nm=val.id; if ((val=val.value)!="") {
-        if (test.indexOf('isEmail')!=-1) { p=val.indexOf('@');
-          if (p<1 || p==(val.length-1)) errors+='- '+nm+' must contain an e-mail address.\n';
-        } else if (test!='R') { num = parseFloat(val);
-          if (isNaN(val)) errors+='- '+nm+' must contain a number.\n';
-          if (test.indexOf('inRange') != -1) { p=test.indexOf(':');
-            min=test.substring(8,p); max=test.substring(p+1);
-            if (num<min || max<num) errors+='- '+nm+' must contain a number between '+min+' and '+max+'.\n';
-      } } } else if (test.charAt(0) == 'R') errors += '- '+nm+' is required.\n'; }
-    } if (errors) alert('The following error(s) occurred:\n'+errors);
-    document.MM_returnValue = (errors == '');
-} }
-function verifyEmail(){
-var status = false;     
-if (document.reg_add1.EMail.value != document.reg_add1.EMailV.value) {
-alert("Email addresses do not match.  Please retype them to make sure they are the same.");
-}}
-function sameInfo(){  
-if (document.reg_add2.Same.checked) {
-document.reg_add2.Same.value = "Y";
-document.reg_add2.PCFullName.value = document.reg_add2.ECFullName.value;
-document.reg_add2.PCPhoneNumber.value = document.reg_add2.ECPhoneNumber.value;
-} else {
-document.reg_add2.Same.value = "";
-document.reg_add2.PCFullName.value = "";
-document.reg_add2.PCPhoneNumber.value = "";
-}}
-function verifyForm(){
-if (document.reg_add2.PCFormVer.checked) {
-document.reg_add2.PCFormVer.value = "Y";
-} else {
-document.reg_add2.PCFormVer.value = "";
-}}
-
-function setAmount() {
-if (document.reg_add3.PassType_0.checked) {
-	document.reg_add3.Amount.value = "<?php echo $Weekend ?>";
-	} 
-else if (document.reg_add3.PassType_1.checked) {
-	document.reg_add3.Amount.value = "<?php echo $Saturday ?>";
-	} 
-else if (document.reg_add3.PassType_2.checked) {
-	document.reg_add3.Amount.value = "<?php echo $Sunday ?>";
-	} 
-else if (document.reg_add3.PassType_3.checked) {
-	document.reg_add3.Amount.value = "<?php echo $Monday ?>";
-	}
-}
-</script>
 <!-- InstanceEndEditable -->
 </head>
 <body>
@@ -303,7 +234,16 @@ else if (document.reg_add3.PassType_3.checked) {
 <fieldset id="checkin">
 <legend>CHECK IN</legend>
 <form action="/prereg_pages/prereg_checkin.php" method="post">
-<?php if ($row_rs_update['kumo_reg_data_checkedin'] == "Yes") { echo "<span class='display_text'>CHECKED IN</span>"; } else { echo "<input name='checkin' type='checkbox' id='Information Verification' class='checkbox' /><span class='display_text'>VERIFIED INFO</span><br /><div class='centerbutton'><input name=Id type=hidden value='" . $Id . "' /><input name='Update' type='submit' value='update' class='submit_button' /></div>";} ?>
+<?php if ($row_rs_update['kumo_reg_data_checkedin'] == "Yes") { ?>
+  <span class='display_text'>CHECKED IN</span>
+<? } else { ?>
+  <input name='checkin' type='checkbox' id='Information Verification' class='checkbox' />
+  <span class='display_text'>VERIFIED INFO</span><br />
+  <div class='centerbutton'>
+    <input name=Id type=hidden value='<? echo $Id ?>' />
+    <input name='Update' type='submit' value='update' class='submit_button' />
+  </div>
+<? } ?>
 
 </form>
 </fieldset>
