@@ -11,7 +11,7 @@ CREATE TABLE registration.kumo_reg_staff
     kumo_reg_staff_lname VARCHAR(60) NOT NULL,
     kumo_reg_staff_initials CHAR(3) NOT NULL,
     kumo_reg_staff_phone_number VARCHAR(60),
-    kumo_reg_staff_bnumber INT DEFAULT 1 NOT NULL COMMENT 'Next Badge Number',
+    kumo_reg_staff_bnumber INT DEFAULT 0 NOT NULL COMMENT 'Last Badge Number Created',
     kumo_reg_staff_accesslevel INT DEFAULT 1 NOT NULL
 );
 ALTER TABLE registration.kumo_reg_staff ADD CONSTRAINT unique_kumo_reg_staff_id UNIQUE (kumo_reg_staff_id);
