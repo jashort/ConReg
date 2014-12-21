@@ -127,8 +127,11 @@ function MM_goToURL() { //v3.0
                     <?php echo $row_rs_reports['regtotal']; ?>
     				<br />
       				Grand Total : <?php echo $row_rs_reports['checkedintotal']; ?></td>
-    <td width="50%">Total From All At-Con Registrations:<br /><br />$<?php echo $row_rs_reports['sumregtotal']; ?>
-                    </td>
+      <td width="50%">
+        <?php if (has_right('report_view_revenue')) { ?>
+          Total From All At-Con Registrations:<br /><br />$<?php echo $row_rs_reports['sumregtotal']; ?>
+        <?php } ?>
+      </td>
     </tr>
 </table>
 
