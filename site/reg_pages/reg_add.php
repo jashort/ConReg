@@ -489,7 +489,7 @@ function radiobutton() {
   <label>
     <input name="PassType" type="radio" id="PassType_4" onclick="setAmount()" value="Monday" <?php if ($_SESSION["PassType"] == "Monday") echo "checked=\"checked\""; ?> />
     Monday Only - $<?php echo $Monday ?></label><br />
-	<?php if ($_SESSION['access']>=2) { ?>
+	<?php if (has_right('registration_manual_price')) { ?>
       <span class="radio_button_left_margin">
     <input name="PassType" type="radio" id="PassType_5" onclick="manualprice()" value="Manual Price" <?php if ($_SESSION["PassType"] == "Manual Price") echo "checked=\"checked\""; ?> />
     Manual Price - $
