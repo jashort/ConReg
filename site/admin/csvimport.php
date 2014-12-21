@@ -72,7 +72,6 @@ if ($_FILES && $_FILES['csv']['size'] > 0) {
 <title>Kumoricon Registration</title>
 <!-- InstanceEndEditable -->
 <link href="../assets/css/kumoreg.css" rel="stylesheet" type="text/css" /> 
-</script>
 <script type="text/javascript">
 function MM_goToURL() { //v3.0
   var i, args=MM_goToURL.arguments; document.MM_returnValue = false;

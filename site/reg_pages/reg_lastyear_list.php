@@ -47,7 +47,6 @@ $totalRows_rs_lastyear_list = mysql_num_rows($rs_lastyear_list);
 <title>Kumoricon Registration</title>
 <!-- InstanceEndEditable -->
 <link href="../assets/css/kumoreg.css" rel="stylesheet" type="text/css" /> 
-</script>
 <script type="text/javascript">
 function MM_goToURL() { //v3.0
   var i, args=MM_goToURL.arguments; document.MM_returnValue = false;
@@ -65,7 +64,7 @@ function MM_goToURL() { //v3.0
 <?php if (!isset($_GET["ln"])) { // Show if no search term ?>
   <form name="ln" action="/reg_pages/reg_lastyear_list.php" method="get" target="_self">
     <fieldset id="list_table_search">
-      <label>Last Name : </label><input name="ln" type="text" class="input_20_200" /><br />
+      <label>Last Name : <input name="ln" type="text" class="input_20_200" /></label><br />
       <input name="Submit" type="submit" class="submit_button" value="Search" />
       </fieldset>
   </form>

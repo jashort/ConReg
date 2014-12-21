@@ -23,7 +23,6 @@ redirect("/index.php");
 <title>Kumoricon Registration</title>
 <!-- InstanceEndEditable -->
 <link href="../assets/css/kumoreg.css" rel="stylesheet" type="text/css" /> 
-</script>
 <script type="text/javascript">
 function MM_goToURL() { //v3.0
   var i, args=MM_goToURL.arguments; document.MM_returnValue = false;
@@ -91,10 +90,10 @@ else
 <form name="reg_add1" action="reg_quick_add.php?part=2" method="post">
 <fieldset id="personalinfo">
 <legend>Attendee Info</legend>
-<label>First Name: </label>
-<input name="FirstName" type="text" class="input_20_200" id="First Name" value="<?php echo $_SESSION["FirstName"]; ?>" />
-<label>Last Name: </label>
-<input name="LastName" type="text" class="input_20_200" id="Last Name" value="<?php echo $_SESSION["LastName"]; ?>" />
+<label>First Name:
+<input name="FirstName" type="text" class="input_20_200" id="First Name" value="<?php echo $_SESSION["FirstName"]; ?>" /></label>
+<label>Last Name:
+<input name="LastName" type="text" class="input_20_200" id="Last Name" value="<?php echo $_SESSION["LastName"]; ?>" /></label>
 <br />
 </fieldset>
 <div class="centerbutton">

@@ -40,7 +40,6 @@ redirect("/reg_pages/reg_add.php");
 <title>Kumoricon Registration</title>
 <!-- InstanceEndEditable -->
 <link href="../assets/css/kumoreg.css" rel="stylesheet" type="text/css" /> 
-</script>
 <script type="text/javascript">
 function MM_goToURL() { //v3.0
   var i, args=MM_goToURL.arguments; document.MM_returnValue = false;
@@ -73,7 +72,7 @@ function MM_goToURL() { //v3.0
 <?php } else { // Show if no search term ?>
   <form name="bid" action="/reg_pages/reg_quick_complete_list.php" method="get" target="_self">
     <fieldset id="list_table_search">
-      <label>Badge Number : </label><input name="bn" type="text" class="input_20_200" />
+      <label>Badge Number : <input name="bn" type="text" class="input_20_200" /></label>
       <input name="Submit" type="submit" class="submit_button" value="Search" />
       </fieldset>
   </form>

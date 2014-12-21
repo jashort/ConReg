@@ -20,7 +20,6 @@ $totalRows_rs_verification_list = mysql_num_rows($rs_verification_list);
 <title>Kumoricon Registration</title>
 <!-- InstanceEndEditable -->
 <link href="../assets/css/kumoreg.css" rel="stylesheet" type="text/css" /> 
-</script>
 <script type="text/javascript">
 function MM_goToURL() { //v3.0
   var i, args=MM_goToURL.arguments; document.MM_returnValue = false;
@@ -37,7 +36,7 @@ function MM_goToURL() { //v3.0
 <div id="content"><!-- InstanceBeginEditable name="Content" -->
   <form name="bid" action="/reg_pages/reg_verification_list.php" method="get" target="_self">
     <fieldset id="list_table_search">
-      <label>Badge  Letter : </label><input name="letter" type="text" class="input_20_200" />
+      <label>Badge  Letter : <input name="letter" type="text" class="input_20_200" /></label>
       <input name="Submit" type="submit" class="submit_button" value="Search" />
       <span class="bold_text">(DOESN'T WORK WITH PRE-REGISTRATIONS)</span>
     </fieldset>

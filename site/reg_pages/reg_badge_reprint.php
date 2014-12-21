@@ -19,7 +19,6 @@ if (isset($_GET['lname'])) {
 <title>Kumoricon Registration</title>
 <!-- InstanceEndEditable -->
 <link href="../assets/css/kumoreg.css" rel="stylesheet" type="text/css" /> 
-</script>
 <script type="text/javascript">
 function MM_goToURL() { //v3.0
   var i, args=MM_goToURL.arguments; document.MM_returnValue = false;
@@ -37,7 +36,7 @@ function MM_goToURL() { //v3.0
 <?php if (!isset($_GET["lname"])) { // Show if no search term ?>
   <form name="ln" action="/reg_pages/reg_badge_reprint.php" method="get" target="_self">
     <fieldset id="list_table_search">
-      <label>Last Name : </label><input name="lname" type="text" class="input_20_200" /><br />
+      <label>Last Name : <input name="lname" type="text" class="input_20_200" /></label><br />
       <input name="Submit" type="submit" class="submit_button" value="Search" onmousedown="validateLN();" />
       </fieldset>
   </form>

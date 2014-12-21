@@ -44,7 +44,7 @@ if (isset($_GET['id'])) {
   <?php if (!isset($_GET["id"])) { // Show if no search term ?>
     <form name="ln" action="/prereg_pages/prereg_checkin_list.php" method="get" target="_self">
       <fieldset id="list_table_search">
-        <label>Last Name : </label><input name="id" type="text" class="input_20_200" /><br />
+        <label>Last Name : <input name="id" type="text" class="input_20_200" /></label><br />
         <input name="Submit" type="submit" class="submit_button" value="Search" />
         <input name="field" type="hidden" value="ln" />
       </fieldset>

@@ -93,7 +93,6 @@ redirect("/index.php");
 <title>Kumoricon Registration</title>
 <!-- InstanceEndEditable -->
 <link href="../assets/css/kumoreg.css" rel="stylesheet" type="text/css" /> 
-</script>
 <script type="text/javascript">
 function MM_goToURL() { //v3.0
   var i, args=MM_goToURL.arguments; document.MM_returnValue = false;
@@ -197,7 +196,7 @@ do {
 var amount=prompt("Please enter the amount","ex 40.00");
 var currencycheck=new RegExp("^(([0-9]\.[0-9][0-9])|([0-9][0-9]\.[0-9][0-9]))$");
 var currencyformat = currencycheck.test(amount);
-} while ((amount=="") | (currencyformat==false));
+} while ((amount=="") || (currencyformat==false));
 
 do {
 var reason=prompt("Please enter the reason for the manual pricing","");
@@ -212,7 +211,7 @@ function creditauth() {
 
 do { 
 var number=prompt("Please enter the authorization number","ex 123456");
-} while ((number=="") | (number=="ex 123456"));
+} while ((number=="") || (number=="ex 123456"));
 
 if (document.reg_add3.Notes.value == "") {
 document.reg_add3.Notes.value = "The Credit Card Authorization Number is: " + number;
@@ -252,22 +251,22 @@ function radiobutton() {
 <fieldset id="personalinfo">
 <legend>Attendee Info</legend>
 <p>
-  <label>First Name: </label>
-  <input name="FirstName" type="text" class="input_20_200" id="First Name" value="<?php echo $_SESSION["FirstName"]; ?>" />
-  <label>Last Name: </label>
-  <input name="LastName" type="text" class="input_20_200" id="Last Name" value="<?php echo $_SESSION["LastName"]; ?>" /><!--&nbsp;<a href="/reg_pages/reg_lastyear_list.php" class="smalltext">Last Year Attendee?</a>-->
+  <label>First Name:
+  <input name="FirstName" type="text" class="input_20_200" id="First Name" value="<?php echo $_SESSION["FirstName"]; ?>" /></label>
+  <label>Last Name:
+  <input name="LastName" type="text" class="input_20_200" id="Last Name" value="<?php echo $_SESSION["LastName"]; ?>" /></label>
   <br />
-  <label>Phone Number: </label>
-  <input name="PhoneNumber" type="text" class="input_20_200" id="Phone Number" value="<?php echo $_SESSION["PhoneNumber"]; ?>" />
+  <label>Phone Number:
+  <input name="PhoneNumber" type="text" class="input_20_200" id="Phone Number" value="<?php echo $_SESSION["PhoneNumber"]; ?>" /></label>
   <br />
-    <label>Zip: </label>
-  <input name="Zip" type="text" class="input_20_200" id="Zip" value="<?php echo $_SESSION["Zip"]; ?>" />
+    <label>Zip:
+  <input name="Zip" type="text" class="input_20_200" id="Zip" value="<?php echo $_SESSION["Zip"]; ?>" /></label>
   <br />
   <span class="display_text_large">
-  <label>Badge Number: </label>
-  <?php if($_SESSION["BadgeNumber"]=="") {echo $_SESSION['initials'] . str_pad(badgeNumberSelect(), 3, '0', STR_PAD_LEFT);} else { echo $_SESSION["BadgeNumber"];} ?>
+  <label>Badge Number:
+  <?php if($_SESSION["BadgeNumber"]=="") {echo $_SESSION['initials'] . str_pad(badgeNumberSelect(), 3, '0', STR_PAD_LEFT);} else { echo $_SESSION["BadgeNumber"];} ?></label>
   </span><br /><br />
-  <label>Birth Date: </label>
+  <label>Birth Date:
   <select name="BirthMonth" class="select_25_50" id="Birth Month" >
     <option value="" <?php if ($_SESSION["BirthMonth"] == "") echo "selected=\"selected\""; ?> >MM</option>
     <option value="01" <?php if ($_SESSION["BirthMonth"] == "01") echo "selected=\"selected\""; ?> >01</option>
@@ -424,7 +423,7 @@ function radiobutton() {
     <option value="1914" <?php if ($_SESSION["BirthYear"] == "1914") echo "selected=\"selected\""; ?> >1914</option>
     <option value="1913" <?php if ($_SESSION["BirthYear"] == "1913") echo "selected=\"selected\""; ?> >1913</option>
     <option value="1912" <?php if ($_SESSION["BirthYear"] == "1912") echo "selected=\"selected\""; ?> >1912</option>
-  </select>
+  </select></label>
 </p>
 </fieldset>
 <div class="centerbutton">
@@ -440,11 +439,11 @@ function radiobutton() {
 <form name="reg_add2" action="reg_add.php?part=3" method="post">
 <fieldset id="emergencyinfo">
 <legend>Emergency Contact Info</legend>
-<label>Full Name: </label>
-<input name="ECFullName" type="text" class="input_20_200" id="Emergency Contact Full Name" value="<?php echo $_SESSION["ECFullName"]; ?>"  />
+<label>Full Name:
+<input name="ECFullName" type="text" class="input_20_200" id="Emergency Contact Full Name" value="<?php echo $_SESSION["ECFullName"]; ?>"  /></label>
 <br />
-<label>Phone Number: </label>
-<input name="ECPhoneNumber" type="text" class="input_20_200" id="Emergency Contact Phone Number" value="<?php echo $_SESSION["ECPhoneNumber"]; ?>"  />
+<label>Phone Number:
+<input name="ECPhoneNumber" type="text" class="input_20_200" id="Emergency Contact Phone Number" value="<?php echo $_SESSION["ECPhoneNumber"]; ?>"  /></label>
 <br />
 </fieldset>
 <?php if (($_SESSION["year_diff"] >= 13) && ($_SESSION["year_diff"] < 18)) { ?>
@@ -452,11 +451,11 @@ function radiobutton() {
 <legend>Parent Contact Info</legend>
 <input name="Same" type="checkbox" class="checkbox" onClick="sameInfo();" <?php if ($_SESSION["Same"] == "Y") { echo "value=\"Y\" checked"; } else { echo "value=\"\""; } ?> /><span class="bold_text"> SAME AS EMERGENCY CONTACT INFO</span>
 <br /><br />
-<label>Full Name: </label>
-<input name="PCFullName" type="text" class="input_20_200" id="Parent Contact Full Name" value="<?php echo $_SESSION["PCFullName"]; ?>"  />
+<label>Full Name:
+<input name="PCFullName" type="text" class="input_20_200" id="Parent Contact Full Name" value="<?php echo $_SESSION["PCFullName"]; ?>"  /></label>
 <br />
-<label>Phone Number: </label>
-<input name="PCPhoneNumber" type="text" class="input_20_200" id="Parent Contact Phone Number" value="<?php echo $_SESSION["PCPhoneNumber"]; ?>" />
+<label>Phone Number:
+<input name="PCPhoneNumber" type="text" class="input_20_200" id="Parent Contact Phone Number" value="<?php echo $_SESSION["PCPhoneNumber"]; ?>" /></label>
 <br /><br />
 <input name="PCFormVer" type="checkbox" <?php if ($_SESSION["PCFormVer"] == "Y") { echo "value=\"Y\" checked"; } else { echo "value=\"\""; } ?> id="Parent Contact Form Verification" class="checkbox" onclick="verifyForm();" /><span class="bold_text"> PARENTAL CONSENT FORM RECEIVED</span>
 </fieldset>

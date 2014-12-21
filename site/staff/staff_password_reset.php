@@ -29,13 +29,12 @@ document.status = false;
 <div id="subheader">
 <div id="subheader_left"><marquee></marquee></div>
 <!--<div id="subheader_right"><input name="adamalert" type="button" class="adamalert_button" value="ADAM ALERT" /><input name="adminalert" type="button" class="adminalert_button" value="ADMIN ALERT" />--></div>
-</div>
 <div id="content_login">
 <form action="staff_password_reset.php" id="passchange" name="passchange" method="post">
 <fieldset id="list_table_search">
 <input name="username" type="hidden" value="<?php echo $_GET["username"]; ?>" />
-<label>New Password : </label><input id="password" name="password" type="password" class="input_20_150" /><br />
-<label>Verify Password : </label><input id="password2" name="password2" type="password" class="input_20_150" /><br />
+<label>New Password : <input id="password" name="password" type="password" class="input_20_150" /></label><br />
+<label>Verify Password : <input id="password2" name="password2" type="password" class="input_20_150" /></label><br />
 <input name="Reset" type="submit" class="submit_button" value="Change"  onclick="verifyPassword();return document.status" />
 </fieldset>
 </form>

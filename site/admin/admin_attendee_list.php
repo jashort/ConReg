@@ -30,7 +30,6 @@ $totalRows_rs_checkin_list = mysql_num_rows($rs_checkin_list);
 <title>Kumoricon Registration</title>
 <!-- InstanceEndEditable -->
 <link href="../assets/css/kumoreg.css" rel="stylesheet" type="text/css" /> 
-</script>
 <script type="text/javascript">
 function MM_goToURL() { //v3.0
   var i, args=MM_goToURL.arguments; document.MM_returnValue = false;
@@ -64,7 +63,7 @@ function validateLN(){
 <?php if (!isset($_GET["id"])) { // Show if no search term ?>
   <form name="bid" action="/admin/admin_attendee_list.php" method="get" target="_self">
     <fieldset id="list_table_search">
-      <label>Badge Number : </label><input name="id" type="text" class="input_20_200" />
+      <label>Badge Number: <input name="id" type="text" class="input_20_200" /></label>
       <input name="Submit" type="submit" class="submit_button" value="Search" onmousedown="validateBID();" />
       <input name="field" type="hidden" value="bid" /><br />
       <span class="bold_text">(DOESN'T WORK WITH PRE-REGISTRATIONS)</span>
@@ -72,13 +71,12 @@ function validateLN(){
   </form>
   <form name="ln" action="/admin/admin_attendee_list.php" method="get" target="_self">
     <fieldset id="list_table_search">
-      <label>Last Name : </label><input name="id" type="text" class="input_20_200" /><br />
+      <label>Last Name : <input name="id" type="text" class="input_20_200" /></label><br />
       <input name="Submit" type="submit" class="submit_button" value="Search" onmousedown="validateLN();" />
       <input name="field" type="hidden" value="ln" />
       </fieldset>
   </form>
-<?php } // Show if no search term ?>
-<?php if (isset($_GET["id"])) { // Show if no search term ?>
+<?php } else { // Show if search term ?>
 <table id="list_table">
   <tr>
     <th scope="col">Name</th>
@@ -93,12 +91,11 @@ function validateLN(){
     </tr>
     <?php } while ($row_rs_checkin_list = mysql_fetch_assoc($rs_checkin_list)); ?>
 </table>
-<?php } // Show if no search term ?>
+<?php
+    mysql_free_result($rs_checkin_list);
+} ?>
 <!-- InstanceEndEditable --></div>
 <div id="footer">&copy; Tim Zuidema</div> 
 <!-- InstanceBeginEditable name="Javascript" --><!-- InstanceEndEditable -->
 </body>
 <!-- InstanceEnd --></html>
-<?php
-mysql_free_result($rs_checkin_list);
-?>

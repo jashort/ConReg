@@ -92,7 +92,6 @@ redirect("/index.php");
 <title>Kumoricon Registration</title>
 <!-- InstanceEndEditable -->
 <link href="../assets/css/kumoreg.css" rel="stylesheet" type="text/css" /> 
-</script>
 <script type="text/javascript">
 function MM_goToURL() { //v3.0
   var i, args=MM_goToURL.arguments; document.MM_returnValue = false;
@@ -150,7 +149,7 @@ else if (document.reg_add3.PassType_2.checked) {
 	document.reg_add3.Amount.value = "<?php echo $Sunday ?>";
 	} 
 else if (document.reg_add3.PassType_3.checked) {
-	document.reg_add3.Amount.value = "<?php echo $Monday ?>";MPAmount
+	document.reg_add3.Amount.value = "<?php echo $Monday ?>";
 	}
 else if (document.reg_add3.PassType_4.checked) {
 	document.reg_add3.Amount.value = document.reg_add3.MPAmount.value;
@@ -168,21 +167,21 @@ else if (document.reg_add3.PassType_4.checked) {
 <input name="Id" type="hidden" value="<?php echo $results['kumo_reg_data_id'] ?>" />
 <fieldset id="personalinfo">
 <legend>Attendee Info</legend>
-<label>First Name: </label>
-<input name="FirstName" type="text" class="input_20_200" id="First Name" value="<?php echo $results['kumo_reg_data_fname'] ?>" />
-<label>Last Name: </label>
-<input name="LastName" type="text" class="input_20_200" id="Last Name" value="<?php echo $results['kumo_reg_data_lname'] ?>" />
+<label>First Name:
+<input name="FirstName" type="text" class="input_20_200" id="First Name" value="<?php echo $results['kumo_reg_data_fname'] ?>" /></label>
+<label>Last Name:
+<input name="LastName" type="text" class="input_20_200" id="Last Name" value="<?php echo $results['kumo_reg_data_lname'] ?>" /></label>
 <br />
-<label>Badge Number: </label>
-<input name="BadgeNumber" type="text" class="input_20_200" id="Badge Number" value="<?php echo $results['kumo_reg_data_bnumber'] ?>" />
+<label>Badge Number:
+<input name="BadgeNumber" type="text" class="input_20_200" id="Badge Number" value="<?php echo $results['kumo_reg_data_bnumber'] ?>" /></label>
 <br />
 <?php if($results['kumo_reg_data_address']!="") { ?>
-<label>Address : </label>
-<input name="Address" type="text" class="input_20_550" id="Address" value="<?php echo $results['kumo_reg_data_address'] ?>" />
+<label>Address :
+<input name="Address" type="text" class="input_20_550" id="Address" value="<?php echo $results['kumo_reg_data_address'] ?>" /></label>
 <br />
-<label>City : </label>
-<input name="City" type="text" class="input_20_200" id="City" value="<?php echo $results['kumo_reg_data_city'] ?>" />
-<label>State : </label>
+<label>City :
+<input name="City" type="text" class="input_20_200" id="City" value="<?php echo $results['kumo_reg_data_city'] ?>" /></label>
+<label>State :
 <select name="State" class="select_25_150" id="State">
 <?php $State = $results['kumo_reg_data_state']; ?>
 <option value="" <?php if ($State == "") echo "selected=\"selected\""; ?> >Select a State</option> 
@@ -237,23 +236,23 @@ else if (document.reg_add3.PassType_4.checked) {
 <option value="WV" <?php if ($State == "WV") echo "selected=\"selected\""; ?> >West Virginia</option> 
 <option value="WI" <?php if ($State == "WI") echo "selected=\"selected\""; ?> >Wisconsin</option> 
 <option value="WY" <?php if ($State == "WY") echo "selected=\"selected\""; ?> >Wyoming</option>
-</select>
+</select></label>
 <?php } ?>
-<label>Zip : </label>
-<input name="Zip" type="text" class="input_20_150" id="Zip" value="<?php echo $results['kumo_reg_data_zip'] ?>"  />
-<label>Country : </label>
+<label>Zip :
+<input name="Zip" type="text" class="input_20_150" id="Zip" value="<?php echo $results['kumo_reg_data_zip'] ?>"  /></label>
+<label>Country :
 <?php if($results['kumo_reg_data_address']!="") { ?>
 <input name="Country" type="text" class="input_20_150" id="Country" value="<?php echo $results['kumo_reg_data_country'] ?>"  />
 <br />
-<?php } ?>
-<label>E-Mail : </label>
-<input name="EMail" type="text" class="input_20_200" id="E-Mail" value="<?php echo $results['kumo_reg_data_email'] ?>"  />
-<label>E-Mail Verification : </label>
-<input name="EMailV" type="text" class="input_20_200" onBlur="verifyEmail();" value="<?php echo $results['kumo_reg_data_email'] ?>"  />
+<?php } ?></label>
+<label>E-Mail :
+<input name="EMail" type="text" class="input_20_200" id="E-Mail" value="<?php echo $results['kumo_reg_data_email'] ?>"  /></label>
+<label>E-Mail Verification :
+<input name="EMailV" type="text" class="input_20_200" onBlur="verifyEmail();" value="<?php echo $results['kumo_reg_data_email'] ?>"  /></label>
 <br />
-<label>Phone Number: </label>
-<input name="PhoneNumber" type="text" class="input_20_200" id="Phone Number" value="<?php echo $results['kumo_reg_data_phone'] ?>"  />
-<label>Birth Date: </label>
+<label>Phone Number:
+<input name="PhoneNumber" type="text" class="input_20_200" id="Phone Number" value="<?php echo $results['kumo_reg_data_phone'] ?>"  /></label>
+<label>Birth Date:
 <select name="BirthMonth" class="select_25_50" id="Birth Month" >
 <option value="" <?php if ($BirthMonth == "") echo "selected=\"selected\""; ?> >MM</option>
 <option value="01" <?php if ($BirthMonth == "01") echo "selected=\"selected\""; ?> >01</option>
@@ -269,7 +268,8 @@ else if (document.reg_add3.PassType_4.checked) {
 <option value="11" <?php if ($BirthMonth == "11") echo "selected=\"selected\""; ?> >11</option>
 <option value="12" <?php if ($BirthMonth == "12") echo "selected=\"selected\""; ?> >12</option>
 </select>
-<span class="bold_text">/</span>
+
+	<span class="bold_text">/</span>
 <select name="BirthDay" class="select_25_50" id="Birth Day"  >
 	<option value="">DD</option>
 <option value="01" <?php if ($BirthDay == "01") echo "selected=\"selected\""; ?> >01</option>
@@ -408,15 +408,15 @@ else if (document.reg_add3.PassType_4.checked) {
 	<option value="1914" <?php if ($BirthYear == "1914") echo "selected=\"selected\""; ?> >1914</option>
 	<option value="1913" <?php if ($BirthYear == "1913") echo "selected=\"selected\""; ?> >1913</option>
 	<option value="1912" <?php if ($BirthYear == "1912") echo "selected=\"selected\""; ?> >1912</option>
-</select>
+</select></label>
 </fieldset>
 <fieldset id="emergencyinfo">
 <legend>Emergency Contact Info</legend>
-<label>Full Name: </label>
-<input name="ECFullName" type="text" class="input_20_200" id="Emergency Contact Full Name" value="<?php echo $results['kumo_reg_data_ecfullname'] ?>"  />
+<label>Full Name:
+<input name="ECFullName" type="text" class="input_20_200" id="Emergency Contact Full Name" value="<?php echo $results['kumo_reg_data_ecfullname'] ?>"  /></label>
 <br />
-<label>Phone Number: </label>
-<input name="ECPhoneNumber" type="text" class="input_20_200" id="Emergency Contact Phone Number" value="<?php echo $results['kumo_reg_data_ecphone'] ?>"  />
+<label>Phone Number:
+<input name="ECPhoneNumber" type="text" class="input_20_200" id="Emergency Contact Phone Number" value="<?php echo $results['kumo_reg_data_ecphone'] ?>"  /></label>
 <br />
 </fieldset>
 <?php if ($year_diff < 18) { ?>
@@ -424,11 +424,11 @@ else if (document.reg_add3.PassType_4.checked) {
 <legend>Parent Contact Info</legend>
 <input name="Same" type="checkbox" class="checkbox" onclick="sameInfo();" <?php if ($results['kumo_reg_data_same'] == "Y") { echo "value=\"Y\" checked"; } else { echo "value=\"\""; } ?> /><span class="bold_text"> SAME AS EMERGENCY CONTACT INFO</span>
 <br /><br />
-<label>Full Name: </label>
-<input name="PCFullName" type="text" class="input_20_200" id="Parent Contact Full Name" value="<?php echo $results['kumo_reg_data_parent'] ?>"  />
+<label>Full Name:
+<input name="PCFullName" type="text" class="input_20_200" id="Parent Contact Full Name" value="<?php echo $results['kumo_reg_data_parent'] ?>"  /></label>
 <br />
-<label>Phone Number: </label>
-<input name="PCPhoneNumber" type="text" class="input_20_200" id="Parent Contact Phone Number" value="<?php echo $results['kumo_reg_data_parentphone'] ?>" />
+<label>Phone Number:
+<input name="PCPhoneNumber" type="text" class="input_20_200" id="Parent Contact Phone Number" value="<?php echo $results['kumo_reg_data_parentphone'] ?>" /></label>
 <br /><br />
 <input name="PCFormVer" type="checkbox" <?php if ($results['kumo_reg_data_parentform'] == "Yes") { echo "value=\"Yes\" checked"; } else { echo "value=\"\""; } ?> id="Parent Contact Form Verification" class="checkbox" onclick="verifyForm();" /><span class="bold_text"> PARENTAL CONSENT FORM RECEIVED</span>
 </fieldset>
@@ -487,8 +487,8 @@ else if (document.reg_add3.PassType_4.checked) {
 echo "<input name='PayType' type='hidden' value='Free' />";
 } ?>
 <fieldset id="notes">
-<label>Notes : </label>
-<textarea name="Notes" rows="5"><?php echo $results['kumo_reg_data_notes']; ?></textarea>
+<label>Notes :
+<textarea name="Notes" rows="5"><?php echo $results['kumo_reg_data_notes']; ?></textarea></label>
 </fieldset>
 <div class="centerbutton">
 <input name="Update" type="submit" value="update" class="submit_button" />

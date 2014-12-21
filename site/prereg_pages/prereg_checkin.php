@@ -157,7 +157,6 @@ $Monday = 25;
     Monday Only - $<?php echo $Monday ?></label>
   <input name="Amount" type="hidden" id="Amount" value="<?php echo $row_rs_update['kumo_reg_data_paidamount'] ?>" />
   <br />
-</p>
 </fieldset>
 <fieldset id="paymentinfo">
 <legend>PAYMENT TYPE</legend>

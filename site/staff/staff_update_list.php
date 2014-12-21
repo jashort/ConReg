@@ -14,7 +14,6 @@ $stmt->execute();
 <title>Kumoricon Registration</title>
 <!-- InstanceEndEditable -->
 <link href="../assets/css/kumoreg.css" rel="stylesheet" type="text/css" /> 
-</script>
 <script type="text/javascript">
 function MM_goToURL() { //v3.0
   var i, args=MM_goToURL.arguments; document.MM_returnValue = false;
@@ -31,7 +30,7 @@ function MM_goToURL() { //v3.0
 <div id="content"><!-- InstanceBeginEditable name="Content" -->
   <form action="/staff/staff_update.php" method="get" target="_self">
     <fieldset id="list_table_search">
-      <label>Staff Username : </label>
+      <label>Staff Username :
       <select name="username" id="username"  class="select_25_150" >
         <?php
 do {  
@@ -40,7 +39,7 @@ do {
         <?php
 } while ($results = $stmt->fetch(PDO::FETCH_ASSOC));
 ?>
-      </select>
+      </select></label>
 <input name="Submit" type="submit" class="submit_button" value="Go" />
       </fieldset>
   </form>

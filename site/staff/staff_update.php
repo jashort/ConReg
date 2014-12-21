@@ -38,7 +38,6 @@ redirect("/index.php");
 <title>Kumoricon Registration</title>
 <!-- InstanceEndEditable -->
 <link href="../assets/css/kumoreg.css" rel="stylesheet" type="text/css" /> 
-</script>
 <script type="text/javascript">
 function MM_goToURL() { //v3.0
   var i, args=MM_goToURL.arguments; document.MM_returnValue = false;
@@ -66,11 +65,11 @@ jQuery(function($){
 <input name="id" type="hidden" value="<?php echo $results['kumo_reg_staff_id']; ?>" />
 Username : </label>
 <span class="display_text"><?php echo $results['kumo_reg_staff_username']; ?></span><br /><br />
-<label>First Name : </label><input name="fname" type="text" class="input_20_150" value="<?php echo $results['kumo_reg_staff_fname']; ?>" /><br />
-<label>Last Name : </label><input name="lname" type="text" class="input_20_150" value="<?php echo $results['kumo_reg_staff_lname']; ?>" /><br />
-<label>Initials : </label><input name="initials" type="text" class="input_20_150" value="<?php echo $results['kumo_reg_staff_initials']; ?>" /><br />
-<label>Cell Phone Number : </label><input id="cellnumber" name="cellnumber" type="text" class="input_20_150"  value="<?php echo $results['kumo_reg_staff_phone_number']; ?>" /><br />
-<label>Access Level : </label>
+<label>First Name : <input name="fname" type="text" class="input_20_150" value="<?php echo $results['kumo_reg_staff_fname']; ?>" /></label><br />
+<label>Last Name : <input name="lname" type="text" class="input_20_150" value="<?php echo $results['kumo_reg_staff_lname']; ?>" /></label><br />
+<label>Initials : <input name="initials" type="text" class="input_20_150" value="<?php echo $results['kumo_reg_staff_initials']; ?>" /></label><br />
+<label>Cell Phone Number : <input id="cellnumber" name="cellnumber" type="text" class="input_20_150"  value="<?php echo $results['kumo_reg_staff_phone_number']; ?>" /></label><br />
+<label>Access Level :
 <select name="accesslevel" class="select_25_125" id="accesslevel">
 <?php
     foreach (array_keys($ROLES) as $i) {
@@ -83,10 +82,10 @@ Username : </label>
     }
 ?>
 </select><br />
-<label>Enabled : </label><select name="enabled" class="select_25_75">
+<label>Enabled : <select name="enabled" class="select_25_75">
 <option value="1" <?php if ($results['kumo_reg_staff_enabled']=="1"){echo 'selected';}?>>Yes</option>
 <option value="0" <?php if ($results['kumo_reg_staff_enabled']=="0"){echo 'selected';}?>>No</option>
-</select><br />
+</select></label><br />
 <input name="create" type="submit" class="submit_button" value="Update" />
 </form>
 <form name="password" action="/staff/staff_update.php" method="post">

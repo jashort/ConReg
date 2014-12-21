@@ -28,13 +28,6 @@ $totalRows_rs_checkin_list = mysql_num_rows($rs_checkin_list);
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Kumoricon Registration</title>
 <link href="../assets/css/kumoreg.css" rel="stylesheet" type="text/css" />
-</script>
-<script type="text/javascript">
-function MM_goToURL() { //v3.0
-  var i, args=MM_goToURL.arguments; document.MM_returnValue = false;
-  for (i=0; i<(args.length-1); i+=2) eval(args[i]+".location='"+args[i+1]+"'");
-}
-</script>
 <script type="text/javascript">
 function validateBID(){
     if(document.bid.id.value == "")
@@ -59,7 +52,7 @@ function validateLN(){
 <?php if (!isset($_GET["id"])) { // Show if no search term ?>
   <form name="bid" action="/opssearch/attendee_list.php" method="get" target="_self">
     <fieldset id="list_table_search">
-      <label>Badge Number : </label><input name="id" type="text" class="input_20_200" />
+      <label>Badge Number : <input name="id" type="text" class="input_20_200" /></label>
       <input name="Submit" type="submit" class="submit_button" value="Search" onmousedown="validateBID();" />
       <input name="field" type="hidden" value="bid" /><br />
       <span class="bold_text">(DOESN'T WORK WITH PRE-REGISTRATIONS)</span>
@@ -67,7 +60,7 @@ function validateLN(){
   </form>
   <form name="ln" action="/opssearch/attendee_list.php" method="get" target="_self">
     <fieldset id="list_table_search">
-      <label>Last Name : </label><input name="id" type="text" class="input_20_200" /><br />
+      <label>Last Name : <input name="id" type="text" class="input_20_200" /></label><br />
       <input name="Submit" type="submit" class="submit_button" value="Search" onmousedown="validateLN();" />
       <input name="field" type="hidden" value="ln" />
       </fieldset>

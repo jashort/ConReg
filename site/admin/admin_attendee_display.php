@@ -36,7 +36,7 @@ $year_diff--;
 <title>Kumoricon Registration</title>
 <!-- InstanceEndEditable -->
 <link href="../assets/css/kumoreg.css" rel="stylesheet" type="text/css" /> 
-</script>
+
 <script type="text/javascript">
 function MM_goToURL() { //v3.0
   var i, args=MM_goToURL.arguments; document.MM_returnValue = false;
@@ -62,7 +62,6 @@ function MM_validateForm() { //v4.0
     document.MM_returnValue = (errors == '');
 } }
 function verifyEmail(){
-var status = false;     
 if (document.reg_add1.EMail.value != document.reg_add1.EMailV.value) {
 alert("Email addresses do not match.  Please retype them to make sure they are the same.");
 }}
