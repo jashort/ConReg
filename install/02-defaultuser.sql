@@ -11,5 +11,5 @@ kumo_reg_staff_fname, kumo_reg_staff_lname, kumo_reg_staff_initials, kumo_reg_st
       'Admin',
       'DA',
       '(123) 456-7890',
-      4
+      99
     )

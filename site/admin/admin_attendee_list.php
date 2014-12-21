@@ -1,6 +1,8 @@
-<?php require('../Connections/kumo_conn.php'); ?>
 <?php
+require('../Connections/kumo_conn.php');
 require('../includes/authcheck.php');
+
+require_right('super-admin');
 
 if (isset($_GET['id'])) {
   $colname_rs_checkin_list = $_GET['id'];

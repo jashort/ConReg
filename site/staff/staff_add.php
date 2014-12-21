@@ -1,6 +1,9 @@
 <?php
 require('../includes/functions.php');
 require('../includes/authcheck.php');
+require('../includes/roles.php');
+
+require_right('manage_staff');
 
 if (isset($_POST["create"])) {
 staffadd($_POST["fname"],$_POST["lname"],$_POST["username"],$_POST["initials"],$_POST["cellnumber"],$_POST["accesslevel"],$_POST["enabled"]);
@@ -68,29 +71,10 @@ function MM_validateForm() { //v4.0
 <label>Cell Phone Number : </label><input id="cellnumber" name="cellnumber" type="text" class="input_20_150" /><br />
 <label>Access Level : </label>
 <select name="accesslevel" class="select_25_125" id="accesslevel">
-<?php 
-for ($i=1; $i<=$_SESSION['access']; $i++)
-{
-if ($i == $row_rs_staff_update['kumo_reg_staff_accesslevel']){
-	$selected = 'selected';
-}
-else {
-	$selected = '';
-}
-if ($i == 1){
-	$Access = 'User';
-}
-if ($i == 2){
-	$Access = 'Super User';
-}
-if ($i == 3){
-	$Access = 'Manager';
-}
-if ($i == 4){
-	$Access = 'Super Admin';
-}
-  echo "<option value='" . $i . "' " . $selected . " >" . $Access . "</option>";
-}
+<?php
+  foreach (array_keys($ROLES) as $i) {
+    echo "<option value='" . $i . "'>" . $ROLES[$i]['name'] . "</option>\n";
+  }
 ?>
 </select>
 <br />

@@ -1,6 +1,9 @@
-<?php require('../includes/functions.php'); ?>
-<?php require('../includes/authcheck.php'); ?>
 <?php
+require('../includes/functions.php');
+require('../includes/authcheck.php');
+require('../includes/roles.php');
+
+require_right('manage_staff');
 
 try {
 $username = "-1";
@@ -69,29 +72,15 @@ Username : </label>
 <label>Cell Phone Number : </label><input id="cellnumber" name="cellnumber" type="text" class="input_20_150"  value="<?php echo $results['kumo_reg_staff_phone_number']; ?>" /><br />
 <label>Access Level : </label>
 <select name="accesslevel" class="select_25_125" id="accesslevel">
-<?php 
-for ($i=1; $i<=$_SESSION['access']; $i++)
-{
-if ($i == $results['kumo_reg_staff_accesslevel']){
-	$selected = 'selected';
-}
-else {
-	$selected = '';
-}
-if ($i == 1){
-	$Access = 'User';
-}
-if ($i == 2){
-	$Access = 'Super User';
-}
-if ($i == 3){
-	$Access = 'Manager';
-}
-if ($i == 4){
-	$Access = 'Super Admin';
-}
-  echo "<option value='" . $i . "' " . $selected . " >" . $Access . "</option>";
-}
+<?php
+    foreach (array_keys($ROLES) as $i) {
+        if ($i == $results['kumo_reg_staff_accesslevel']){
+            $selected = 'selected';
+        } else {
+            $selected = '';
+        }
+        echo "<option value='" . $i . "' " . $selected . " >" . $ROLES[$i]['name'] . "</option>\n";
+    }
 ?>
 </select><br />
 <label>Enabled : </label><select name="enabled" class="select_25_75">

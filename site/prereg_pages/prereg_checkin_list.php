@@ -2,6 +2,9 @@
 require('../Connections/kumo_conn.php');
 require('../includes/authcheck.php');
 
+require_right('prereg_checkin');
+
+
 if (isset($_GET['id'])) {
   $colname_rs_checkin_list = $_GET['id'];
 

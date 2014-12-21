@@ -1,6 +1,9 @@
-<?php require_once('../Connections/kumo_conn.php'); ?>
-<?php require_once('../includes/functions.php'); ?>
-<?php 
+<?php
+require_once('../Connections/kumo_conn.php');
+require_once('../includes/functions.php');
+require_once('../includes/authcheck.php');
+
+require_right('super-admin');
 
 if ($_FILES && $_FILES['csv']['size'] > 0) {
 

@@ -1,6 +1,6 @@
-<?php require_once('Connections/kumo_conn.php'); ?>
-<?php //require_once('includes/cryptfunc.php'); ?>
 <?php
+require_once('Connections/kumo_conn.php');
+require_once('includes/roles.php');
 
 if (!isset($_SESSION)) {
   session_start();
@@ -31,7 +31,11 @@ if (isset($_POST['username'])) {
     //Declare session variables and assign them
     $_SESSION['username'] = $results["kumo_reg_staff_username"];
 	$_SESSION['access'] = $results["kumo_reg_staff_accesslevel"];
-	$_SESSION['initials'] = $results["kumo_reg_staff_initials"];    
+	$_SESSION['initials'] = $results["kumo_reg_staff_initials"];
+	$_SESSION['rights'] = get_rights($results["kumo_reg_staff_accesslevel"]);	// Get array of rights for
+																			    // the user's role from
+																			    // includes/roles.php
+
 
 	if ($results["kumo_reg_staff_password"] == crypt("password",$results["kumo_reg_staff_password"])) {
 		header("Location: /staff/staff_password_reset.php?username=". $_SESSION['username']);

@@ -5,21 +5,6 @@ if (!isset($_SESSION)) {
 
 $restrictGoTo = "/login.php";
 
-switch ($_SESSION['access']) {
-    case 1:
-        $accessWord = "User";
-        break;
-    case 2:
-        $accessWord = "Super User";
-        break;
-    case 3:
-        $accessWord = "Manager";
-        break;
-    case 4:
-        $accessWord = "Administrator";
-        break;
-}
-
 if (!(isset($_SESSION['username']))) {   
   $queryStringChar = "?";
   $currentPage = $_SERVER['PHP_SELF'];
@@ -29,4 +14,37 @@ if (!(isset($_SESSION['username']))) {
   $restrictGoTo .= $queryStringChar . "accesscheck=" . urlencode($currentPage);
   header("Location: " . $restrictGoTo); 
   exit;
+}
+
+/**
+ * Check if the logged in user has the given right
+ *
+ * Returns true if the logged in user has the given right stored in $_SESSION['rights'],
+ * false otherwise. Rights are generally set in session variable at login.
+ *
+ * @param $right
+ * @return bool
+ */
+function has_right($right) {
+    if (array_key_exists('rights', $_SESSION) && array_key_exists($right, $_SESSION['rights'])) {
+        return $_SESSION['rights'][$right];
+    } elseif ($_SESSION['access'] == 99) {
+        // grant super-admin role all rights
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+/**
+ * Abort page load if the user doesn't have the given right
+ *
+ * @param $right
+ */
+function require_right($right) {
+    if (!has_right($right)) {
+        echo "Error: Permission denied.";
+        die();
+    }
 }

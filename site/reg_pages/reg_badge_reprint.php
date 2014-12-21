@@ -1,6 +1,8 @@
-<?php require('../Connections/kumo_conn.php'); ?>
 <?php
+require('../Connections/kumo_conn.php');
 require('../includes/authcheck.php');
+
+require_right('badge_reprint');
 
 if (isset($_GET['lname'])) {
 
