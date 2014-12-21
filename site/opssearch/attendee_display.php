@@ -2,6 +2,8 @@
 require('../includes/functions.php');
 require('../includes/authcheck.php');
 
+require_right('ops_search');
+
 $colname_rs_attendee = "-1";
 if (isset($_GET['id'])) {
   $colname_rs_attendee = $_GET['id'];

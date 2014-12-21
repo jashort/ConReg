@@ -1,5 +1,8 @@
-<?php require_once('../Connections/kumo_conn.php'); ?>
 <?php
+require_once('../Connections/kumo_conn.php');
+require_once('../include/authcheck.php');
+
+require_right('badge_reprint');
 
 if (!isset($_SESSION)) {
   session_start();

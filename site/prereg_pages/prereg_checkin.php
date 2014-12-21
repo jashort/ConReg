@@ -2,6 +2,8 @@
 require('../includes/functions.php');
 require('../includes/authcheck.php');
 
+require_right('prereg_checkin');
+
 if (isset($_POST["Update"])) {
   if (isset($_POST["checkin"]) && $_POST["checkin"] == true) {
     regcheckin($_POST["Id"]);

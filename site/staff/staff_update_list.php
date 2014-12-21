@@ -1,9 +1,10 @@
-<?php require('../Connections/kumo_conn.php'); ?>
-<?php require('../includes/authcheck.php'); ?>
 <?php
+require('../Connections/kumo_conn.php');
+require('../includes/authcheck.php');
+require_right('manage_staff');
 
-	$stmt = $conn->prepare("SELECT * FROM kumo_reg_staff ORDER BY kumo_reg_staff_username ASC");
-    $stmt->execute();
+$stmt = $conn->prepare("SELECT * FROM kumo_reg_staff ORDER BY kumo_reg_staff_username ASC");
+$stmt->execute();
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/main.dwt.php" codeOutsideHTMLIsLocked="false" -->

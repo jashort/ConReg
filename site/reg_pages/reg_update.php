@@ -2,6 +2,8 @@
 require('../includes/functions.php');
 require('../includes/authcheck.php');
 
+require_right('registration_update');
+
 $Id = "-1";
 if (isset($_GET['id'])) {
   $Id = $_GET['id'];

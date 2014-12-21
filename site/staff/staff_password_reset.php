@@ -2,6 +2,8 @@
 require('../includes/functions.php');
 require('../includes/authcheck.php');
 
+require_right('manage_staff');
+
 if (isset($_POST["Reset"])) {
 passwordreset($_POST["username"],$_POST["password"]);
 redirect("/index.php");
