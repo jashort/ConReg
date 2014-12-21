@@ -2,7 +2,7 @@
 require('../Connections/kumo_conn.php');
 require('../includes/authcheck.php');
 
-require_right('super-admin');
+require_right('attendee_search');
 
 if (isset($_GET['id'])) {
   $colname_rs_checkin_list = $_GET['id'];

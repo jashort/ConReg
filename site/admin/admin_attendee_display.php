@@ -2,7 +2,7 @@
 require('../includes/functions.php');
 require('../includes/authcheck.php');
 
-require_right('super-admin');
+require_right('attendee_search');
 
 $colname_rs_attendee = "-1";
 if (isset($_GET['id'])) {
