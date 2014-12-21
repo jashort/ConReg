@@ -32,79 +32,11 @@ $year_diff--;
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Kumoricon Registration</title>
 <link href="../assets/css/kumoreg.css" rel="stylesheet" type="text/css" />
-</script>
-<script type="text/javascript">
-function MM_goToURL() { //v3.0
-  var i, args=MM_goToURL.arguments; document.MM_returnValue = false;
-  for (i=0; i<(args.length-1); i+=2) eval(args[i]+".location='"+args[i+1]+"'");
-}
-</script>
-<script type="text/javascript">
-function MM_validateForm() { //v4.0
-  if (document.getElementById){
-    var i,p,q,nm,test,num,min,max,errors='',args=MM_validateForm.arguments;
-    for (i=0; i<(args.length-2); i+=3) { test=args[i+2]; val=document.getElementById(args[i]);
-      if (val) { nm=val.id; if ((val=val.value)!="") {
-        if (test.indexOf('isEmail')!=-1) { p=val.indexOf('@');
-          if (p<1 || p==(val.length-1)) errors+='- '+nm+' must contain an e-mail address.\n';
-        } else if (test!='R') { num = parseFloat(val);
-          if (isNaN(val)) errors+='- '+nm+' must contain a number.\n';
-          if (test.indexOf('inRange') != -1) { p=test.indexOf(':');
-            min=test.substring(8,p); max=test.substring(p+1);
-            if (num<min || max<num) errors+='- '+nm+' must contain a number between '+min+' and '+max+'.\n';
-      } } } else if (test.charAt(0) == 'R') errors += '- '+nm+' is required.\n'; }
-    } if (errors) alert('The following error(s) occurred:\n'+errors);
-    document.MM_returnValue = (errors == '');
-} }
-function verifyEmail(){
-var status = false;     
-if (document.reg_add1.EMail.value != document.reg_add1.EMailV.value) {
-alert("Email addresses do not match.  Please retype them to make sure they are the same.");
-}}
-function sameInfo(){  
-if (document.reg_add2.Same.checked) {
-document.reg_add2.Same.value = "Y";
-document.reg_add2.PCFullName.value = document.reg_add2.ECFullName.value;
-document.reg_add2.PCPhoneNumber.value = document.reg_add2.ECPhoneNumber.value;
-} else {
-document.reg_add2.Same.value = "";
-document.reg_add2.PCFullName.value = "";
-document.reg_add2.PCPhoneNumber.value = "";
-}}
-function verifyForm(){
-if (document.reg_add2.PCFormVer.checked) {
-document.reg_add2.PCFormVer.value = "Y";
-} else {
-document.reg_add2.PCFormVer.value = "";
-}}
-function MM_goToURL() { //v3.0
-  var i, args=MM_goToURL.arguments; document.MM_returnValue = false;
-  for (i=0; i<(args.length-1); i+=2) eval(args[i]+".location='"+args[i+1]+"'");
-}
-function setAmount() {
-if (document.reg_add3.PassType_0.checked) {
-	document.reg_add3.Amount.value = "<?php echo $Weekend ?>";
-	} 
-else if (document.reg_add3.PassType_1.checked) {
-	document.reg_add3.Amount.value = "<?php echo $Saturday ?>";
-	} 
-else if (document.reg_add3.PassType_2.checked) {
-	document.reg_add3.Amount.value = "<?php echo $Sunday ?>";
-	} 
-else if (document.reg_add3.PassType_3.checked) {
-	document.reg_add3.Amount.value = "<?php echo $Monday ?>";
-	}
-}
-</script>
+
 </head>
 <body>
 <div id="header"></div> 
-<div id="menu">
-<!-- Menu Removed -->
-<ul>
-<li><a href="/opssearch/attendee_list.php">SEARCH ATTENDEE</a></li>
-</ul>
-</div> 
+<?php require '../includes/leftmenu.php' ?>
 <div id="content">
 
 <fieldset id="personalinfo">

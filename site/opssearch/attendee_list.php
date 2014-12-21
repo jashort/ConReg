@@ -52,12 +52,7 @@ function validateLN(){
 </head>
 <body>
 <div id="header"></div> 
-<div id="menu">
-<!-- Menu Removed -->
-<ul>
-<li><a href="/opssearch/attendee_list.php">SEARCH ATTENDEE</a></li>
-</ul>
-</div> 
+<?php require '../includes/leftmenu.php' ?>
 <div id="content">
 <?php if (!isset($_GET["id"])) { // Show if no search term ?>
   <form name="bid" action="/opssearch/attendee_list.php" method="get" target="_self">
@@ -75,8 +70,8 @@ function validateLN(){
       <input name="field" type="hidden" value="ln" />
       </fieldset>
   </form>
-<?php } // Show if no search term ?>
-<?php if (isset($_GET["id"])) { // Show if no search term ?>
+<?php
+} else { // Show if search term ?>
 <table id="list_table">
   <tr>
     <th scope="col">Name</th>
@@ -91,11 +86,13 @@ function validateLN(){
     </tr>
     <?php } while ($row_rs_checkin_list = mysql_fetch_assoc($rs_checkin_list)); ?>
 </table>
-<?php } // Show if no search term ?>
+<?php
+    mysql_free_result($rs_checkin_list);
+    }
+?>
 </div>
 <div id="footer">&copy; Tim Zuidema</div> 
 </body>
 </html>
 <?php
-mysql_free_result($rs_checkin_list);
 ?>
