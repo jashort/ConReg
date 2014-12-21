@@ -41,6 +41,7 @@ $ROLES = array(
             'badge_reprint' => true,
             'attendee_search' => true,
             'manage_staff' => true,
+            'report_view' => true,
         )),
     4 => array('name' => 'Operations',
         'rights' => Array(
@@ -49,6 +50,7 @@ $ROLES = array(
     99 => array('name' => 'Super Admin',
         'rights' => Array(
             'super_admin' => true,
+            'report_view_revenue' => true,
         ))
 );
 

@@ -2,7 +2,7 @@
 require('../includes/functions.php');
 require('../includes/authcheck.php');
 
-require_right('super-admin');
+require_right('report_view');
 
 mysql_select_db($db_name, $kumo_conn);
 $query_rs_reports = "select distinct (select count(*) from kumo_reg_data where kumo_reg_data_checkedin = 'yes' AND kumo_reg_data_regtype='prereg') AS preregcheckedincount, (select count(*) from kumo_reg_data where kumo_reg_data_checkedin = 'no' AND kumo_reg_data_regtype='prereg') AS preregnotcheckedincount,(select count(*) from kumo_reg_data where kumo_reg_data_regtype = 'reg' AND kumo_reg_data_timestamp like '2014-08-29%') AS countregon829, (select sum(kumo_reg_data_paidamount) from kumo_reg_data where kumo_reg_data_regtype = 'reg' AND kumo_reg_data_timestamp like '2014-08-29%') AS sumregon829,(select count(*) from kumo_reg_data where kumo_reg_data_regtype = 'reg' AND kumo_reg_data_timestamp like '2014-08-30%') AS countregon830, (select sum(kumo_reg_data_paidamount) from kumo_reg_data where kumo_reg_data_regtype = 'reg' AND kumo_reg_data_timestamp like '2014-08-30%') AS sumregon830,(select count(*) from kumo_reg_data where kumo_reg_data_regtype = 'reg' AND kumo_reg_data_timestamp like '2014-08-31%') AS countregon831, (select sum(kumo_reg_data_paidamount) from kumo_reg_data where kumo_reg_data_regtype = 'reg' AND kumo_reg_data_timestamp like '2014-08-31%') AS sumregon831, (select count(*) from kumo_reg_data where kumo_reg_data_regtype = 'reg' AND kumo_reg_data_timestamp like '2014-09-01%') AS countregon91, (select sum(kumo_reg_data_paidamount) from kumo_reg_data where kumo_reg_data_regtype = 'reg' AND kumo_reg_data_timestamp like '2014-09-01%') AS sumregon91, (select count(*) from kumo_reg_data where kumo_reg_data_regtype = 'reg' AND kumo_reg_data_timestamp like '2014-09-02%') AS countregon92, (select sum(kumo_reg_data_paidamount) from kumo_reg_data where kumo_reg_data_regtype = 'reg' AND kumo_reg_data_timestamp like '2014-09-02%') AS sumregon92, (select count(*) from kumo_reg_data where kumo_reg_data_regtype = 'reg' AND kumo_reg_data_timestamp like '2014-09-03%') AS countregon93, (select count(*) from kumo_reg_quick_data where kumo_reg_quick_data_timestamp like '2014-08-31%') AS countquickregon831, (select count(*) from kumo_reg_quick_data where kumo_reg_quick_data_timestamp like '2014-09-01%') AS countquickregon91, (select count(*) from kumo_reg_quick_data where kumo_reg_quick_data_timestamp like '2014-09-02%') AS countquickregon92, (select count(*) from kumo_reg_data where kumo_reg_data_regtype = 'reg' AND kumo_reg_data_timestamp > DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 HOUR)) AS reginlasthour, (select count(kumo_reg_data_bnumber) from kumo_reg_data where kumo_reg_data_passtype = 'Weekend') AS passtypeweekend, (select count(kumo_reg_data_bnumber) from kumo_reg_data where kumo_reg_data_passtype = 'Friday') AS passtypefriday,(select count(kumo_reg_data_bnumber) from kumo_reg_data where kumo_reg_data_passtype = 'Saturday') AS passtypesaturday, (select count(kumo_reg_data_bnumber) from kumo_reg_data where kumo_reg_data_passtype = 'Sunday') AS passtypesunday, (select count(kumo_reg_data_bnumber) from kumo_reg_data where kumo_reg_data_passtype = 'Monday') AS passtypemonday, (SELECT count(*) FROM kumo_reg_data WHERE kumo_reg_data_bnumber IN (SELECT kumo_reg_quick_data_bnumber FROM kumo_reg_quick_data)) AS quickentered, (select count(*) from kumo_reg_quick_data where kumo_reg_quick_data_timestamp > DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 HOUR)) AS quickreginlasthour, (select count(*) from kumo_reg_data where kumo_reg_data_regtype like 'reg') AS regtotal,(select count(*) from kumo_reg_data where kumo_reg_data_checkedin = 'Yes') AS checkedintotal, (select sum(kumo_reg_data_paidamount) from kumo_reg_data where kumo_reg_data_regtype = 'reg') AS sumregtotal from kumo_reg_data;";
@@ -50,7 +50,7 @@ function MM_goToURL() { //v3.0
       <tr>
     <td colspan="2">Number of Registrations on 8/29/2014: <?php echo $row_rs_reports['countregon829']; ?></td>
   </tr>
-<?php if ($_SESSION['access']=4) { ?>
+<?php if (has_right('report_view_revenue')) { ?>
   <tr>
     <td colspan="2">Revenue of Registrations on 8/29/2014: <?php echo $row_rs_reports['sumregon829']; ?></td>
   </tr>
@@ -58,7 +58,7 @@ function MM_goToURL() { //v3.0
       <tr>
     <td colspan="2">Number of Registrations on 8/30/2014: <?php echo $row_rs_reports['countregon830']; ?></td>
   </tr>
-<?php if ($_SESSION['access']=4) { ?>
+<?php if (has_right('report_view_revenue')) { ?>
   <tr>
     <td colspan="2">Revenue of Registrations on 8/30/2014: <?php echo $row_rs_reports['sumregon830']; ?></td>
   </tr>
@@ -66,7 +66,7 @@ function MM_goToURL() { //v3.0
     <tr>
     <td colspan="2">Number of Registrations on 8/31/2014: <?php echo $row_rs_reports['countregon831']; ?></td>
   </tr>
-<?php if ($_SESSION['access']=4) { ?>
+<?php if (has_right('report_view_revenue')) { ?>
   <tr>
     <td colspan="2">Revenue of Registrations on 8/31/2014: <?php echo $row_rs_reports['sumregon831']; ?></td>
   </tr>
@@ -75,7 +75,7 @@ function MM_goToURL() { //v3.0
   <tr>
     <td colspan="2">Number of Registrations on 9/1/2014: <?php echo $row_rs_reports['countregon91']; ?></td>
   </tr>
-<?php if ($_SESSION['access']=4) { ?>
+<?php if (has_right('report_view_revenue')) { ?>
   <tr>
     <td colspan="2">Revenue of Registrations on 9/1/2014: <?php echo $row_rs_reports['sumregon91']; ?></td>
   </tr>

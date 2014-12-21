@@ -44,6 +44,8 @@
             <?php } ?>
             <?php if (has_right('super_admin')) { ?>
                 <li><a href="/admin/csvimport.php">IMPORT CSV</a></li>
+            <?php } ?>
+            <?php if (has_right('report_view')) { ?>
                 <li><a href="/admin/admin_report.php">REPORTS</a></li>
             <?php } ?>
         </ul>

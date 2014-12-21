@@ -26,12 +26,14 @@ roles numerically lower on the list. (Permission names are in parenthesis)
     + Can add or modify staff users (manage_staff)
     + Can view staff phone list (manage_staff)
     + Can search attendee list (attendee_search)
+    + Can view reports (report_view)
   
 - 4: Operations
     + Can search for attendees and view limited information (ops_search)
   
 - 99: Super User
     + All rights granted by override in the has_right() function.
+    + Can view revenue in reports (report_view_revenue)
     
     
 Permissions are set on each page, with either the has_right() function (to test if the logged in 
