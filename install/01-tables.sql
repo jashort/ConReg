@@ -63,6 +63,14 @@ CREATE TABLE kumo_reg_quick_data (
 ALTER TABLE registration.kumo_reg_quick_data ADD CONSTRAINT unique_kumo_reg_quick_data_id UNIQUE (kumo_reg_quick_data_id);
 
 
+CREATE TABLE registration.kumo_reg_admin
+(
+    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    kumo_reg_admin_timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    kumo_reg_admin_agent VARCHAR(80) NOT NULL,
+    kumo_reg_admin_text TEXT NOT NULL
+);
+
 
 CREATE TABLE registration.orders
 (
