@@ -10,6 +10,7 @@ $_SESSION["FirstName"] = $_POST["FirstName"];
 $_SESSION["LastName"] = $_POST["LastName"];
 if($_SESSION["BadgeNumber"]=="") {$_SESSION["BadgeNumber"] = $_SESSION['initials'] . str_pad(badgeNumberSelect(), 3, '0', STR_PAD_LEFT);}
 $_SESSION["PhoneNumber"] = $_POST["PhoneNumber"];
+$_SESSION["Email"] = $_POST["Email"];
 $_SESSION["Zip"] = $_POST["Zip"];
 $_SESSION["BirthMonth"] = $_POST["BirthMonth"];
 $_SESSION["BirthDay"] = $_POST["BirthDay"];
@@ -76,7 +77,7 @@ $ParentForm = "No";
 }  
 
 if ((isset($_POST["SubmitNow"])) && ($_POST["SubmitNow"] == "Yes")) {
-regadd($_SESSION["FirstName"], $_SESSION["LastName"], $_SESSION["BadgeNumber"], $_SESSION["PhoneNumber"],  $_SESSION["Zip"], $_SESSION["BDate"], $_SESSION["ECFullName"], $_SESSION["ECPhoneNumber"], $_SESSION["Same"], $_SESSION["PCFullName"], $_SESSION["PCPhoneNumber"], $ParentForm, "Yes", $_SESSION["Amount"], $_SESSION["PassType"], "Reg", $_SESSION["PayType"], "Yes", $_SESSION["Notes"]);
+regadd($_SESSION["FirstName"], $_SESSION["LastName"], $_SESSION["BadgeNumber"], $_SESSION["PhoneNumber"], $_SESSION["Email"],  $_SESSION["Zip"], $_SESSION["BDate"], $_SESSION["ECFullName"], $_SESSION["ECPhoneNumber"], $_SESSION["Same"], $_SESSION["PCFullName"], $_SESSION["PCPhoneNumber"], $ParentForm, "Yes", $_SESSION["Amount"], $_SESSION["PassType"], "Reg", $_SESSION["PayType"], "Yes", $_SESSION["Notes"]);
 if ($_SESSION["QuickReg"] != "True") {
 badgeNumberUpdate();
 }
@@ -258,6 +259,9 @@ function radiobutton() {
   <br />
   <label>Phone Number:
   <input name="PhoneNumber" type="text" class="input_20_200" id="Phone Number" value="<?php echo $_SESSION["PhoneNumber"]; ?>" /></label>
+  <br />
+  <label>Email:
+    <input name="Email" type="text" class="input_20_200" id="Email" value="<?php echo $_SESSION["Email"]; ?>" /></label>
   <br />
     <label>Zip:
   <input name="Zip" type="text" class="input_20_200" id="Zip" value="<?php echo $_SESSION["Zip"]; ?>" /></label>
@@ -568,6 +572,9 @@ function radiobutton() {
 <br />
 <label>Phone Number: </label>
 <span class="display_text"><?php echo $_SESSION["PhoneNumber"]; ?></span>
+<br />
+<label>Email: </label>
+<span class="display_text"><?php echo $_SESSION["Email"]; ?></span>
 <br />
 <label>Zip: </label>
 <span class="display_text"><?php echo $_SESSION["Zip"]; ?></span>
