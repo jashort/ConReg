@@ -2,8 +2,6 @@
 require('../includes/functions.php');
 require('../includes/authcheck.php');
 
-require_right('manage_staff');
-
 if (isset($_POST["Reset"])) {
 passwordreset($_POST["username"],$_POST["password"]);
 redirect("/index.php");
@@ -13,7 +11,7 @@ redirect("/index.php");
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Kumoricon Registration</title>
+<title>Reset Password</title>
 <link href="/assets/css/kumoreg.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript">
 function verifyPassword(){
