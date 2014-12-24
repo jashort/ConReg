@@ -256,6 +256,45 @@ input {
 	width: auto;
 }
 
+.input_20_40 {
+	height: 20px;
+	width: 40px;
+	border: 1px solid #000;
+	-moz-border-radius: 5px;
+	padding-top: 1px;
+	padding-bottom: 1px;
+	padding-left: 5px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	color: #000;
+	margin-bottom: 10px;
+}
+.input_20_60 {
+	height: 20px;
+	width: 60px;
+	border: 1px solid #000;
+	-moz-border-radius: 5px;
+	padding-top: 1px;
+	padding-bottom: 1px;
+	padding-left: 5px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	color: #000;
+	margin-bottom: 10px;
+}
+.input_20_150 {
+	height: 20px;
+	width: 150px;
+	border: 1px solid #000;
+	-moz-border-radius: 5px;
+	padding-top: 1px;
+	padding-bottom: 1px;
+	padding-left: 5px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	color: #000;
+	margin-bottom: 10px;
+}
 .input_20_150 {
 	height: 20px;
 	width: 150px;
