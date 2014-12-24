@@ -1,6 +1,7 @@
 <?php
 require('../includes/functions.php');
 require('../includes/authcheck.php');
+require('../includes/passtypes.php');
 
 require_right('registration_update');
 
@@ -29,49 +30,16 @@ $BirthDay = $Birthdate_array[2];
 $BDate = $BirthYear . "-" . $BirthMonth . "-" . $BirthDay;
 }
 
-$date = new DateTime($BDate);
-$now = new DateTime();
-$interval = $now->diff($date);
-$year_diff = $interval->y;
+$year_diff = calculateAge($BDate);
+// Get pass costs based on age
+$Weekend = calculatePassCost($_SESSION["year_diff"], "Weekend");
+$Friday = calculatePassCost($_SESSION["year_diff"], "Friday");
+$Saturday = calculatePassCost($_SESSION["year_diff"], "Saturday");
+$Sunday = calculatePassCost($_SESSION["year_diff"], "Sunday");
+$Monday = calculatePassCost($_SESSION["year_diff"], "Monday");
 
+$PaidAmount = calculatePassCost($year_diff, $_POST['PassType']);
 
-if ($year_diff <= 5) {
-$Weekend = 0;
-$Friday = 0;
-$Saturday = 0;
-$Sunday = 0;
-$Monday = 0;
-} else if (($year_diff > 5) && ($year_diff <= 12)){
-$Weekend = 35;
-$Friday = 15;
-$Saturday = 25;
-$Sunday = 25;
-$Monday = 15;	
-} else if ($year_diff > 12){
-$Weekend = 55;
-$Friday = 25;
-$Saturday = 35;
-$Sunday = 35;
-$Monday = 25;
-}  
-
-switch ($_POST["PassType"]){
-	case "Weekend":
-		$PaidAmount = $Weekend;
-		break;
-	case "Friday":
-		$PaidAmount = $Friday;
-		break;	
-	case "Saturday":
-		$PaidAmount = $Saturday;
-		break;	
-	case "Sunday":
-		$PaidAmount = $Sunday;
-		break;	
-	case "Monday":
-		$PaidAmount = $Monday;
-		break;
-}
 
 } catch(PDOException $e) {
     echo 'ERROR: ' . $e->getMessage();

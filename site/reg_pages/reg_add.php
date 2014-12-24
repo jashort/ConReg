@@ -1,6 +1,7 @@
 <?php
 require('../includes/functions.php');
 require('../includes/authcheck.php');
+require('../includes/passtypes.php');
 
 require_right('registration_add');
 
@@ -34,47 +35,32 @@ $_SESSION["Notes"] = $_POST["Notes"];
 }
 
 if ((isset($_POST["BirthYear"]))&&($_POST["BirthYear"]!="YYYY")) {
-$BDate = $_SESSION["BirthYear"] . "-" . $_SESSION["BirthMonth"] . "-" . $_SESSION["BirthDay"];
-$_SESSION["BDate"] = $BDate;
-$date = new DateTime($BDate);
-$now = new DateTime();
-$interval = $now->diff($date);
-$year_diff = $interval->y;
-$_SESSION["year_diff"] = $year_diff;
+  $BDate = $_SESSION["BirthYear"] . "-" . $_SESSION["BirthMonth"] . "-" . $_SESSION["BirthDay"];
+  $_SESSION["BDate"] = $BDate;
+  $_SESSION["year_diff"] = calculateAge($BDate);
 } else {
-$year_message = "Please go back and enter a birthdate!";
+  $year_message = "Please go back and enter a birthdate!";
 }
-
-
 
 if (isset($_SESSION["year_diff"])&&($_POST["BirthYear"]!="YYYY")) { $year_message = NULL; }
 
-if ($_SESSION["year_diff"] <= 5) {
-$Weekend = 0;
-$Friday = 0;
-$Saturday = 0;
-$Sunday = 0;
-$Monday = 0;
-$ParentForm = "No";
-} else if (($_SESSION["year_diff"] > 5) && ($_SESSION["year_diff"] <= 12)){
-$Weekend = 35;
-$Friday = 15;
-$Saturday = 25;
-$Sunday = 25;
-$Monday = 15;
-$ParentForm = "No";	
-} else if ($_SESSION["year_diff"] > 12){
-$Weekend = 55;
-$Friday = 25;
-$Saturday = 35;
-$Sunday = 35;
-$Monday = 25;
-if (($_SESSION["year_diff"] > 12) && ($_SESSION["year_diff"] < 18)){
-$ParentForm = "Yes";
-} else {
-$ParentForm = "No";
+// Get pass costs based on age
+$Weekend = calculatePassCost($_SESSION["year_diff"], "Weekend");
+$Friday = calculatePassCost($_SESSION["year_diff"], "Friday");
+$Saturday = calculatePassCost($_SESSION["year_diff"], "Saturday");
+$Sunday = calculatePassCost($_SESSION["year_diff"], "Sunday");
+$Monday = calculatePassCost($_SESSION["year_diff"], "Monday");
+
+if ($_SESSION['PassType'] != 'Manual') {
+  $_SESSION['Amount'] = calculatePassCost($_SESSION["year_diff"], $_SESSION["PassType"]);
 }
-}  
+
+if (($_SESSION["year_diff"] > 12) && ($_SESSION["year_diff"] < 18)){
+  $ParentForm = "Yes";
+} else {
+  $ParentForm = "No";
+}
+
 
 if ((isset($_POST["SubmitNow"])) && ($_POST["SubmitNow"] == "Yes")) {
 regadd($_SESSION["FirstName"], $_SESSION["LastName"], $_SESSION["BadgeNumber"], $_SESSION["PhoneNumber"], $_SESSION["EMail"],  $_SESSION["Zip"], $_SESSION["BDate"], $_SESSION["ECFullName"], $_SESSION["ECPhoneNumber"], $_SESSION["Same"], $_SESSION["PCFullName"], $_SESSION["PCPhoneNumber"], $ParentForm, "Yes", $_SESSION["Amount"], $_SESSION["PassType"], "Reg", $_SESSION["PayType"], "Yes", $_SESSION["Notes"]);
