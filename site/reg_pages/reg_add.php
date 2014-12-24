@@ -100,6 +100,15 @@ function MM_goToURL() { //v3.0
   for (i=0; i<(args.length-1); i+=2) eval(args[i]+".location='"+args[i+1]+"'");
 }
 </script>
+<script src="/assets/javascript/jquery-1.8.0.js" type="text/javascript"></script>
+<script src="/assets/javascript/jquery.maskedinput-1.3.min.js" type="text/javascript"></script>
+<script>
+  jQuery(function($){
+    $("#PhoneNumber").mask("(999) 999-9999");
+    $("#ECPhoneNumber").mask("(999) 999-9999");
+    $("#PCPhoneNumber").mask("(999) 999-9999");
+  });
+</script>
 <!-- InstanceBeginEditable name="head" -->
 <script type="text/javascript">
 function MM_validateForm() { //v4.0
@@ -258,7 +267,7 @@ function radiobutton() {
   <input name="LastName" type="text" class="input_20_200" id="Last Name" value="<?php echo $_SESSION["LastName"]; ?>" /></label>
   <br />
   <label>Phone Number:
-  <input name="PhoneNumber" type="text" class="input_20_200" id="Phone Number" value="<?php echo $_SESSION["PhoneNumber"]; ?>" /></label>
+  <input name="PhoneNumber" type="text" class="input_20_200" id="PhoneNumber" value="<?php echo $_SESSION["PhoneNumber"]; ?>" /></label>
   <br />
   <label>EMail:
     <input name="EMail" type="text" class="input_20_200" id="EMail" value="<?php echo $_SESSION["EMail"]; ?>" /></label>
@@ -447,7 +456,7 @@ function radiobutton() {
 <input name="ECFullName" type="text" class="input_20_200" id="Emergency Contact Full Name" value="<?php echo $_SESSION["ECFullName"]; ?>"  /></label>
 <br />
 <label>Phone Number:
-<input name="ECPhoneNumber" type="text" class="input_20_200" id="Emergency Contact Phone Number" value="<?php echo $_SESSION["ECPhoneNumber"]; ?>"  /></label>
+<input name="ECPhoneNumber" type="text" class="input_20_200" id="ECPhoneNumber" value="<?php echo $_SESSION["ECPhoneNumber"]; ?>"  /></label>
 <br />
 </fieldset>
 <?php if (($_SESSION["year_diff"] >= 13) && ($_SESSION["year_diff"] < 18)) { ?>
@@ -459,7 +468,7 @@ function radiobutton() {
 <input name="PCFullName" type="text" class="input_20_200" id="Parent Contact Full Name" value="<?php echo $_SESSION["PCFullName"]; ?>"  /></label>
 <br />
 <label>Phone Number:
-<input name="PCPhoneNumber" type="text" class="input_20_200" id="Parent Contact Phone Number" value="<?php echo $_SESSION["PCPhoneNumber"]; ?>" /></label>
+<input name="PCPhoneNumber" type="text" class="input_20_200" id="PCPhoneNumber" value="<?php echo $_SESSION["PCPhoneNumber"]; ?>" /></label>
 <br /><br />
 <input name="PCFormVer" type="checkbox" <?php if ($_SESSION["PCFormVer"] == "Y") { echo "value=\"Y\" checked"; } else { echo "value=\"\""; } ?> id="Parent Contact Form Verification" class="checkbox" onclick="verifyForm();" /><span class="bold_text"> PARENTAL CONSENT FORM RECEIVED</span>
 </fieldset>

@@ -98,6 +98,15 @@ function MM_goToURL() { //v3.0
   for (i=0; i<(args.length-1); i+=2) eval(args[i]+".location='"+args[i+1]+"'");
 }
 </script>
+<script src="/assets/javascript/jquery-1.8.0.js" type="text/javascript"></script>
+<script src="/assets/javascript/jquery.maskedinput-1.3.min.js" type="text/javascript"></script>
+<script>
+	jQuery(function($){
+		$("#PhoneNumber").mask("(999) 999-9999");
+		$("#ECPhoneNumber").mask("(999) 999-9999");
+		$("#PCPhoneNumber").mask("(999) 999-9999");
+	});
+</script>
 <!-- InstanceBeginEditable name="head" -->
 <script type="text/javascript">
 function MM_validateForm() { //v4.0
@@ -251,7 +260,7 @@ else if (document.reg_add3.PassType_4.checked) {
 <input name="EMailV" type="text" class="input_20_200" onBlur="verifyEmail();" value="<?php echo $results['kumo_reg_data_email'] ?>"  /></label>
 <br />
 <label>Phone Number:
-<input name="PhoneNumber" type="text" class="input_20_200" id="Phone Number" value="<?php echo $results['kumo_reg_data_phone'] ?>"  /></label>
+<input name="PhoneNumber" type="text" class="input_20_200" id="PhoneNumber" value="<?php echo $results['kumo_reg_data_phone'] ?>"  /></label>
 <label>Birth Date:
 <select name="BirthMonth" class="select_25_50" id="Birth Month" >
 <option value="" <?php if ($BirthMonth == "") echo "selected=\"selected\""; ?> >MM</option>
@@ -416,7 +425,7 @@ else if (document.reg_add3.PassType_4.checked) {
 <input name="ECFullName" type="text" class="input_20_200" id="Emergency Contact Full Name" value="<?php echo $results['kumo_reg_data_ecfullname'] ?>"  /></label>
 <br />
 <label>Phone Number:
-<input name="ECPhoneNumber" type="text" class="input_20_200" id="Emergency Contact Phone Number" value="<?php echo $results['kumo_reg_data_ecphone'] ?>"  /></label>
+<input name="ECPhoneNumber" type="text" class="input_20_200" id="ECPhoneNumber" value="<?php echo $results['kumo_reg_data_ecphone'] ?>"  /></label>
 <br />
 </fieldset>
 <?php if ($year_diff < 18) { ?>
@@ -428,7 +437,7 @@ else if (document.reg_add3.PassType_4.checked) {
 <input name="PCFullName" type="text" class="input_20_200" id="Parent Contact Full Name" value="<?php echo $results['kumo_reg_data_parent'] ?>"  /></label>
 <br />
 <label>Phone Number:
-<input name="PCPhoneNumber" type="text" class="input_20_200" id="Parent Contact Phone Number" value="<?php echo $results['kumo_reg_data_parentphone'] ?>" /></label>
+<input name="PCPhoneNumber" type="text" class="input_20_200" id="PCPhoneNumber" value="<?php echo $results['kumo_reg_data_parentphone'] ?>" /></label>
 <br /><br />
 <input name="PCFormVer" type="checkbox" <?php if ($results['kumo_reg_data_parentform'] == "Yes") { echo "value=\"Yes\" checked"; } else { echo "value=\"\""; } ?> id="Parent Contact Form Verification" class="checkbox" onclick="verifyForm();" /><span class="bold_text"> PARENTAL CONSENT FORM RECEIVED</span>
 </fieldset>
