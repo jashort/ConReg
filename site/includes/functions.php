@@ -89,26 +89,6 @@ function badgeNumberSet($Number) {
 }
 
 
-//Deprecated but leaving for time being
-function regquickadd($FirstName, $LastName, $BadgeNumber) {
-	
-global $db_hostname, $db_name, $kumo_conn;
-	
-	$insertSQL = sprintf("INSERT INTO kumo_reg_quick_data (kumo_reg_quick_data_fname, kumo_reg_quick_data_lname, kumo_reg_quick_data_bnumber, kumo_reg_quick_data_staff_add, kumo_reg_quick_data_completed) VALUES ('%s', '%s', '%s', '%s', 'N')",
-                       mysql_real_escape_string($FirstName),
-                       mysql_real_escape_string($LastName),
-                       mysql_real_escape_string($BadgeNumber),
-                       $_SESSION["MM_Username"]);
-
-  mysql_select_db($db_name, $kumo_conn);
-  $Result1 = mysql_query($insertSQL, $kumo_conn) or die(mysql_error());
-
-unset ($_SESSION['var']);
-unset ($_SESSION["FirstName"]);
-unset ($_SESSION["LastName"]);
-unset ($_SESSION["BadgeNumber"]);
-}
-
 function regupdate($Id, $FirstName, $LastName, $BadgeNumber, $Address, $City, $State, $Zip, $Country, $EMail, $PhoneNumber, $BDate, $ECFullName, $ECPhoneNumber, $Same, $PCFullName, $PCPhoneNumber, $PForm, $Amount, $PassType, $PayType, $Notes) {
 
 	try {

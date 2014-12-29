@@ -26,8 +26,6 @@
             <?php if (has_right('reprint_badge')) { ?>
                 <li><a href="/reg_pages/reg_badge_reprint.php">REPRINT BADGE</a></li>
             <?php } ?>
-            <!--<li><a href="/reg_pages/reg_quick_add.php">QUICK REG</a></li>
-            <li><a href="/reg_pages/reg_quick_complete_list.php">QUICK REG COMPLETE</a></li>-->
         </ul>
         <?php if (has_right('manage_staff')) { ?>
             <ul>
