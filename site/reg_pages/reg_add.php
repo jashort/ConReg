@@ -5,11 +5,11 @@ require('../includes/passtypes.php');
 
 require_right('registration_add');
 
-if ($_GET["part"] == "2" && stristr($_SERVER['HTTP_REFERER'], '/reg_pages/reg_add.php' ) && !stristr($_SERVER['HTTP_REFERER'], '/reg_pages/reg_add.php?part' )) {
+if (array_key_exists('part', $_GET) && $_GET["part"] == "2" && stristr($_SERVER['HTTP_REFERER'], '/reg_pages/reg_add.php' ) && !stristr($_SERVER['HTTP_REFERER'], '/reg_pages/reg_add.php?part' )) {
 
 $_SESSION["FirstName"] = $_POST["FirstName"];
 $_SESSION["LastName"] = $_POST["LastName"];
-if($_SESSION["BadgeNumber"]=="") {$_SESSION["BadgeNumber"] = $_SESSION['initials'] . str_pad(badgeNumberSelect(), 3, '0', STR_PAD_LEFT);}
+if(array_key_exists('part', $_GET) && $_SESSION["BadgeNumber"]=="") {$_SESSION["BadgeNumber"] = $_SESSION['initials'] . str_pad(badgeNumberSelect(), 3, '0', STR_PAD_LEFT);}
 $_SESSION["PhoneNumber"] = $_POST["PhoneNumber"];
 $_SESSION["EMail"] = $_POST["EMail"];
 $_SESSION["Zip"] = $_POST["Zip"];
@@ -17,7 +17,7 @@ $_SESSION["BirthMonth"] = $_POST["BirthMonth"];
 $_SESSION["BirthDay"] = $_POST["BirthDay"];
 $_SESSION["BirthYear"] = $_POST["BirthYear"];
 }
-elseif ($_GET["part"] == "3" && stristr($_SERVER['HTTP_REFERER'], '/reg_pages/reg_add.php?part=2' )) {
+elseif (array_key_exists('part', $_GET) && $_GET["part"] == "3" && stristr($_SERVER['HTTP_REFERER'], '/reg_pages/reg_add.php?part=2' )) {
 $_SESSION["ECFullName"] = $_POST["ECFullName"];
 $_SESSION["ECPhoneNumber"] = $_POST["ECPhoneNumber"];
 $_SESSION["Same"] = $_POST["Same"];
@@ -25,11 +25,9 @@ $_SESSION["PCFullName"] = $_POST["PCFullName"];
 $_SESSION["PCPhoneNumber"] = $_POST["PCPhoneNumber"];	
 $_SESSION["PCFormVer"] = $_POST["PCFormVer"];	
 }
-elseif ($_GET["part"] == "4" && stristr($_SERVER['HTTP_REFERER'], '/reg_pages/reg_add.php?part=3' )) {
+elseif (array_key_exists('part', $_GET) && $_GET["part"] == "4" && stristr($_SERVER['HTTP_REFERER'], '/reg_pages/reg_add.php?part=3' )) {
 $_SESSION["PassType"] = $_POST["PassType"];
 $_SESSION["Amount"] = $_POST["Amount"];
-$_SESSION["PayType"] = $_POST["PayType"];
-$_SESSION["AuthNumber"] = $_POST["AuthNumber"];	
 $_SESSION["Notes"] = $_POST["Notes"];	
 
 }
@@ -61,14 +59,19 @@ if (($_SESSION["year_diff"] > 12) && ($_SESSION["year_diff"] < 18)){
   $ParentForm = "No";
 }
 
-
 if ((isset($_POST["SubmitNow"])) && ($_POST["SubmitNow"] == "Yes")) {
-regadd($_SESSION["FirstName"], $_SESSION["LastName"], $_SESSION["BadgeNumber"], $_SESSION["PhoneNumber"], $_SESSION["EMail"],  $_SESSION["Zip"], $_SESSION["BDate"], $_SESSION["ECFullName"], $_SESSION["ECPhoneNumber"], $_SESSION["Same"], $_SESSION["PCFullName"], $_SESSION["PCPhoneNumber"], $ParentForm, "Yes", $_SESSION["Amount"], $_SESSION["PassType"], "Reg", $_SESSION["PayType"], "Yes", $_SESSION["Notes"]);
-if ($_SESSION["QuickReg"] != "True") {
-badgeNumberUpdate();
-}
-unset ($_SESSION["QuickReg"]);
-redirect("/index.php");
+  // Create an order record if it doesn't exist
+  if (!isset($_SESSION["OrderId"])) {
+    $_SESSION["OrderId"] = orderadd();
+  }
+
+  regadd($_SESSION["FirstName"], $_SESSION["LastName"], $_SESSION["BadgeNumber"], $_SESSION["PhoneNumber"], $_SESSION["EMail"],  $_SESSION["Zip"], $_SESSION["BDate"], $_SESSION["ECFullName"], $_SESSION["ECPhoneNumber"], $_SESSION["Same"], $_SESSION["PCFullName"], $_SESSION["PCPhoneNumber"], $ParentForm, "Yes", $_SESSION["Amount"], $_SESSION["PassType"], "Reg", "Yes", $_SESSION["OrderId"], $_SESSION["Notes"]);
+
+  if ($_SESSION["QuickReg"] != "True") {
+    badgeNumberUpdate();
+  }
+  unset ($_SESSION["QuickReg"]);
+  redirect("/reg_pages/reg_order.php");
 }
 
 ?>
@@ -217,22 +220,6 @@ document.reg_add3.Notes.value = document.reg_add3.Notes.value + "---" + "The Cre
 
 document.reg_add3.AuthDisplay.value = number;
 }
-<?php if ($year_diff > 5) { ?>
-function radiobutton() {
-
-	//var len = document.form.name.length;
-	var len = document.reg_add3.PayType.length;
-
-	for (i = 0; i < len; i++) {
-		if ( document.reg_add3.PayType[i].checked ) {
-			return true;
-		}
-	}
-	alert('Please select a payment type!');
-	return false;
-
-}
-<?php } ?>
 </script>
 <!-- InstanceEndEditable -->
 </head>
@@ -241,7 +228,6 @@ function radiobutton() {
 <?php require "../includes/leftmenu.php" ?>
 
 <div id="content"><!-- InstanceBeginEditable name="Content" -->
-<?php // echo $_SERVER['HTTP_REFERER']; ?>
 <?php if ($_GET["part"]==""){ ?>
 <form name="reg_add1" action="reg_add.php?part=2" method="post">
 <fieldset id="personalinfo">
@@ -368,35 +354,6 @@ function radiobutton() {
   <br />
 </p>
 </fieldset>
-<fieldset id="paymentinfo">
-<legend>PAYMENT TYPE</legend>
-<?php if ($_SESSION["year_diff"] > 5) { ?>
-<p>
-  <label>
-    <input type="radio" name="PayType" value="Cash" id="PayType_1" <?php if ($_SESSION["PayType"] == "Cash") echo "checked=\"checked\""; ?> />
-    Cash</label>
-      <br />
-  <label>
-    <input type="radio" name="PayType" value="Check" id="PayType_2" <?php if ($_SESSION["PayType"] == "Check") echo "checked=\"checked\""; ?> />
-    Check</label>
-  <br />
-  <label>
-  <input type="radio" name="PayType" value="Money Order" id="PayType_3" <?php if ($_SESSION["PayType"] == "Money Order") echo "checked=\"checked\""; ?>/>
-    Money Order</label>
-  <br />
-  <label>
-<input type="radio" name="PayType" value="Credit/Debit" id="PayType_3" onclick="creditauth()" <?php if ($_SESSION["PayType"] == "Credit/Debit") echo "checked=\"checked\""; ?>/>
-    Credit Card</label>
-    <input name="AuthDisplay" type="text" class="input_20_150" id="AuthDisplay" value="<?php echo $_SESSION["AuthNumber"] ?>" disabled="disabled"/>
-      </span>
-  <br />
-  
-  
-  <?php } else { ?>
-<label><input name='PayType' type='radio' id='PayType_4' checked='checked' value='Free' /> Free</label>
-<?php } ?>
-</p>
-</fieldset>
 <fieldset id="notes">
 <label>Notes : </label>
 <textarea name="Notes" rows="5"><?php echo $_SESSION["Notes"]; ?></textarea>
@@ -455,19 +412,17 @@ function radiobutton() {
 <legend>PASS TYPE</legend>
 <span class="display_text"><?php echo $_SESSION["PassType"]; ?> - $<?php echo $_SESSION["Amount"]; ?></span>
 </fieldset>
-<fieldset id="paymentinfo">
+  <!--<fieldset id="paymentinfo">
 <legend>PAYMENT TYPE</legend>
 <span class="display_text"><?php if ($_SESSION["PayType"]=="") { echo "Please enter a payment type!"; } else { echo $_SESSION["PayType"]; } ?>
-</fieldset>
+</fieldset>-->
 <fieldset id="paymentinfo">
 <legend>NOTES</legend>
 <span class="display_text"><?php echo $_SESSION["Notes"]; ?>
 </fieldset>
+
 <div class="centerbutton">
-<input name="Badge" type="button" class="badge_button" onclick="MM_openBrWindow('/reg_pages/badgeprint.php','','');return document.MM_returnValue" value="Print Badge" />
-</div>
-<div class="centerbutton">
-<form name="reg_add" action="reg_add.php" method="post"><input type="hidden" name="SubmitNow" value="Yes" /><input name="Previous" type="button" class="next_button" onclick="MM_goToURL('parent','/reg_pages/reg_add.php?part=3');return document.MM_returnValue" value="Previous" /><input name="Clear" type="button" class="next_button" onclick="clearverify()" value="Clear" /><?php if ($_SESSION["PayType"]!="") { ?><input name="Submit" type="submit" class="next_button" value="Confirm" /><?php } ?></form>
+<form name="reg_add" action="reg_add.php" method="post"><input type="hidden" name="SubmitNow" value="Yes" /><input name="Previous" type="button" class="next_button" onclick="MM_goToURL('parent','/reg_pages/reg_add.php?part=3');return document.MM_returnValue" value="Previous" /><input name="Clear" type="button" class="next_button" onclick="clearverify()" value="Clear" /><input name="Submit" type="submit" class="next_button" value="Confirm" /></form>
 </div><br />
 <?php } ?>
 <!-- InstanceEndEditable --></div>

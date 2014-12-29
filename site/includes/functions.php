@@ -11,14 +11,33 @@ if (array_key_exists('action',$_GET) && $_GET["action"] == "clear") {
 	redirect("/index.php");
 }
 
-function regadd($FirstName, $LastName, $BadgeNumber, $PhoneNumber, $Email, $Zip, $BDate, $ECFullName, $ECPhoneNumber, $Same, $PCFullName, $PCPhoneNumber, $PForm, $Paid, $Amount, $PassType, $RegType, $PayType, $CheckedIn, $Notes) {
-	
+function regadd($FirstName, $LastName, $BadgeNumber, $PhoneNumber, $Email, $Zip, $BDate, $ECFullName, $ECPhoneNumber, $Same, $PCFullName, $PCPhoneNumber, $PForm, $Paid, $Amount, $PassType, $RegType, $CheckedIn, $OrderId, $Notes) {
 	global $conn;
 	
 	$Phone_Stripped = preg_replace("/[^a-zA-Z0-9s]/","",$PhoneNumber);
 
-	$stmt = $conn->prepare("INSERT INTO kumo_reg_data (kumo_reg_data_fname, kumo_reg_data_lname, kumo_reg_data_bnumber, kumo_reg_data_phone, kumo_reg_data_email, kumo_reg_data_zip, kumo_reg_data_bdate, kumo_reg_data_ecfullname, kumo_reg_data_ecphone, kumo_reg_data_same, kumo_reg_data_parent, kumo_reg_data_parentphone, kumo_reg_data_parentform, kumo_reg_data_paid, kumo_reg_data_paidamount, kumo_reg_data_passtype, kumo_reg_data_regtype, kumo_reg_data_paytype, kumo_reg_data_checkedin, kumo_reg_data_notes, kumo_reg_data_staff_add) VALUES (:firstname, :lastname, :bnumber, :phone, :email, :zip, :bdate, :ecname, :ecphone, :same, :pcname, :pcphone, :pform, :paid, :amount, :passtype, :regtype, :paytype, :checked, :notes, :add)");
-    $stmt->execute(array('firstname' => $FirstName, 'lastname' => $LastName, 'bnumber' => $BadgeNumber, 'phone' => $Phone_Stripped, 'email' => $Email, 'zip' => $Zip, 'bdate' => $BDate, 'ecname' => $ECFullName, 'ecphone' => $ECPhoneNumber, 'same' => $Same, 'pcname' => $PCFullName, 'pcphone' => $PCPhoneNumber, 'pform' => $PForm, 'paid' => $Paid, 'amount' => $Amount, 'passtype' => $PassType, 'paytype' => $PayType, 'regtype' => $RegType, 'checked' => $CheckedIn, 'notes' => $Notes, 'add' => $_SESSION["MM_Username"]));
+	$stmt = $conn->prepare("INSERT INTO kumo_reg_data (kumo_reg_data_fname, kumo_reg_data_lname, kumo_reg_data_bnumber, kumo_reg_data_phone, kumo_reg_data_email, kumo_reg_data_zip, kumo_reg_data_bdate, kumo_reg_data_ecfullname, kumo_reg_data_ecphone, kumo_reg_data_same, kumo_reg_data_parent, kumo_reg_data_parentphone, kumo_reg_data_parentform, kumo_reg_data_paid, kumo_reg_data_paidamount, kumo_reg_data_passtype, kumo_reg_data_regtype, kumo_reg_data_orderid, kumo_reg_data_checkedin, kumo_reg_data_notes, kumo_reg_data_staff_add) VALUES (:firstname, :lastname, :bnumber, :phone, :email, :zip, :bdate, :ecname, :ecphone, :same, :pcname, :pcphone, :pform, :paid, :amount, :passtype, :regtype, :orderid, :checked, :notes, :staffadd)");
+    $stmt->execute(array('firstname' => $FirstName,
+		'lastname' => $LastName,
+		'bnumber' => $BadgeNumber,
+		'phone' => $Phone_Stripped,
+		'email' => $Email,
+		'zip' => $Zip,
+		'bdate' => $BDate,
+		'ecname' => $ECFullName,
+		'ecphone' => $ECPhoneNumber,
+		'same' => $Same,
+		'pcname' => $PCFullName,
+		'pcphone' => $PCPhoneNumber,
+		'pform' => $PForm,
+		'paid' => $Paid,
+		'amount' => $Amount,
+		'passtype' => $PassType,
+		'orderid' => $OrderId,
+		'regtype' => $RegType,
+		'checked' => $CheckedIn,
+		'notes' => $Notes,
+		'staffadd' => $_SESSION['username']));
 
 	unset ($_SESSION['var']);
 	unset ($_SESSION["FirstName"]);
@@ -42,7 +61,6 @@ function regadd($FirstName, $LastName, $BadgeNumber, $PhoneNumber, $Email, $Zip,
 	unset ($_SESSION["PCFormVer"]);
 	unset ($_SESSION["PassType"]);
 	unset ($_SESSION["Amount"]);
-	unset ($_SESSION["PayType"]);
 	unset ($_SESSION["Notes"]);
 }
 
@@ -89,14 +107,98 @@ function badgeNumberSet($Number) {
 }
 
 
-function regupdate($Id, $FirstName, $LastName, $BadgeNumber, $Address, $City, $State, $Zip, $Country, $EMail, $PhoneNumber, $BDate, $ECFullName, $ECPhoneNumber, $Same, $PCFullName, $PCPhoneNumber, $PForm, $Amount, $PassType, $PayType, $Notes) {
+/**
+ * Create a new order record
+ * @return int Created order's ID number
+ */
+function orderadd() {
+	global $conn;
+
+	$orderid = -1;
+
+	try {
+		$conn->beginTransaction();
+		$stmt = $conn->prepare("INSERT INTO kumo_reg_orders (paid) VALUES (:paid)");
+		$stmt->execute(array('paid' => 'no'));
+		$orderid = $conn->lastInsertId();
+		$conn->commit();
+	} catch(PDOExecption $e) {
+		$conn->rollback();
+		echo 'ERROR: ' . $e->getMessage();
+	}
+	return $orderid;
+}
+
+
+/**
+ * Update an order record
+ * @param $Id	int ID
+ * @param $Amount 	Decimal Total amount paid
+ * @param $PayType	Payment Type
+ * @param $Paid		Paid? (yes/no)
+ */
+function orderupdate($Id, $Amount, $PayType, $Paid) {
+	global $conn;
+	try {
+		$stmt = $conn->prepare("UPDATE kumo_reg_orders SET total_amount=:amount, paid=:paid, paytype=:paytype WHERE order_id=:id");
+		$stmt->execute(array('amount' => $Amount, 'paid' => $Paid, 'paytype' => $PayType, 'id' => $Id));
+	} catch(PDOException $e) {
+		echo 'ERROR: ' . $e->getMessage();
+	}
+}
+
+
+function orderlistattendees($OrderId) {
+
+	global $conn;
+
+	$stmt = $conn->prepare("SELECT kumo_reg_data_fname, kumo_reg_data_lname, kumo_reg_data_passtype, kumo_reg_data_paidamount FROM kumo_reg_data WHERE kumo_reg_data_orderid = :orderid");
+	$stmt->execute(array('orderid' => $OrderId));
+	return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+/**
+ * Mark attendees as checked in for the given order ID
+ * @param $OrderId
+ */
+function ordercheckin($OrderId) {
+	try {
+		global $conn;
+
+		$stmt = $conn->prepare("UPDATE kumo_reg_data SET kumo_reg_data_checkedin='Yes' WHERE kumo_reg_data_orderid= :orderid");
+		$stmt->execute(array('orderid' => $OrderId));
+	} catch(PDOException $e) {
+		echo 'ERROR: ' . $e->getMessage();
+	}
+
+}
+
+function orderpaid($OrderId, $PaymentType, $Total) {
+	global $conn;
+	try {
+		$conn->beginTransaction();
+
+		$stmt = $conn->prepare("UPDATE kumo_reg_data SET kumo_reg_data_paid='Yes' WHERE kumo_reg_data_orderid= :orderid");
+		$stmt->execute(array('orderid' => $OrderId));
+		$stmt = $conn->prepare("UPDATE kumo_reg_orders SET paid='Yes', paytype=:paymenttype, total_amount=:total WHERE order_id= :orderid");
+		$stmt->execute(array('orderid' => $OrderId, 'paymenttype' => $PaymentType, 'total' => $Total));
+		$conn->commit();
+	} catch(PDOException $e) {
+		$conn->rollBack();
+		echo 'ERROR: ' . $e->getMessage();
+	}
+
+}
+
+
+function regupdate($Id, $FirstName, $LastName, $BadgeNumber, $Address, $City, $State, $Zip, $Country, $EMail, $PhoneNumber, $BDate, $ECFullName, $ECPhoneNumber, $Same, $PCFullName, $PCPhoneNumber, $PForm, $Amount, $PassType, $OrderId, $Notes) {
 
 	try {
 		global $conn;
 		$Phone_Stripped = preg_replace("/[^a-zA-Z0-9s]/","",$PhoneNumber);
 
-		$stmt = $conn->prepare("UPDATE kumo_reg_data SET kumo_reg_data_fname=:firstname, kumo_reg_data_lname=:lastname, kumo_reg_data_phone=:phone, kumo_reg_data_email=:email, kumo_reg_data_bdate=:bdate, kumo_reg_data_ecfullname=:ecname, kumo_reg_data_ecphone=:ecphone, kumo_reg_data_same=:same, kumo_reg_data_parent=:pcname, kumo_reg_data_parentphone=:pcphone, kumo_reg_data_parentform=:pform, kumo_reg_data_paidamount=:amount, kumo_reg_data_passtype=:passtype, kumo_reg_data_paytype=:paytype, kumo_reg_data_notes=:notes WHERE kumo_reg_data_id=:id");
-		$stmt->execute(array('firstname' => $FirstName, 'lastname' => $LastName, 'phone' => $Phone_Stripped, 'email' => $EMail, 'bdate' => $BDate, 'ecname' => $ECFullName, 'ecphone' => $ECPhoneNumber, 'same' => $Same, 'pcname' => $PCFullName, 'pcphone' => $PCPhoneNumber, 'pform' => $PForm, 'amount' => $Amount, 'passtype' => $PassType, 'paytype' => $PayType, 'notes' => $Notes, 'id' => $Id));
+		$stmt = $conn->prepare("UPDATE kumo_reg_data SET kumo_reg_data_fname=:firstname, kumo_reg_data_lname=:lastname, kumo_reg_data_phone=:phone, kumo_reg_data_email=:email, kumo_reg_data_bdate=:bdate, kumo_reg_data_ecfullname=:ecname, kumo_reg_data_ecphone=:ecphone, kumo_reg_data_same=:same, kumo_reg_data_parent=:pcname, kumo_reg_data_parentphone=:pcphone, kumo_reg_data_parentform=:pform, kumo_reg_data_paidamount=:amount, kumo_reg_data_passtype=:passtype, kumo_reg_data_orderid=:orderid, kumo_reg_data_notes=:notes WHERE kumo_reg_data_id=:id");
+		$stmt->execute(array('firstname' => $FirstName, 'lastname' => $LastName, 'phone' => $Phone_Stripped, 'email' => $EMail, 'bdate' => $BDate, 'ecname' => $ECFullName, 'ecphone' => $ECPhoneNumber, 'same' => $Same, 'pcname' => $PCFullName, 'pcphone' => $PCPhoneNumber, 'pform' => $PForm, 'amount' => $Amount, 'passtype' => $PassType, 'orderid' => $OrderId, 'notes' => $Notes, 'id' => $Id));
 
 	} catch(PDOException $e) {
 		echo 'ERROR: ' . $e->getMessage();
@@ -138,7 +240,6 @@ unset ($_SESSION["PCPhoneNumber"]);
 unset ($_SESSION["PCFormVer"]);
 unset ($_SESSION["PassType"]);
 unset ($_SESSION["Amount"]);
-unset ($_SESSION["PayType"]);
 unset ($_SESSION["Notes"]);
 
 }

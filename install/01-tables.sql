@@ -18,6 +18,15 @@ ALTER TABLE registration.kumo_reg_staff ADD CONSTRAINT unique_kumo_reg_staff_id 
 ALTER TABLE registration.kumo_reg_staff ADD CONSTRAINT unique_kumo_reg_staff_initials UNIQUE (kumo_reg_staff_initials);
 
 
+CREATE TABLE registration.kumo_reg_orders
+(
+    order_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    total_amount DECIMAL(10,0) NOT NULL,
+    paid CHAR(3) NOT NULL COMMENT 'yes or no',
+    paytype VARCHAR(60) NOT NULL
+);
+
+
 CREATE TABLE registration.kumo_reg_data
 (
     kumo_reg_data_id         INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -43,13 +52,13 @@ CREATE TABLE registration.kumo_reg_data
     kumo_reg_data_paidamount DECIMAL(5, 2),
     kumo_reg_data_passtype   VARCHAR(50),
     kumo_reg_data_regtype    VARCHAR(50),
-    kumo_reg_data_paytype    VARCHAR(50),
+    kumo_reg_data_orderid    INT,
     kumo_reg_data_checkedin  CHAR(3) COMMENT 'Values: yes or no',
     kumo_reg_data_notes      TEXT,
     kumo_reg_data_staff_add  VARCHAR(60),
     kumo_reg_data_timestamp  TIMESTAMP
 );
-
+ALTER TABLE registration.kumo_reg_data ADD FOREIGN KEY (kumo_reg_data_orderid) REFERENCES kumo_reg_orders (order_id);
 
 CREATE TABLE kumo_reg_quick_data (
     kumo_reg_quick_data_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -60,7 +69,6 @@ CREATE TABLE kumo_reg_quick_data (
     kumo_reg_quick_data_completed BOOLEAN,
     kumo_reg_quick_data_timestamp TIMESTAMP
 );
-ALTER TABLE registration.kumo_reg_quick_data ADD CONSTRAINT unique_kumo_reg_quick_data_id UNIQUE (kumo_reg_quick_data_id);
 
 
 CREATE TABLE registration.kumo_reg_admin
@@ -71,11 +79,3 @@ CREATE TABLE registration.kumo_reg_admin
     kumo_reg_admin_text TEXT NOT NULL
 );
 
-
-CREATE TABLE registration.orders
-(
-    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    amount DECIMAL(10,0) NOT NULL,
-    paid TINYINT NOT NULL
-);
-CREATE UNIQUE INDEX unique_id ON orders (id);
