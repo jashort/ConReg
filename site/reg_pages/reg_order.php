@@ -147,7 +147,7 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Paid")) {
 <div id="content"><!-- InstanceBeginEditable name="Content" -->
     <? if ($_POST["action"] == "Paid") { ?>
     <fieldset id="paymentinfo">
-        <legend>PAYMENT TYPE</legend>
+        <legend>PRINT BADGES</legend>
     <p>
         <div class="centerbutton">
             <input name="Badge" type="button" class="badge_button" onclick="MM_openBrWindow('/reg_pages/badgeprint.php','','');return document.MM_returnValue" value="Print Badges" />
