@@ -165,7 +165,7 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Paid")) {
     <fieldset id="attendees">
         <legend>ATTENDEES</legend>
         <a href="/reg_pages/reg_add.php">Add Another</a><br>
-        <table>
+        <table id="attendee_table">
             <tr>
                 <th>Name</th>
                 <th>Pass Type</th>

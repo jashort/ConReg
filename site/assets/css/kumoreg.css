@@ -453,13 +453,29 @@ input {
 .centerbutton {
 	text-align: center;
 }
+
+#attendee_table {
+	width: 60%;
+	border-collapse: collapse;
+}
+
+#attendee_table tr th {
+	white-space: nowrap;
+	text-align: center;
+}
+#attendee_table tr td {
+	border: 1px solid gray;
+	padding-left: 1em;
+	padding-right: 1em;
+}
+
 #list_table {
 	width: 90%;
 	border-collapse:collapse;
 	margin: 15px;
 	table-layout: fixed;
 }
-#list_table th,td {
+#list_table th td {
 	border: 1px solid black;
 }
 #list_table th {
@@ -494,6 +510,7 @@ input {
 	margin-top: 25px;
 	text-align: center;
 }
+
 #login_fieldset {
 	width: 30%;
 	margin-left: auto;
