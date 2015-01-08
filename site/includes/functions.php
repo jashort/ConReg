@@ -191,14 +191,14 @@ function orderpaid($OrderId, $PaymentType, $Total) {
 }
 
 
-function regupdate($Id, $FirstName, $LastName, $BadgeNumber, $Address, $City, $State, $Zip, $Country, $EMail, $PhoneNumber, $BDate, $ECFullName, $ECPhoneNumber, $Same, $PCFullName, $PCPhoneNumber, $PForm, $Amount, $PassType, $OrderId, $Notes) {
+function regupdate($Id, $FirstName, $LastName, $BadgeNumber, $Zip, $EMail, $PhoneNumber, $BDate, $ECFullName, $ECPhoneNumber, $Same, $PCFullName, $PCPhoneNumber, $PForm, $Amount, $PassType, $OrderId, $Notes) {
 
 	try {
 		global $conn;
 		$Phone_Stripped = preg_replace("/[^a-zA-Z0-9s]/","",$PhoneNumber);
 
-		$stmt = $conn->prepare("UPDATE kumo_reg_data SET kumo_reg_data_fname=:firstname, kumo_reg_data_lname=:lastname, kumo_reg_data_phone=:phone, kumo_reg_data_email=:email, kumo_reg_data_bdate=:bdate, kumo_reg_data_ecfullname=:ecname, kumo_reg_data_ecphone=:ecphone, kumo_reg_data_same=:same, kumo_reg_data_parent=:pcname, kumo_reg_data_parentphone=:pcphone, kumo_reg_data_parentform=:pform, kumo_reg_data_paidamount=:amount, kumo_reg_data_passtype=:passtype, kumo_reg_data_orderid=:orderid, kumo_reg_data_notes=:notes WHERE kumo_reg_data_id=:id");
-		$stmt->execute(array('firstname' => $FirstName, 'lastname' => $LastName, 'phone' => $Phone_Stripped, 'email' => $EMail, 'bdate' => $BDate, 'ecname' => $ECFullName, 'ecphone' => $ECPhoneNumber, 'same' => $Same, 'pcname' => $PCFullName, 'pcphone' => $PCPhoneNumber, 'pform' => $PForm, 'amount' => $Amount, 'passtype' => $PassType, 'orderid' => $OrderId, 'notes' => $Notes, 'id' => $Id));
+		$stmt = $conn->prepare("UPDATE kumo_reg_data SET kumo_reg_data_fname=:firstname, kumo_reg_data_lname=:lastname, kumo_reg_data_bnumber=:badgenumber, kumo_reg_data_zip=:zip, kumo_reg_data_phone=:phone, kumo_reg_data_email=:email, kumo_reg_data_bdate=:bdate, kumo_reg_data_ecfullname=:ecname, kumo_reg_data_ecphone=:ecphone, kumo_reg_data_same=:same, kumo_reg_data_parent=:pcname, kumo_reg_data_parentphone=:pcphone, kumo_reg_data_parentform=:pform, kumo_reg_data_paidamount=:amount, kumo_reg_data_passtype=:passtype, kumo_reg_data_orderid=:orderid, kumo_reg_data_notes=:notes WHERE kumo_reg_data_id=:id");
+		$stmt->execute(array('firstname' => $FirstName, 'lastname' => $LastName, 'badgenumber' => $BadgeNumber, 'zip' => $Zip, 'phone' => $Phone_Stripped, 'email' => $EMail, 'bdate' => $BDate, 'ecname' => $ECFullName, 'ecphone' => $ECPhoneNumber, 'same' => $Same, 'pcname' => $PCFullName, 'pcphone' => $PCPhoneNumber, 'pform' => $PForm, 'amount' => $Amount, 'passtype' => $PassType, 'orderid' => $OrderId, 'notes' => $Notes, 'id' => $Id));
 
 	} catch(PDOException $e) {
 		echo 'ERROR: ' . $e->getMessage();

@@ -46,7 +46,7 @@ $PaidAmount = calculatePassCost($year_diff, $_POST['PassType']);
 }
 
 if (isset($_POST["Update"])) {
-regupdate($_POST["Id"], $_POST["FirstName"], $_POST["LastName"], $_POST["BadgeNumber"], $_POST["Address"], $_POST["City"], $_POST["State"], $_POST["Zip"], $_POST["Country"], $_POST["EMail"], $_POST["PhoneNumber"], $BDate, $_POST["ECFullName"], $_POST["ECPhoneNumber"], $_POST["Same"], $_POST["PCFullName"], $_POST["PCPhoneNumber"], $_POST["PCFormVer"], $PaidAmount, $_POST["PassType"], $_POST["PayType"], $_POST["Notes"]);
+regupdate($_POST["Id"], $_POST["FirstName"], $_POST["LastName"], $_POST["BadgeNumber"], $_POST["Zip"], $_POST["EMail"], $_POST["PhoneNumber"], $BDate, $_POST["ECFullName"], $_POST["ECPhoneNumber"], $_POST["Same"], $_POST["PCFullName"], $_POST["PCPhoneNumber"], $_POST["PCFormVer"], $PaidAmount, $_POST["PassType"], $_POST["OrderId"], $_POST["Notes"]);
 
 redirect("/index.php");
 
@@ -142,6 +142,7 @@ else if (document.reg_add3.PassType_4.checked) {
 <div id="content"><!-- InstanceBeginEditable name="Content" -->
 <form name="reg_update" action="reg_update.php" method="post">
 <input name="Id" type="hidden" value="<?php echo $results['kumo_reg_data_id'] ?>" />
+<input name="OrderId" type="hidden" value="<?php echo $results['kumo_reg_data_orderid'] ?>" />
 <fieldset id="personalinfo">
 <legend>Attendee Info</legend>
 <label>First Name:
@@ -152,75 +153,8 @@ else if (document.reg_add3.PassType_4.checked) {
 <label>Badge Number:
 <input name="BadgeNumber" type="text" class="input_20_200" id="Badge Number" value="<?php echo $results['kumo_reg_data_bnumber'] ?>" /></label>
 <br />
-<?php if($results['kumo_reg_data_address']!="") { ?>
-<label>Address :
-<input name="Address" type="text" class="input_20_550" id="Address" value="<?php echo $results['kumo_reg_data_address'] ?>" /></label>
-<br />
-<label>City :
-<input name="City" type="text" class="input_20_200" id="City" value="<?php echo $results['kumo_reg_data_city'] ?>" /></label>
-<label>State :
-<select name="State" class="select_25_150" id="State">
-<?php $State = $results['kumo_reg_data_state']; ?>
-<option value="" <?php if ($State == "") echo "selected=\"selected\""; ?> >Select a State</option> 
-<option value="AL" <?php if ($State == "AL") echo "selected=\"selected\""; ?> >Alabama</option> 
-<option value="AK" <?php if ($State == "AK") echo "selected=\"selected\""; ?> >Alaska</option> 
-<option value="AZ" <?php if ($State == "AZ") echo "selected=\"selected\""; ?> >Arizona</option> 
-<option value="AR" <?php if ($State == "AR") echo "selected=\"selected\""; ?> >Arkansas</option> 
-<option value="CA" <?php if ($State == "CA") echo "selected=\"selected\""; ?> >California</option> 
-<option value="CO" <?php if ($State == "CO") echo "selected=\"selected\""; ?> >Colorado</option> 
-<option value="CT" <?php if ($State == "CT") echo "selected=\"selected\""; ?> >Connecticut</option> 
-<option value="DE" <?php if ($State == "DE") echo "selected=\"selected\""; ?> >Delaware</option> 
-<option value="DC" <?php if ($State == "DC") echo "selected=\"selected\""; ?> >District Of Columbia</option>
-<option value="FL" <?php if ($State == "FL") echo "selected=\"selected\""; ?> >Florida</option> 
-<option value="GA" <?php if ($State == "GA") echo "selected=\"selected\""; ?> >Georgia</option> 
-<option value="HI" <?php if ($State == "HI") echo "selected=\"selected\""; ?> >Hawaii</option> 
-<option value="ID" <?php if ($State == "ID") echo "selected=\"selected\""; ?> >Idaho</option> 
-<option value="IL" <?php if ($State == "IL") echo "selected=\"selected\""; ?> >Illinois</option> 
-<option value="IN" <?php if ($State == "IN") echo "selected=\"selected\""; ?> >Indiana</option> 
-<option value="IA" <?php if ($State == "IA") echo "selected=\"selected\""; ?> >Iowa</option> 
-<option value="KS" <?php if ($State == "KS") echo "selected=\"selected\""; ?> >Kansas</option> 
-<option value="KY" <?php if ($State == "KY") echo "selected=\"selected\""; ?> >Kentucky</option> 
-<option value="LA" <?php if ($State == "LA") echo "selected=\"selected\""; ?> >Louisiana</option> 
-<option value="ME" <?php if ($State == "ME") echo "selected=\"selected\""; ?> >Maine</option> 
-<option value="MD" <?php if ($State == "MD") echo "selected=\"selected\""; ?> >Maryland</option> 
-<option value="MA" <?php if ($State == "MA") echo "selected=\"selected\""; ?> >Massachusetts</option> 
-<option value="MI" <?php if ($State == "MI") echo "selected=\"selected\""; ?> >Michigan</option> 
-<option value="MN" <?php if ($State == "MN") echo "selected=\"selected\""; ?> >Minnesota</option> 
-<option value="MS" <?php if ($State == "MS") echo "selected=\"selected\""; ?> >Mississippi</option> 
-<option value="MO" <?php if ($State == "MO") echo "selected=\"selected\""; ?> >Missouri</option> 
-<option value="MT" <?php if ($State == "MT") echo "selected=\"selected\""; ?> >Montana</option> 
-<option value="NE" <?php if ($State == "NE") echo "selected=\"selected\""; ?> >Nebraska</option> 
-<option value="NV" <?php if ($State == "NV") echo "selected=\"selected\""; ?> >Nevada</option> 
-<option value="NH" <?php if ($State == "NH") echo "selected=\"selected\""; ?> >New Hampshire</option> 
-<option value="NJ" <?php if ($State == "NJ") echo "selected=\"selected\""; ?> >New Jersey</option> 
-<option value="NM" <?php if ($State == "NM") echo "selected=\"selected\""; ?> >New Mexico</option> 
-<option value="NY" <?php if ($State == "NY") echo "selected=\"selected\""; ?> >New York</option> 
-<option value="NC" <?php if ($State == "NC") echo "selected=\"selected\""; ?> >North Carolina</option> 
-<option value="ND" <?php if ($State == "ND") echo "selected=\"selected\""; ?> >North Dakota</option> 
-<option value="OH" <?php if ($State == "OH") echo "selected=\"selected\""; ?> >Ohio</option> 
-<option value="OK" <?php if ($State == "OK") echo "selected=\"selected\""; ?> >Oklahoma</option> 
-<option value="OR" <?php if ($State == "OR") echo "selected=\"selected\""; ?> >Oregon</option> 
-<option value="PA" <?php if ($State == "PA") echo "selected=\"selected\""; ?> >Pennsylvania</option> 
-<option value="RI" <?php if ($State == "RI") echo "selected=\"selected\""; ?> >Rhode Island</option> 
-<option value="SC" <?php if ($State == "SC") echo "selected=\"selected\""; ?> >South Carolina</option> 
-<option value="SD" <?php if ($State == "SD") echo "selected=\"selected\""; ?> >South Dakota</option> 
-<option value="TN" <?php if ($State == "TN") echo "selected=\"selected\""; ?> >Tennessee</option> 
-<option value="TX" <?php if ($State == "TX") echo "selected=\"selected\""; ?> >Texas</option> 
-<option value="UT" <?php if ($State == "UT") echo "selected=\"selected\""; ?> >Utah</option> 
-<option value="VT" <?php if ($State == "VT") echo "selected=\"selected\""; ?> >Vermont</option> 
-<option value="VA" <?php if ($State == "VA") echo "selected=\"selected\""; ?> >Virginia</option> 
-<option value="WA" <?php if ($State == "WA") echo "selected=\"selected\""; ?> >Washington</option> 
-<option value="WV" <?php if ($State == "WV") echo "selected=\"selected\""; ?> >West Virginia</option> 
-<option value="WI" <?php if ($State == "WI") echo "selected=\"selected\""; ?> >Wisconsin</option> 
-<option value="WY" <?php if ($State == "WY") echo "selected=\"selected\""; ?> >Wyoming</option>
-</select></label>
-<?php } ?>
 <label>Zip :
 <input name="Zip" type="text" class="input_20_150" id="Zip" value="<?php echo $results['kumo_reg_data_zip'] ?>"  /></label>
-<?php if($results['kumo_reg_data_address']!="") { ?>
-	<label>Country :
-	<input name="Country" type="text" class="input_20_150" id="Country" value="<?php echo $results['kumo_reg_data_country'] ?>"  />
-<?php } ?></label>
 <br />
 <label>E-Mail :
 <input name="EMail" type="text" class="input_20_200" id="E-Mail" value="<?php echo $results['kumo_reg_data_email'] ?>"  /></label>
@@ -263,7 +197,7 @@ else if (document.reg_add3.PassType_4.checked) {
 <fieldset id="paymentinfo">
 <legend>PASS TYPE</legend>
 <p>
-  <label>
+<label>
 <?php $PassType = $results['kumo_reg_data_passtype']; ?>
     <input type="radio" name="PassType" value="Weekend" id="PassType_0" onchange="setAmount();" <?php if ($PassType == "Weekend") echo "checked=\"checked\""; ?> />
     All Weekend - $<?php echo $Weekend ?></label>
@@ -288,31 +222,6 @@ else if (document.reg_add3.PassType_4.checked) {
   <br />
 </p>
 </fieldset>
-<?php if ($year_diff > 5) { ?>
-<fieldset id="paymentinfo">
-<legend>PAYMENT TYPE</legend>
-<p>
-  <label>
-    <input type="radio" name="PayType" value="Cash" id="PayType_0" <?php if ($results['kumo_reg_data_paytype'] == "Cash") echo "checked=\"checked\""; ?> />
-    Cash</label>
-      <br />
-  <label>
-    <input type="radio" name="PayType" value="Check" id="PayType_1" <?php if ($results['kumo_reg_data_paytype'] == "Check") echo "checked=\"checked\""; ?> />
-    Check</label>
-  <br />
-  <label>
-    <input type="radio" name="PayType" value="Money Order" id="PayType_2" <?php if ($results['kumo_reg_data_paytype'] == "Money Order") echo "checked=\"checked\""; ?>/>
-    Money Order</label>
-  <br />
-<label>
-<input type="radio" name="PayType" value="Credit/Debit" id="PayType_3" onclick="creditauth()" <?php if ($results['kumo_reg_data_paytype'] == "Credit/Debit") echo "checked=\"checked\""; ?>/>
-    Credit Card</label>
-<br />
-</p>
-</fieldset>
-<?php } else { 
-echo "<input name='PayType' type='hidden' value='Free' />";
-} ?>
 <fieldset id="notes">
 <label>Notes :
 <textarea name="Notes" rows="5"><?php echo $results['kumo_reg_data_notes']; ?></textarea></label>
