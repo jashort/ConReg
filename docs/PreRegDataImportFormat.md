@@ -4,7 +4,7 @@ Data Import Format for Attendees Who Preregister on Website
  Tab delimited file with Unix line endings (LF). The first row is a header and is
  currently ignored. (IE, it makes the file easier to read, but changing the field order
  would break the import)
- An example file is [here](PreRegDataImportExample.csv).
+ An example file is [here](PreRegDataImportExample.tsv).
  
  
  Contains the following fields:
