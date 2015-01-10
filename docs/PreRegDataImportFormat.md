@@ -9,27 +9,26 @@ Data Import Format for Attendees Who Preregister on Website
  
  Contains the following fields:
 
-
- | Field | Name              | Notes                                                    |
- | ----: | ----------------- | -------------------------------------------------------- |
- |   1   | First Name        | 60 characters max                                        |
- |   2   | Last Name         | 60 characters max                                        |
- |   3   | Badge Name        | 60 characters max [[1]](#1)                              |
- |   4   | Badge Number      | 10 characters max, empty/NULL is okay [[2]](#2)          |
- |   5   | Zip Code          | 10 characters max                                        |
- |   6   | Country           | 250 characters max                                       |
- |   7   | Phone             | 60 characters max, numbers only                          |
- |   8   | Email Address     | 250 characters max                                       |
- |   9   | Birthdate         | YYYY-MM-DD format (ex: 1990-12-30)                       |
- |  10   | Emergency Contact | Emergency Contact Name, 250 characters max               |
- |  11   | Emergency Phone   | Emergency Contact Phone, 250 characters max              |
- |  12   | EC Same as Parent | "Y" if emergency contact is parent, "N" otherwise        |
- |  13   | Parent Name       | 250 characters max                                       |
- |  14   | Parent Phone      | 250 characters max                                       |
- |  15   | Paid              | "Y" if paid, "N" otherwise                               |
- |  16   | Amount            | Amount Paid, numbers/decimal only. (ex: 50.00 )          |
- |  17   | Pass Type         | 50 characters max, valid values: "Weekend", "VIP"        |
- |  18   | Order ID          | ??? Currently an integer [[3]](#3)                       |
+| Field | Name              | Notes                                                    |
+| ----: | ----------------- | -------------------------------------------------------- |
+|   1   | First Name        | 60 characters max                                        |
+|   2   | Last Name         | 60 characters max                                        |
+|   3   | Badge Name        | 60 characters max [[1]](#1)                              |
+|   4   | Badge Number      | 10 characters max, empty/NULL is okay [[2]](#2)          |
+|   5   | Zip Code          | 10 characters max                                        |
+|   6   | Country           | 250 characters max                                       |
+|   7   | Phone             | 60 characters max, numbers only                          |
+|   8   | Email Address     | 250 characters max                                       |
+|   9   | Birthdate         | YYYY-MM-DD format (ex: 1990-12-30)                       |
+|  10   | Emergency Contact | Emergency Contact Name, 250 characters max               |
+|  11   | Emergency Phone   | Emergency Contact Phone, 250 characters max              |
+|  12   | EC Same as Parent | "Y" if emergency contact is parent, "N" otherwise        |
+|  13   | Parent Name       | 250 characters max                                       |
+|  14   | Parent Phone      | 250 characters max                                       |
+|  15   | Paid              | "Y" if paid, "N" otherwise                               |
+|  16   | Amount            | Amount Paid, numbers/decimal only. (ex: 50.00 )          |
+|  17   | Pass Type         | 50 characters max, valid values: "Weekend", "VIP"        |
+|  18   | Order ID          | ??? Currently an integer [[3]](#3)                       |
  
  
  
