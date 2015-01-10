@@ -34,12 +34,12 @@ Data Import Format for Attendees Who Preregister on Website
  
 Notes:
 ------
-<a name="1">1:</a> Currently we're storing 60 characters for the badge name. I believe the actual limit
+<a name="1"></a>1: Currently we're storing 60 characters for the badge name. I believe the actual limit
 will be less. 
 
-<a name="2">2:</a> If the website generates/stores badge numbers, put it here. Otherwise just leave it
+<a name="2"></a>2: If the website generates/stores badge numbers, put it here. Otherwise just leave it
 blank. Previously, this was generated when data was imported in to the registration system.
 
-<a name="3">3:</a> Order ID is currently an integer in the registration system, but if the web site
+<a name="3"></a>3: Order ID is currently an integer in the registration system, but if the web site
 uses something else let me know. The goal is to associate attendees who register at the same
 time/pay together.
