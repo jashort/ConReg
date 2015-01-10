@@ -11,11 +11,11 @@ Data Import Format for Attendees Who Preregister on Website
 
 
  | Field | Name              | Notes                                                    |
- | ------| ----------------- | -------------------------------------------------------- |
+ | ----: | ----------------- | -------------------------------------------------------- |
  |   1   | First Name        | 60 characters max                                        |
  |   2   | Last Name         | 60 characters max                                        |
- |   3   | Badge Name        | 60 characters max [[1]](#1)                               |
- |   4   | Badge Number      | 10 characters max, empty/NULL is okay [[2]](#2)           |
+ |   3   | Badge Name        | 60 characters max [[1]](#1)                              |
+ |   4   | Badge Number      | 10 characters max, empty/NULL is okay [[2]](#2)          |
  |   5   | Zip Code          | 10 characters max                                        |
  |   6   | Country           | 250 characters max                                       |
  |   7   | Phone             | 60 characters max, numbers only                          |
@@ -29,7 +29,8 @@ Data Import Format for Attendees Who Preregister on Website
  |  15   | Paid              | "Y" if paid, "N" otherwise                               |
  |  16   | Amount            | Amount Paid, numbers/decimal only. (ex: 50.00 )          |
  |  17   | Pass Type         | 50 characters max, valid values: "Weekend", "VIP"        |
- |  18   | Order ID          | ??? Currently an integer [[3]](#3)                        |
+ |  18   | Order ID          | ??? Currently an integer [[3]](#3)                       |
+ 
  
  
 Notes:
