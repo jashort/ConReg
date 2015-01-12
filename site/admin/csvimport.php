@@ -15,43 +15,67 @@ if ($_FILES && $_FILES['csv']['size'] > 0) {
     
     //loop through the csv file and insert into database
 	$count = 0;
-
-	while (($data = fgetcsv($handle,1000,",","'")) !== FALSE) {
+	$first = true;
+	while (($data = fgetcsv($handle,1000,"\t","'")) !== FALSE) {
+		// Skip the first line
+		if ($first == true) {
+			$first = false;
+			continue;
+		}
 		// Skip empty lines and lines where the first field starts with "#"
         if (count($data) > 1 && substr($data[0], 0, 1) != '#') {
-			$name = explode(" ",$data[0]);
-			$FirstName = $name[0];
-			$LastName = $name[1];
+			if ($data[3] == "" || $data[3] == "NULL") {
+				$data[3] = sprintf("ONL%1$04d", $BNumber);
+			}
 
-			$BadgeNumber = "ONL" . $BNumber;
-
-			$PhoneNumber = $data[16];
+			$PhoneNumber = $data[6];
 			$Phone_Stripped = preg_replace("/[^a-zA-Z0-9s]/","",$PhoneNumber);
 
-			$date = explode("/",$data[18]);
-			$Month = str_pad($date[0], 2, "0", STR_PAD_LEFT);
-			$Day = str_pad($date[1], 2, "0", STR_PAD_LEFT);
-			$Year = $date[2];
-			$BDate = $Year . "-" . $Month . "-" . $Day;
+			$conn->beginTransaction();
+			// Create order if it doesn't exist. If it does, increment the total amount
+			$stmt = $conn->prepare("INSERT INTO kumo_reg_orders (order_id, total_amount, paid, paytype)
+									VALUES (:orderid, :amount, :paid, :paytype)
+									ON DUPLICATE KEY UPDATE total_amount = total_amount + :amount");
+			$stmt->execute(array('orderid' => $data[17],
+ 								 'amount' => $data[15],
+								 'paid' => $data[14],
+								 'paytype' => 'ONLINE'));
 
-			switch ($data[7]) {
-				case "Young Child Membership":
-					$Amount = 0;
-					break;
-				case "Child Membership":
-					$Amount = 35;
-					break;
-				case "Standard Membership":
-					$Amount = 55;
-					break;
-				case "VIP Membership":
-					$Amount = 300;
-					break;
-			}
-			$stmt = $conn->prepare("INSERT INTO kumo_reg_data (kumo_reg_data_fname, kumo_reg_data_lname, kumo_reg_data_bnumber, kumo_reg_data_bname, kumo_reg_data_address, kumo_reg_data_city, kumo_reg_data_state, kumo_reg_data_zip, kumo_reg_data_phone, kumo_reg_data_email, kumo_reg_data_bdate, kumo_reg_data_ecfullname, kumo_reg_data_ecphone, kumo_reg_data_same, kumo_reg_data_parent, kumo_reg_data_parentphone, kumo_reg_data_parentform, kumo_reg_data_paid, kumo_reg_data_paidamount, kumo_reg_data_passtype, kumo_reg_data_regtype, kumo_reg_data_paytype, kumo_reg_data_checkedin, kumo_reg_data_staff_add) VALUES (:firstname, :lastname, :bnumber, :bname, :address, :city, :state, :zip, :phone, :email, :bdate, :ecname, :ecphone, 'No', :pcname, :pcphone, 'No', 'Yes', :amount, 'Weekend', 'PreReg', 'Credit/Debit', 'No', 'ONLINE')");
-			$stmt->execute(array('firstname' => $FirstName, 'lastname' => $LastName, 'bnumber' => $BadgeNumber, 'bname' => $data[11], 'address' => $data[12], 'city' => $data[13], 'state' => $data[14],'zip' => $data[15], 'phone' => $Phone_Stripped, 'email' => $data[17], 'bdate' => $BDate, 'ecname' => $data[20], 'ecphone' => $data[21], 'pcname' => $data[22], 'pcphone' => $data[23], 'amount' => $Amount));
-			$count += 1;
+			$stmt = $conn->prepare("
+							INSERT INTO kumo_reg_data (kumo_reg_data_fname, kumo_reg_data_lname, kumo_reg_data_bnumber, kumo_reg_data_bname, kumo_reg_data_zip, kumo_reg_data_country,
+                           kumo_reg_data_phone, kumo_reg_data_email, kumo_reg_data_bdate, kumo_reg_data_ecfullname, kumo_reg_data_ecphone,
+                           kumo_reg_data_same, kumo_reg_data_parent, kumo_reg_data_parentphone, kumo_reg_data_parentform,
+                           kumo_reg_data_paid, kumo_reg_data_paidamount, kumo_reg_data_passtype, kumo_reg_data_regtype,
+                           kumo_reg_data_checkedin, kumo_reg_data_staff_add, kumo_reg_data_orderid) VALUES
+                           (:firstname, :lastname, :bnumber, :bname, :zip, :country,
+                           :phone, :email, :bdate, :ecname, :ecphone,
+                           :same, :pcname, :pcphone, :parentform, :paid, :amount, :passtype, :regtype, :checkedin, :staffadd, :orderid)");
+			$stmt->execute(array('firstname' => $data[0],
+				'lastname' => $data[1],
+				'bname' => $data[2],
+				'bnumber' => $data[3],
+				'zip' => $data[4],
+				'country' => $data[5],
+				'phone' => $Phone_Stripped,
+				'email' => $data[7],
+				'bdate' => $data[8],
+				'ecname' => $data[9],
+				'ecphone' => $data[10],
+				'same' => $data[11],
+				'pcname' => $data[12],
+				'pcphone' => $data[13],
+				'parentform' => 'No',
+				'paid' => $data[14],
+				'amount' => $data[15],
+				'passtype' => $data[16],
+				'regtype' => 'PreReg',
+				'checkedin' => 'No',
+				'staffadd' => 'ONLINE',
+				'orderid' => $data[17]));
+			$conn->commit();
+
 			$BNumber++;
+			$count += 1;
 		}
     }
 

@@ -20,7 +20,7 @@ ALTER TABLE registration.kumo_reg_staff ADD CONSTRAINT unique_kumo_reg_staff_ini
 
 CREATE TABLE registration.kumo_reg_orders
 (
-    order_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    order_id INT PRIMARY KEY NOT NULL UNIQUE,
     total_amount DECIMAL(10,0) NOT NULL,
     paid CHAR(3) NOT NULL COMMENT 'yes or no',
     paytype VARCHAR(60) NOT NULL
@@ -33,7 +33,7 @@ CREATE TABLE registration.kumo_reg_data
     kumo_reg_data_fname      VARCHAR(60) NOT NULL,
     kumo_reg_data_lname      VARCHAR(60) NOT NULL,
     kumo_reg_data_bname      VARCHAR(120) COMMENT 'Badge Name',
-    kumo_reg_data_bnumber    VARCHAR(10) NOT NULL,
+    kumo_reg_data_bnumber    VARCHAR(10) UNIQUE NOT NULL,
     kumo_reg_data_address    VARCHAR(250),
     kumo_reg_data_city       VARCHAR(80),
     kumo_reg_data_state      VARCHAR(20),
