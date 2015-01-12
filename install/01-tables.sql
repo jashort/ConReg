@@ -20,7 +20,7 @@ ALTER TABLE registration.kumo_reg_staff ADD CONSTRAINT unique_kumo_reg_staff_ini
 
 CREATE TABLE registration.kumo_reg_orders
 (
-    order_id INT PRIMARY KEY NOT NULL UNIQUE,
+    order_id INT PRIMARY KEY NOT NULL UNIQUE AUTO_INCREMENT,
     total_amount DECIMAL(10,0) NOT NULL,
     paid CHAR(3) NOT NULL COMMENT 'yes or no',
     paytype VARCHAR(60) NOT NULL
@@ -34,9 +34,6 @@ CREATE TABLE registration.kumo_reg_data
     kumo_reg_data_lname      VARCHAR(60) NOT NULL,
     kumo_reg_data_bname      VARCHAR(120) COMMENT 'Badge Name',
     kumo_reg_data_bnumber    VARCHAR(10) UNIQUE NOT NULL,
-    kumo_reg_data_address    VARCHAR(250),
-    kumo_reg_data_city       VARCHAR(80),
-    kumo_reg_data_state      VARCHAR(20),
     kumo_reg_data_zip        VARCHAR(10),
     kumo_reg_data_country    VARCHAR(250),
     kumo_reg_data_phone      VARCHAR(20) NOT NULL,
@@ -59,16 +56,6 @@ CREATE TABLE registration.kumo_reg_data
     kumo_reg_data_timestamp  TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP
 );
 ALTER TABLE registration.kumo_reg_data ADD FOREIGN KEY (kumo_reg_data_orderid) REFERENCES kumo_reg_orders (order_id);
-
-CREATE TABLE kumo_reg_quick_data (
-    kumo_reg_quick_data_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    kumo_reg_quick_data_fname VARCHAR(60) NOT NULL,
-    kumo_reg_quick_data_lname VARCHAR(60) NOT NULL,
-    kumo_reg_quick_data_bnumber VARCHAR(10) NOT NULL,
-    kumo_reg_quick_data_staff_add VARCHAR(60) NOT NULL,
-    kumo_reg_quick_data_completed BOOLEAN,
-    kumo_reg_quick_data_timestamp TIMESTAMP
-);
 
 
 CREATE TABLE registration.kumo_reg_admin
