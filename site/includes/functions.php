@@ -1,6 +1,7 @@
 <?php
 require('../Connections/kumo_conn.php');
 require('../includes/cryptfunc.php');
+require('Attendee.php');
 
 if (!isset($_SESSION)) {
   session_start();
@@ -156,6 +157,23 @@ function orderlistattendees($OrderId) {
 	$stmt->execute(array('orderid' => $OrderId));
 	return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
+
+/**
+ * Gets attendee information from the database
+ * @param $Id Attendee ID
+ * @return mixed
+ */
+function getAttendee($Id) {
+
+	global $conn;
+
+	$stmt = $conn->prepare("SELECT * FROM kumo_reg_data WHERE kumo_reg_data_id = :id");
+	$stmt->execute(array('id' => $Id));
+	$attendee = $stmt->fetchObject('Attendee');
+	return $attendee;
+}
+
 
 /**
  * Mark attendees as checked in for the given order ID

@@ -20,51 +20,9 @@ if (isset($_POST["Update"])) {
   }
 }
 
-
-$colname_rs_update = "-1";
 if (isset($_GET['id'])) {
-  $colname_rs_update = $_GET['id'];
+  $attendee = getAttendee($_GET['id']);
 }
-mysql_select_db($db_name, $kumo_conn);
-$query_rs_update = sprintf("SELECT * FROM kumo_reg_data WHERE kumo_reg_data_id = %s", mysql_real_escape_string($colname_rs_update));
-$rs_update = mysql_query($query_rs_update, $kumo_conn) or die(mysql_error());
-$row_rs_update = mysql_fetch_assoc($rs_update);
-$totalRows_rs_update = mysql_num_rows($rs_update);
-
-$Id = $row_rs_update['kumo_reg_data_id'];
-
-$Birthdate = $row_rs_update['kumo_reg_data_bdate'];
-
-$Birthdate_array = explode("-", $Birthdate);
-$BirthYear = $Birthdate_array[0];
-$BirthMonth = $Birthdate_array[1];
-$BirthDay = $Birthdate_array[2];
-
-$BDate = $BirthYear . "-" . $BirthMonth . "-" . $BirthDay;
-
-$year_diff = floor( (strtotime(date('Y-m-d')) - strtotime($BDate)) / 31556926);
-if ((date("m") == $BirthMonth) && (date("d") == $BirthDay) && ($BirthYear == "2012")) {
-$year_diff++;
-}
-
-if ($year_diff <= 5) {
-$Weekend = 0;
-$Saturday = 0;
-$Sunday = 0;
-$Monday = 0;
-} else if (($year_diff > 5) && ($year_diff <= 12)){
-$Weekend = 25;
-$Saturday = 20;
-$Sunday = 20;
-$Monday = 15;	
-} else if ($year_diff > 12){
-$Weekend = 45;
-$Saturday = 30;
-$Sunday = 30;
-$Monday = 25;
-}  
-
-
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -86,71 +44,71 @@ $Monday = 25;
 <fieldset id="personalinfo">
 <legend>Attendee Info</legend>
 <label>First Name: </label>
-<span class="display_text"><?php echo $row_rs_update['kumo_reg_data_fname']; ?></span>
+<span class="display_text"><?php echo $attendee->kumo_reg_data_fname; ?></span>
 <label>Last Name: </label>
-<span class="display_text"><?php echo $row_rs_update['kumo_reg_data_lname']; ?></span>
+<span class="display_text"><?php echo $attendee->kumo_reg_data_lname; ?></span>
 <br />
 <label>Badge Name: </label>
-<span class="display_text"><?php echo $row_rs_update['kumo_reg_data_bname']; ?></span>
+<span class="display_text"><?php echo $attendee->kumo_reg_data_bname; ?></span>
 <label>Badge Number: </label>
-<span class="display_text"><?php $badgenumber = $row_rs_update['kumo_reg_data_bnumber']; ?><?php echo $badgenumber; ?></span>
+<span class="display_text"><?php echo $attendee->kumo_reg_data_bnumber; ?></span>
 <br />
 <label>Address : </label>
-<span class="display_text"><?php echo $row_rs_update['kumo_reg_data_address']; ?></span>
+<span class="display_text"><?php echo $attendee->kumo_reg_data_address; ?></span>
 <br />
 <label>City : </label>
-<span class="display_text"><?php echo $row_rs_update['kumo_reg_data_city']; ?></span>
+<span class="display_text"><?php echo $attendee->kumo_reg_data_city; ?></span>
 <label>State : </label>
-<span class="display_text"><?php echo $row_rs_update['kumo_reg_data_state']; ?></span>
+<span class="display_text"><?php echo $attendee->kumo_reg_data_state; ?></span>
 <label>Zip : </label>
-<span class="display_text"><?php echo $row_rs_update['kumo_reg_data_zip']; ?></span>
+<span class="display_text"><?php echo $attendee->kumo_reg_data_zip; ?></span>
 <label>Country : </label>
-<span class="display_text"><?php echo $row_rs_update['kumo_reg_data_country']; ?></span>
+<span class="display_text"><?php echo $attendee->kumo_reg_data_country; ?></span>
 <br />
 <label>E-Mail : </label>
-<span class="display_text"><?php echo $row_rs_update['kumo_reg_data_email']; ?></span>
+<span class="display_text"><?php echo $attendee->kumo_reg_data_email; ?></span>
 <br />
 <label>Phone Number: </label>
-<span class="display_text"><?php echo $row_rs_update['kumo_reg_data_phone']; ?></span>
+<span class="display_text"><?php echo $attendee->kumo_reg_data_phone; ?></span>
 <label>Birth Date: </label>
-<span class="display_text"><?php echo $BirthMonth; ?>/<?php echo $BirthDay; ?>/<?php echo $BirthYear; ?></span>
+<span class="display_text"><?php echo $attendee->getBirthDate(); ?></span>
 </fieldset>
 <fieldset id="emergencyinfo">
 <legend>Emergency Contact Info</legend>
 <label>Full Name: </label>
-<span class="display_text"><?php echo $row_rs_update['kumo_reg_data_ecfullname']; ?></span>
+<span class="display_text"><?php echo $attendee->kumo_reg_data_ecfullname; ?></span>
 <br />
 <label>Phone Number: </label>
-<span class="display_text"><?php echo $row_rs_update['kumo_reg_data_ecphone']; ?></span>
+<span class="display_text"><?php echo $attendee->kumo_reg_data_ecphone; ?></span>
 <br />
 </fieldset>
-<?php if (($year_diff >= 13) && ($year_diff < 18)) { ?>
+<?php if (($attendee->getAge() >= 13) && ($attendee->getAge() < 18)) { ?>
 <fieldset id="parentinfo">
 <legend>Parent Contact Info</legend>
 <label>Full Name: </label>
-<span class="display_text"><?php echo $row_rs_update['kumo_reg_data_parent']; ?></span>
+<span class="display_text"><?php echo $attendee->kumo_reg_data_parent; ?></span>
 <br />
 <label>Phone Number: </label>
-<span class="display_text"><?php echo $row_rs_update['kumo_reg_data_parentphone']; ?></span>
+<span class="display_text"><?php echo $attendee->kumo_reg_data_parentphone; ?></span>
 <br /><br />
-<input name="PCFormVer" type="checkbox" <?php if ($row_rs_update['kumo_reg_data_parentform'] == "Yes") { echo "value=\"Yes\" checked"; } else { echo "value=\"\""; } ?> id="Parent Contact Form Verification" class="checkbox" /><span class="display_text"> PARENTAL CONSENT FORM RECEIVED</span>
+<input name="PCFormVer" type="checkbox" <?php if ($attendee->kumo_reg_data_parentform == "Yes") { echo "value=\"Yes\" checked"; } else { echo "value=\"\""; } ?> id="Parent Contact Form Verification" class="checkbox" /><span class="display_text"> PARENTAL CONSENT FORM RECEIVED</span>
 </fieldset>
 <?php } ?>
 <fieldset id="paymentinfo">
 <legend>PASS TYPE</legend>
 <p>
-  <label>Pass Type: <?echo $row_rs_update['kumo_reg_data_passtype']; ?> - 
-    $<?echo $row_rs_update['kumo_reg_data_paidamount']; ?>
+  <label>Pass Type: <?echo $attendee->kumo_reg_data_passtype; ?> -
+    $<?echo $attendee->kumo_reg_data_paidamount; ?>
   </label>
 </fieldset>
 <fieldset id="notes">
 <legend>Notes</legend>
-<span class="display_text"><?php echo $row_rs_update['kumo_reg_data_notes']; ?></span>
+<span class="display_text"><?php echo $attendee->kumo_reg_data_notes; ?></span>
 </fieldset>
 <fieldset id="checkin">
 <legend>CHECK IN</legend>
 <form action="/prereg_pages/prereg_checkin.php" method="post">
-<?php if ($row_rs_update['kumo_reg_data_checkedin'] == "Yes") { ?>
+<?php if ($attendee->kumo_reg_data_checkedin == "Yes") { ?>
   <span class='display_text'>CHECKED IN</span>
 <? } else { ?>
   <input name='checkin' type='checkbox' id='Information Verification' class='checkbox' />
