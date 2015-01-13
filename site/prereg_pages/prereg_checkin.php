@@ -139,45 +139,9 @@ $Monday = 25;
 <fieldset id="paymentinfo">
 <legend>PASS TYPE</legend>
 <p>
-  <label>
-<?php $PassType = $row_rs_update['kumo_reg_data_passtype']; ?>
-    <input type="radio" name="PassType" value="Weekend" id="PassType_0" disabled <?php if ($PassType == "Weekend") echo "checked=\"checked\""; ?> />
-    All Weekend - $<?php echo $Weekend ?></label>
-    <hr />
-  <label>
-    <input name="PassType" type="radio" id="PassType_1" disabled value="Saturday" <?php if ($PassType == "Saturday") echo "checked=\"checked\""; ?> />
-    Saturday Only - $<?php echo $Saturday ?></label>
-  <br />
-  <label>
-    <input type="radio" name="PassType" value="Sunday" id="PassType_2" disabled <?php if ($PassType == "Sunday") echo "checked=\"checked\""; ?> />
-    Sunday Only - $<?php echo $Sunday ?></label>
-  <br />
-  <label>
-    <input name="PassType" type="radio" id="PassType_3" disabled value="Monday" <?php if ($PassType == "Monday") echo "checked=\"checked\""; ?> />
-    Monday Only - $<?php echo $Monday ?></label>
-  <input name="Amount" type="hidden" id="Amount" value="<?php echo $row_rs_update['kumo_reg_data_paidamount'] ?>" />
-  <br />
-</fieldset>
-<fieldset id="paymentinfo">
-<legend>PAYMENT TYPE</legend>
-<p>
-  <label>
-    <input type="radio" name="PayType" value="Cash" disabled id="PayType_0" <?php if ($row_rs_update['kumo_reg_data_paytype'] == "Cash") echo "checked=\"checked\""; ?> />
-    Cash</label>
-      <br />
-  <label>
-    <input type="radio" name="PayType" value="Credit/Debit" disabled id="PayType_1" <?php if ($row_rs_update['kumo_reg_data_paytype'] == "Credit/Debit") echo "checked=\"checked\""; ?> />
-    Credit/Debit</label>
-  <br />
-    <label>
-    <input type="radio" name="PayType" value="Check" disabled id="PayType_1" <?php if ($row_rs_update['kumo_reg_data_paytype'] == "Check") echo "checked=\"checked\""; ?> />
-    Check</label>
-  <br />
-  <label>
-    <input type="radio" name="PayType" value="Money Order" disabled id="PayType_2" <?php if ($row_rs_update['kumo_reg_data_paytype'] == "Money Order") echo "checked=\"checked\""; ?>/>
-    Money Order</label>
-  <br />
-</p>
+  <label>Pass Type: <?echo $row_rs_update['kumo_reg_data_passtype']; ?> - 
+    $<?echo $row_rs_update['kumo_reg_data_paidamount']; ?>
+  </label>
 </fieldset>
 <fieldset id="notes">
 <legend>Notes</legend>
