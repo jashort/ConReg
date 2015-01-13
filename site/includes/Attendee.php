@@ -33,15 +33,28 @@ class Attendee {
     public $kumo_reg_data_staff_add;
     public $kumo_reg_data_timestamp;
 
-    public $birthMonth;
-    public $birthDay;
-    public $birthYear;
-
+    /**
+     * @return string Birthdate in MM/DD/YYYY format
+     */
     public function getBirthDate() {
         $date = new DateTime($this->kumo_reg_data_bdate);
         return $date->format('m/d/Y');
     }
-    
+
+    /**
+     * @return bool Returns true if < 18 years old
+     */
+    public function isMinor() {
+        if ($this->getAge() < 18) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @return int Returns age in years
+     */
     public function getAge() {
         $date = new DateTime($this->kumo_reg_data_bdate);
         $now = new DateTime();

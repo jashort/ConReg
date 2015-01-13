@@ -22,6 +22,8 @@ if (isset($_POST["Update"])) {
 
 if (isset($_GET['id'])) {
   $attendee = getAttendee($_GET['id']);
+} else {
+  $attendee = Array();
 }
 
 ?>
@@ -53,13 +55,6 @@ if (isset($_GET['id'])) {
 <label>Badge Number: </label>
 <span class="display_text"><?php echo $attendee->kumo_reg_data_bnumber; ?></span>
 <br />
-<label>Address : </label>
-<span class="display_text"><?php echo $attendee->kumo_reg_data_address; ?></span>
-<br />
-<label>City : </label>
-<span class="display_text"><?php echo $attendee->kumo_reg_data_city; ?></span>
-<label>State : </label>
-<span class="display_text"><?php echo $attendee->kumo_reg_data_state; ?></span>
 <label>Zip : </label>
 <span class="display_text"><?php echo $attendee->kumo_reg_data_zip; ?></span>
 <label>Country : </label>
@@ -82,7 +77,8 @@ if (isset($_GET['id'])) {
 <span class="display_text"><?php echo $attendee->kumo_reg_data_ecphone; ?></span>
 <br />
 </fieldset>
-<?php if (($attendee->getAge() >= 13) && ($attendee->getAge() < 18)) { ?>
+  
+<?php if ($attendee->isMinor()) { ?>
 <fieldset id="parentinfo">
 <legend>Parent Contact Info</legend>
 <label>Full Name: </label>
@@ -94,7 +90,8 @@ if (isset($_GET['id'])) {
 <input name="PCFormVer" type="checkbox" <?php if ($attendee->kumo_reg_data_parentform == "Yes") { echo "value=\"Yes\" checked"; } else { echo "value=\"\""; } ?> id="Parent Contact Form Verification" class="checkbox" /><span class="display_text"> PARENTAL CONSENT FORM RECEIVED</span>
 </fieldset>
 <?php } ?>
-<fieldset id="paymentinfo">
+
+  <fieldset id="paymentinfo">
 <legend>PASS TYPE</legend>
 <p>
   <label>Pass Type: <?echo $attendee->kumo_reg_data_passtype; ?> -
