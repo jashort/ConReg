@@ -226,12 +226,15 @@ function regupdate($Id, $FirstName, $LastName, $BadgeNumber, $Zip, $EMail, $Phon
 
 
 function regcheckin($Id) {
-	
 	global $conn;
-					   
 	$stmt = $conn->prepare("UPDATE kumo_reg_data SET kumo_reg_data_checkedin='Yes' WHERE kumo_reg_data_id= :id");
-    $stmt->execute(array('id' => $Id));
+	$stmt->execute(array('id' => $Id));
+}
 
+function regCheckinParentFormReceived($Id) {
+	global $conn;
+	$stmt = $conn->prepare("UPDATE kumo_reg_data SET kumo_reg_data_parentform='Yes' WHERE kumo_reg_data_id= :id");
+	$stmt->execute(array('id' => $Id));
 }
 
 function regclear() {

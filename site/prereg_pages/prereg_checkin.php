@@ -5,8 +5,21 @@ require('../includes/authcheck.php');
 require_right('prereg_checkin');
 
 if (isset($_POST["Update"])) {
+  // If a minor, check for parental consent form
+  if (isset($_POST["Minor"]) && $_POST["Minor"] == true) {
+    if ($_POST["PCFormVer"] != "on") {
+      echo('Error: Parental consent form not verified. Click back and check "Parental Consent Form Received" after verifying attendee information');
+      die();
+    }
+  }
+
+  // Make sure information was verified
+  
   if (isset($_POST["checkin"]) && $_POST["checkin"] == true) {
     regcheckin($_POST["Id"]);
+    if (isset($_POST["Minor"]) && $_POST["Minor"] == true && $_POST["PCFormVer"] == "on") {
+      regCheckinParentFormReceived($_POST["Id"]);
+    }    
     redirect("/index.php");
     die();
   } else {
@@ -43,6 +56,7 @@ if (isset($_GET['id'])) {
 <?php require "../includes/leftmenu.php" ?>
 
 <div id="content"><!-- InstanceBeginEditable name="Content" -->
+<form action="/prereg_pages/prereg_checkin.php" method="post">
 <fieldset id="personalinfo">
 <legend>Attendee Info</legend>
 <label>First Name: </label>
@@ -87,7 +101,7 @@ if (isset($_GET['id'])) {
 <label>Phone Number: </label>
 <span class="display_text"><?php echo $attendee->kumo_reg_data_parentphone; ?></span>
 <br /><br />
-<input name="PCFormVer" type="checkbox" <?php if ($attendee->kumo_reg_data_parentform == "Yes") { echo "value=\"Yes\" checked"; } else { echo "value=\"\""; } ?> id="Parent Contact Form Verification" class="checkbox" /><span class="display_text"> PARENTAL CONSENT FORM RECEIVED</span>
+<input name="PCFormVer" type="checkbox" <?php if ($attendee->kumo_reg_data_parentform == "Yes") { echo "checked"; } ?> id="Parent Contact Form Verification" class="checkbox" /><span class="display_text"> PARENTAL CONSENT FORM RECEIVED</span>
 </fieldset>
 <?php } ?>
 
@@ -104,14 +118,14 @@ if (isset($_GET['id'])) {
 </fieldset>
 <fieldset id="checkin">
 <legend>CHECK IN</legend>
-<form action="/prereg_pages/prereg_checkin.php" method="post">
 <?php if ($attendee->kumo_reg_data_checkedin == "Yes") { ?>
   <span class='display_text'>CHECKED IN</span>
 <? } else { ?>
   <input name='checkin' type='checkbox' id='Information Verification' class='checkbox' />
   <span class='display_text'>VERIFIED INFO</span><br />
+  <input name="Id" type="hidden" value="<? echo $attendee->kumo_reg_data_id ?>" />
+  <input name="Minor" type="hidden" value="<? echo $attendee->isMinor(); ?>" />
   <div class='centerbutton'>
-    <input name=Id type=hidden value='<? echo $Id ?>' />
     <input name='Update' type='submit' value='update' class='submit_button' />
   </div>
 <? } ?>
