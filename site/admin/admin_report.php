@@ -5,7 +5,28 @@ require('../includes/authcheck.php');
 require_right('report_view');
 
 mysql_select_db($db_name, $kumo_conn);
-$query_rs_reports = "select distinct (select count(*) from kumo_reg_data where kumo_reg_data_checkedin = 'yes' AND kumo_reg_data_regtype='prereg') AS preregcheckedincount, (select count(*) from kumo_reg_data where kumo_reg_data_checkedin = 'no' AND kumo_reg_data_regtype='prereg') AS preregnotcheckedincount,(select count(*) from kumo_reg_data where kumo_reg_data_regtype = 'reg' AND kumo_reg_data_timestamp like '2014-08-29%') AS countregon829, (select sum(kumo_reg_data_paidamount) from kumo_reg_data where kumo_reg_data_regtype = 'reg' AND kumo_reg_data_timestamp like '2014-08-29%') AS sumregon829,(select count(*) from kumo_reg_data where kumo_reg_data_regtype = 'reg' AND kumo_reg_data_timestamp like '2014-08-30%') AS countregon830, (select sum(kumo_reg_data_paidamount) from kumo_reg_data where kumo_reg_data_regtype = 'reg' AND kumo_reg_data_timestamp like '2014-08-30%') AS sumregon830,(select count(*) from kumo_reg_data where kumo_reg_data_regtype = 'reg' AND kumo_reg_data_timestamp like '2014-08-31%') AS countregon831, (select sum(kumo_reg_data_paidamount) from kumo_reg_data where kumo_reg_data_regtype = 'reg' AND kumo_reg_data_timestamp like '2014-08-31%') AS sumregon831, (select count(*) from kumo_reg_data where kumo_reg_data_regtype = 'reg' AND kumo_reg_data_timestamp like '2014-09-01%') AS countregon91, (select sum(kumo_reg_data_paidamount) from kumo_reg_data where kumo_reg_data_regtype = 'reg' AND kumo_reg_data_timestamp like '2014-09-01%') AS sumregon91, (select count(*) from kumo_reg_data where kumo_reg_data_regtype = 'reg' AND kumo_reg_data_timestamp like '2014-09-02%') AS countregon92, (select sum(kumo_reg_data_paidamount) from kumo_reg_data where kumo_reg_data_regtype = 'reg' AND kumo_reg_data_timestamp like '2014-09-02%') AS sumregon92, (select count(*) from kumo_reg_data where kumo_reg_data_regtype = 'reg' AND kumo_reg_data_timestamp like '2014-09-03%') AS countregon93, (select count(*) from kumo_reg_quick_data where kumo_reg_quick_data_timestamp like '2014-08-31%') AS countquickregon831, (select count(*) from kumo_reg_quick_data where kumo_reg_quick_data_timestamp like '2014-09-01%') AS countquickregon91, (select count(*) from kumo_reg_quick_data where kumo_reg_quick_data_timestamp like '2014-09-02%') AS countquickregon92, (select count(*) from kumo_reg_data where kumo_reg_data_regtype = 'reg' AND kumo_reg_data_timestamp > DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 HOUR)) AS reginlasthour, (select count(kumo_reg_data_bnumber) from kumo_reg_data where kumo_reg_data_passtype = 'Weekend') AS passtypeweekend, (select count(kumo_reg_data_bnumber) from kumo_reg_data where kumo_reg_data_passtype = 'Friday') AS passtypefriday,(select count(kumo_reg_data_bnumber) from kumo_reg_data where kumo_reg_data_passtype = 'Saturday') AS passtypesaturday, (select count(kumo_reg_data_bnumber) from kumo_reg_data where kumo_reg_data_passtype = 'Sunday') AS passtypesunday, (select count(kumo_reg_data_bnumber) from kumo_reg_data where kumo_reg_data_passtype = 'Monday') AS passtypemonday, (SELECT count(*) FROM kumo_reg_data WHERE kumo_reg_data_bnumber IN (SELECT kumo_reg_quick_data_bnumber FROM kumo_reg_quick_data)) AS quickentered, (select count(*) from kumo_reg_quick_data where kumo_reg_quick_data_timestamp > DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 HOUR)) AS quickreginlasthour, (select count(*) from kumo_reg_data where kumo_reg_data_regtype like 'reg') AS regtotal,(select count(*) from kumo_reg_data where kumo_reg_data_checkedin = 'Yes') AS checkedintotal, (select sum(kumo_reg_data_paidamount) from kumo_reg_data where kumo_reg_data_regtype = 'reg') AS sumregtotal from kumo_reg_data;";
+$query_rs_reports = "select distinct (select count(*) from kumo_reg_data where kumo_reg_data_checkedin = 'yes' AND kumo_reg_data_regtype='prereg') AS preregcheckedincount,
+                                     (select count(*) from kumo_reg_data where kumo_reg_data_checkedin = 'no' AND kumo_reg_data_regtype='prereg') AS preregnotcheckedincount,
+                                     (select count(*) from kumo_reg_data where kumo_reg_data_regtype = 'reg' AND kumo_reg_data_timestamp like '2014-08-29%') AS countregon829,
+                                     (select sum(kumo_reg_data_paidamount) from kumo_reg_data where kumo_reg_data_regtype = 'reg' AND kumo_reg_data_timestamp like '2014-08-29%') AS sumregon829,
+                                     (select count(*) from kumo_reg_data where kumo_reg_data_regtype = 'reg' AND kumo_reg_data_timestamp like '2014-08-30%') AS countregon830,
+                                     (select sum(kumo_reg_data_paidamount) from kumo_reg_data where kumo_reg_data_regtype = 'reg' AND kumo_reg_data_timestamp like '2014-08-30%') AS sumregon830,
+                                     (select count(*) from kumo_reg_data where kumo_reg_data_regtype = 'reg' AND kumo_reg_data_timestamp like '2014-08-31%') AS countregon831,
+                                     (select sum(kumo_reg_data_paidamount) from kumo_reg_data where kumo_reg_data_regtype = 'reg' AND kumo_reg_data_timestamp like '2014-08-31%') AS sumregon831,
+                                     (select count(*) from kumo_reg_data where kumo_reg_data_regtype = 'reg' AND kumo_reg_data_timestamp like '2014-09-01%') AS countregon91,
+                                     (select sum(kumo_reg_data_paidamount) from kumo_reg_data where kumo_reg_data_regtype = 'reg' AND kumo_reg_data_timestamp like '2014-09-01%') AS sumregon91,
+                                     (select count(*) from kumo_reg_data where kumo_reg_data_regtype = 'reg' AND kumo_reg_data_timestamp like '2014-09-02%') AS countregon92,
+                                     (select sum(kumo_reg_data_paidamount) from kumo_reg_data where kumo_reg_data_regtype = 'reg' AND kumo_reg_data_timestamp like '2014-09-02%') AS sumregon92,
+                                     (select count(*) from kumo_reg_data where kumo_reg_data_regtype = 'reg' AND kumo_reg_data_timestamp like '2014-09-03%') AS countregon93,
+                                     (select count(*) from kumo_reg_data where kumo_reg_data_regtype = 'reg' AND kumo_reg_data_timestamp > DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 HOUR)) AS reginlasthour,
+                                     (select count(kumo_reg_data_bnumber) from kumo_reg_data where kumo_reg_data_passtype = 'Weekend') AS passtypeweekend,
+                                     (select count(kumo_reg_data_bnumber) from kumo_reg_data where kumo_reg_data_passtype = 'Friday') AS passtypefriday,
+                                     (select count(kumo_reg_data_bnumber) from kumo_reg_data where kumo_reg_data_passtype = 'Saturday') AS passtypesaturday,
+                                     (select count(kumo_reg_data_bnumber) from kumo_reg_data where kumo_reg_data_passtype = 'Sunday') AS passtypesunday,
+                                     (select count(kumo_reg_data_bnumber) from kumo_reg_data where kumo_reg_data_passtype = 'Monday') AS passtypemonday,
+                                     (select count(*) from kumo_reg_data where kumo_reg_data_regtype like 'reg') AS regtotal,
+                                     (select count(*) from kumo_reg_data where kumo_reg_data_checkedin = 'Yes') AS checkedintotal,
+                                     (select sum(kumo_reg_data_paidamount) from kumo_reg_data where kumo_reg_data_regtype = 'reg') AS sumregtotal from kumo_reg_data;";
 $rs_reports = mysql_query($query_rs_reports, $kumo_conn) or die(mysql_error());
 $row_rs_reports = mysql_fetch_assoc($rs_reports);
 $totalRows_rs_reports = mysql_num_rows($rs_reports);
@@ -15,25 +36,14 @@ $totalRows_rs_reports = mysql_num_rows($rs_reports);
 <html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/main.dwt.php" codeOutsideHTMLIsLocked="false" -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<!-- InstanceBeginEditable name="doctitle" -->
 <title>Kumoricon Registration</title>
-
-<!-- InstanceEndEditable -->
 <link href="../assets/css/kumoreg.css" rel="stylesheet" type="text/css" /> 
-<script type="text/javascript">
-function MM_goToURL() { //v3.0
-  var i, args=MM_goToURL.arguments; document.MM_returnValue = false;
-  for (i=0; i<(args.length-1); i+=2) eval(args[i]+".location='"+args[i+1]+"'");
-}
-</script>
-<!-- InstanceBeginEditable name="head" -->
 <meta http-equiv="refresh" content="60" />
-<!-- InstanceEndEditable -->
 </head>
 <body>
 <div id="header"></div>
 <?php require "../includes/leftmenu.php" ?>
-<div id="content"><!-- InstanceBeginEditable name="Content" -->
+<div id="content">
 <table id="list_table" width="300" border="1" cellspacing="0" cellpadding="0">
   <tr>
     <th colspan="2" class="display_text">Preregistrations</th>
@@ -80,29 +90,12 @@ function MM_goToURL() { //v3.0
     <td colspan="2">Revenue of Registrations on 9/1/2014: <?php echo $row_rs_reports['sumregon91']; ?></td>
   </tr>
 <?php } ?>
-<!--      <th colspan="2">Quick Registrations</th>
-  </tr>
-  <tr>
-    <td colspan="2">Number of Quick Registrations on 8/31/2013: <?php echo $row_rs_reports['countquickregon831']; ?></td>
-  </tr>
-  <tr>
-    <td colspan="2">Number of Quick Registrations on 9/1/2013: <?php echo $row_rs_reports['countquickregon91']; ?></td>
-  </tr>
-    <tr>
-    <td colspan="2">Number of Quick Registrations on 9/2/2013: <?php echo $row_rs_reports['countquickregon92']; ?></td>
-  </tr>-->
   <tr>
     <th colspan="2">Registrations In The Last Hour</th>
   </tr>
   <tr>
     <td colspan="2"><?php echo $row_rs_reports['reginlasthour']; ?></td>
   </tr>
-<!--  <tr>
-    <th colspan="2">Quick Registrations In The Last Hour</th>
-  </tr>
-  <tr>
-    <td colspan="2"><?php echo $row_rs_reports['quickreginlasthour']; ?></td>
-  </tr>-->
     <tr>
     <th colspan="2">Pass Types</th>
   </tr>
@@ -134,13 +127,9 @@ function MM_goToURL() { //v3.0
       </td>
     </tr>
 </table>
+</div>
 
-
-
-
-
-<!-- InstanceEndEditable --></div>
 <div id="footer">&copy; Tim Zuidema</div> 
-<!-- InstanceBeginEditable name="Javascript" --><!-- InstanceEndEditable -->
+
 </body>
-<!-- InstanceEnd --></html>
+</html>
