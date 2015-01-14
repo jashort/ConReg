@@ -14,7 +14,7 @@ if (isset($_POST['username'])) {
   $username = $_POST['username'];
 }
 	
-	$stmt = $conn->prepare("SELECT * FROM kumo_reg_staff WHERE kumo_reg_staff_username like :uname");
+	$stmt = $conn->prepare("SELECT * FROM reg_staff WHERE username like :uname");
     $stmt->execute(array('uname' => $username));
 	$results = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -62,18 +62,18 @@ jQuery(function($){
 <fieldset id="list_table_search">
 <form name="staffupdate" action="/staff/staff_update.php" method="post">
 <label>
-<input name="id" type="hidden" value="<?php echo $results['kumo_reg_staff_id']; ?>" />
+<input name="id" type="hidden" value="<?php echo $results['staff_id']; ?>" />
 Username : </label>
-<span class="display_text"><?php echo $results['kumo_reg_staff_username']; ?></span><br /><br />
-<label>First Name : <input name="fname" type="text" class="input_20_150" value="<?php echo $results['kumo_reg_staff_fname']; ?>" /></label><br />
-<label>Last Name : <input name="lname" type="text" class="input_20_150" value="<?php echo $results['kumo_reg_staff_lname']; ?>" /></label><br />
-<label>Initials : <input name="initials" type="text" class="input_20_150" value="<?php echo $results['kumo_reg_staff_initials']; ?>" /></label><br />
-<label>Cell Phone Number : <input id="cellnumber" name="cellnumber" type="text" class="input_20_150"  value="<?php echo $results['kumo_reg_staff_phone_number']; ?>" /></label><br />
+<span class="display_text"><?php echo $results['username']; ?></span><br /><br />
+<label>First Name : <input name="fname" type="text" class="input_20_150" value="<?php echo $results['first_name']; ?>" /></label><br />
+<label>Last Name : <input name="lname" type="text" class="input_20_150" value="<?php echo $results['last_name']; ?>" /></label><br />
+<label>Initials : <input name="initials" type="text" class="input_20_150" value="<?php echo $results['initials']; ?>" /></label><br />
+<label>Cell Phone Number : <input id="cellnumber" name="cellnumber" type="text" class="input_20_150"  value="<?php echo $results['phone_number']; ?>" /></label><br />
 <label>Access Level :
 <select name="accesslevel" class="select_25_125" id="accesslevel">
 <?php
     foreach (array_keys($ROLES) as $i) {
-        if ($i == $results['kumo_reg_staff_accesslevel']){
+        if ($i == $results['access_level']){
             $selected = 'selected';
         } else {
             $selected = '';
@@ -83,13 +83,13 @@ Username : </label>
 ?>
 </select><br />
 <label>Enabled : <select name="enabled" class="select_25_75">
-<option value="1" <?php if ($results['kumo_reg_staff_enabled']=="1"){echo 'selected';}?>>Yes</option>
-<option value="0" <?php if ($results['kumo_reg_staff_enabled']=="0"){echo 'selected';}?>>No</option>
+<option value="1" <?php if ($results['enabled']=="1"){echo 'selected';}?>>Yes</option>
+<option value="0" <?php if ($results['enabled']=="0"){echo 'selected';}?>>No</option>
 </select></label><br />
 <input name="create" type="submit" class="submit_button" value="Update" />
 </form>
 <form name="password" action="/staff/staff_update.php" method="post">
-<input name="username" type="hidden" value="<?php echo $results['kumo_reg_staff_username']; ?>" />
+<input name="username" type="hidden" value="<?php echo $results['username']; ?>" />
 <input name="password" type="hidden" value="password" />
 <input name="passwordreset" type="submit" class="submit_button" value="Password Reset" /><br />
 </form>

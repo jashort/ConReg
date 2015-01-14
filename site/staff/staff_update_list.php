@@ -3,7 +3,7 @@ require('../Connections/kumo_conn.php');
 require('../includes/authcheck.php');
 require_right('manage_staff');
 
-$stmt = $conn->prepare("SELECT * FROM kumo_reg_staff ORDER BY kumo_reg_staff_username ASC");
+$stmt = $conn->prepare("SELECT * FROM reg_staff ORDER BY username ASC");
 $stmt->execute();
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -35,7 +35,7 @@ function MM_goToURL() { //v3.0
         <?php
 do {  
 ?>
-        <option value="<?php echo $results['kumo_reg_staff_username']?>"><?php echo $results['kumo_reg_staff_username']?></option>
+        <option value="<?php echo $results['username']?>"><?php echo $results['username']?></option>
         <?php
 } while ($results = $stmt->fetch(PDO::FETCH_ASSOC));
 ?>

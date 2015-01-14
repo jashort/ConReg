@@ -4,26 +4,16 @@ require('../includes/authcheck.php');
 
 require_right('manage_staff');
 
-$stmt = $conn->prepare("SELECT * FROM kumo_reg_staff ORDER BY kumo_reg_staff_fname ASC");
+$stmt = $conn->prepare("SELECT * FROM reg_staff ORDER BY first_name ASC");
 $stmt->execute();
-
+$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/main.dwt.php" codeOutsideHTMLIsLocked="false" -->
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<!-- InstanceBeginEditable name="doctitle" -->
-<title>Kumoricon Registration</title>
-<!-- InstanceEndEditable -->
-<link href="../assets/css/kumoreg.css" rel="stylesheet" type="text/css" /> 
-<script type="text/javascript">
-function MM_goToURL() { //v3.0
-  var i, args=MM_goToURL.arguments; document.MM_returnValue = false;
-  for (i=0; i<(args.length-1); i+=2) eval(args[i]+".location='"+args[i+1]+"'");
-}
-</script>
-<!-- InstanceBeginEditable name="head" -->
-<!-- InstanceEndEditable -->
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Kumoricon Registration</title>
+  <link href="../assets/css/kumoreg.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div id="header"></div>
@@ -35,12 +25,12 @@ function MM_goToURL() { //v3.0
     <th scope="col">Name</th>
     <th scope="col">Phone Number</th>
     </tr>
-  <?php do { ?>
+  <?php foreach ($results as $result) { ?>
     <tr>
-      <td><?php echo $results['kumo_reg_staff_fname'] . " " . $results['kumo_reg_staff_lname']; ?></td>
-      <td><?php echo $results['kumo_reg_staff_phone_number']; ?></td>
+      <td><?php echo $result['first_name'] . " " . $result['last_name']; ?></td>
+      <td><?php echo $result['phone_number']; ?></td>
       </tr>
-    <?php } while ($results = $stmt->fetch(PDO::FETCH_ASSOC)); ?>
+    <?php } ?>
 </table>
 <!-- InstanceEndEditable --></div>
 <div id="footer">&copy; Tim Zuidema</div> 

@@ -1,21 +1,21 @@
 /* Create database tables */
 USE registration;
 
-CREATE TABLE registration.kumo_reg_staff
+CREATE TABLE registration.reg_staff
 (
-    kumo_reg_staff_id INT(10) PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    kumo_reg_staff_username VARCHAR(60) NOT NULL,
-    kumo_reg_staff_password CHAR(98) NOT NULL,
-    kumo_reg_staff_enabled BOOLEAN DEFAULT TRUE NOT NULL,
-    kumo_reg_staff_fname VARCHAR(60) NOT NULL,
-    kumo_reg_staff_lname VARCHAR(60) NOT NULL,
-    kumo_reg_staff_initials CHAR(3) NOT NULL,
-    kumo_reg_staff_phone_number VARCHAR(60),
-    kumo_reg_staff_bnumber SMALLINT(5) UNSIGNED ZEROFILL DEFAULT 0 NOT NULL COMMENT 'Last Badge Number Created',
-    kumo_reg_staff_accesslevel INT DEFAULT 1 NOT NULL
+    staff_id INT(10) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    username VARCHAR(60) NOT NULL,
+    password CHAR(98) NOT NULL,
+    enabled BOOLEAN DEFAULT TRUE NOT NULL,
+    first_name VARCHAR(60) NOT NULL,
+    last_name VARCHAR(60) NOT NULL,
+    initials CHAR(3) NOT NULL,
+    phone_number VARCHAR(60),
+    last_badge_number MEDIUMINT(5) UNSIGNED ZEROFILL DEFAULT 0 NOT NULL COMMENT 'Last Badge Number Created',
+    access_level INT DEFAULT 1 NOT NULL
 );
-ALTER TABLE registration.kumo_reg_staff ADD CONSTRAINT unique_kumo_reg_staff_id UNIQUE (kumo_reg_staff_id);
-ALTER TABLE registration.kumo_reg_staff ADD CONSTRAINT unique_kumo_reg_staff_initials UNIQUE (kumo_reg_staff_initials);
+ALTER TABLE registration.reg_staff ADD CONSTRAINT unique_id UNIQUE (staff_id);
+ALTER TABLE registration.reg_staff ADD CONSTRAINT unique_initials UNIQUE (initials);
 
 
 CREATE TABLE registration.kumo_reg_orders
