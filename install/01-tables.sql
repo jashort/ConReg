@@ -48,7 +48,7 @@ CREATE TABLE registration.kumo_reg_data
     kumo_reg_data_paid       CHAR(3) COMMENT 'Values: yes or no',
     kumo_reg_data_paidamount DECIMAL(5, 2) NOT NULL,
     kumo_reg_data_passtype   VARCHAR(50),
-    kumo_reg_data_regtype    VARCHAR(50),
+    kumo_reg_data_regtype    VARCHAR(50) COMMENT 'Values: Reg or PreReg',
     kumo_reg_data_orderid    INT,
     kumo_reg_data_checkedin  CHAR(3) NOT NULL COMMENT 'Values: yes or no',
     kumo_reg_data_notes      TEXT,

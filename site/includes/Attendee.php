@@ -26,7 +26,7 @@ class Attendee {
     public $kumo_reg_data_paid;
     public $kumo_reg_data_paidamount;
     public $kumo_reg_data_passtype;
-    public $kumo_reg_data_regtype;
+    public $kumo_reg_data_regtype;      // Registration type. Reg or PreReg
     public $kumo_reg_data_orderid;
     public $kumo_reg_data_checkedin;
     public $kumo_reg_data_notes;
