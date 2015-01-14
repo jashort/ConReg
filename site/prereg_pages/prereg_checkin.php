@@ -137,6 +137,3 @@ if (isset($_GET['id'])) {
 <!-- InstanceBeginEditable name="Javascript" --><!-- InstanceEndEditable -->
 </body>
 <!-- InstanceEnd --></html>
-<?php
-mysql_free_result($rs_update);
-?>

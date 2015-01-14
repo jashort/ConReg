@@ -1,27 +1,12 @@
 <?php
 require('../Connections/kumo_conn.php');
 require('../includes/authcheck.php');
-
+require('../includes/functions.php');
 require_right('prereg_checkin');
 
 
-if (isset($_GET['id'])) {
-  $colname_rs_checkin_list = $_GET['id'];
-
-
-  if ($_GET['field'] == "bid") {
-    $query_rs_checkin_list = sprintf("SELECT kumo_reg_data_id, kumo_reg_data_fname, kumo_reg_data_lname, kumo_reg_data_bname, kumo_reg_data_checkedin FROM kumo_reg_data WHERE kumo_reg_data_bnumber = '%s'", mysql_real_escape_string($colname_rs_checkin_list));
-  } elseif ($_GET['field'] == "ln") {
-    $query_rs_checkin_list = sprintf("SELECT kumo_reg_data_id, kumo_reg_data_fname, kumo_reg_data_lname, kumo_reg_data_bname, kumo_reg_data_checkedin FROM kumo_reg_data WHERE kumo_reg_data_lname LIKE '%s'", mysql_real_escape_string($colname_rs_checkin_list));
-  } elseif ($_GET['field'] == "fn") {
-    $query_rs_checkin_list = sprintf("SELECT kumo_reg_data_id, kumo_reg_data_fname, kumo_reg_data_lname, kumo_reg_data_bname, kumo_reg_data_checkedin FROM kumo_reg_data WHERE kumo_reg_data_fname LIKE '%s'", mysql_real_escape_string($colname_rs_checkin_list));
-  }
-
-  mysql_select_db($db_name, $kumo_conn);
-  $rs_checkin_list = mysql_query($query_rs_checkin_list, $kumo_conn) or die(mysql_error());
-  $row_rs_checkin_list = mysql_fetch_assoc($rs_checkin_list);
-  $totalRows_rs_checkin_list = mysql_num_rows($rs_checkin_list);
-
+if (isset($_GET['id']) && isset($_GET['field'])) {
+  $attendees = preRegSearch($_GET['id'], $_GET['field']);
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -62,22 +47,30 @@ if (isset($_GET['id'])) {
       <tr>
         <th scope="col">Name</th>
         <th scope="col">Badge Name</th>
+        <th scope="col">Order</th>
         <th scope="col">Checked In</th>
       </tr>
-      <?php do { ?>
-        <tr>
-          <td><a href="/prereg_pages/prereg_checkin.php?id=<?php echo $row_rs_checkin_list['kumo_reg_data_id']; ?>"><?php echo $row_rs_checkin_list['kumo_reg_data_fname'] . " " . $row_rs_checkin_list['kumo_reg_data_lname']; ?></a></td>
-          <td><?php echo $row_rs_checkin_list['kumo_reg_data_bname']; ?></td>
-          <td><?php echo $row_rs_checkin_list['kumo_reg_data_checkedin']; ?></td>
-        </tr>
       <?php
-        } while ($row_rs_checkin_list = mysql_fetch_assoc($rs_checkin_list));
+        $lastOrder = -1;
+        foreach ($attendees as $attendee) { 
+          if ($attendee['kumo_reg_data_orderid'] == $lastOrder) {
+            $rowClass = '';
+          } else {
+            $rowClass = 'spacer_row';
+            $lastOrder = $attendee['kumo_reg_data_orderid'];
+          }
+      ?>
+        <tr>
+          <td class="<?php echo $rowClass ?>"><a href="/prereg_pages/prereg_checkin.php?id=<?php echo $attendee['kumo_reg_data_id']; ?>"><?php echo $attendee['kumo_reg_data_fname'] . " " . $attendee['kumo_reg_data_lname']; ?></a></td>
+          <td class="<?php echo $rowClass ?>"><?php echo $attendee['kumo_reg_data_bname']; ?></td>
+          <td class="<?php echo $rowClass ?>"><?php echo $attendee['kumo_reg_data_orderid']; ?></td>
+          <td class="<?php echo $rowClass ?>"><?php echo $attendee['kumo_reg_data_checkedin']; ?></td>
+        </tr>
+      <?php 
+        } 
       ?>
     </table>
-  <?php
-    mysql_free_result($rs_checkin_list);
-  }
-  ?>
+  <?php } ?>
   <!-- InstanceEndEditable --></div>
 <div id="footer">&copy; Tim Zuidema</div>
 <!-- InstanceBeginEditable name="Javascript" --><!-- InstanceEndEditable -->

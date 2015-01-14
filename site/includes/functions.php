@@ -237,6 +237,31 @@ function regCheckinParentFormReceived($Id) {
 	$stmt->execute(array('id' => $Id));
 }
 
+
+/**
+ * @param $name	First or Lost Name
+ * @param $field Field to search. fn = first name, ln = last name
+ * @return array Array of attendee arrays
+ */
+function preRegSearch($name, $field) {
+	global $conn;
+	if ($field == 'fn') {
+		$stmt = $conn->prepare("SELECT kumo_reg_data_id, kumo_reg_data_fname, kumo_reg_data_lname, kumo_reg_data_bname,
+								kumo_reg_data_checkedin, kumo_reg_data_orderid
+								FROM kumo_reg_data
+								WHERE kumo_reg_data_fname LIKE :name
+								ORDER BY kumo_reg_data_orderid");
+	} else {
+		$stmt = $conn->prepare("SELECT kumo_reg_data_id, kumo_reg_data_fname, kumo_reg_data_lname, kumo_reg_data_bname,
+								kumo_reg_data_checkedin, kumo_reg_data_orderid
+								FROM kumo_reg_data
+								WHERE kumo_reg_data_lname LIKE :name
+								ORDER BY kumo_reg_data_orderid");
+	}
+	$stmt->execute(array('name' => $name));
+	return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 function regclear() {
 
 unset ($_SESSION['var']);
