@@ -6,7 +6,7 @@ require_right('badge_reprint');
 
 if (isset($_GET['lname'])) {
 
-	$stmt = $conn->prepare("SELECT first_name, last_name, birthdate FROM kumo_reg_data WHERE last_name LIKE :lname");
+	$stmt = $conn->prepare("SELECT id, first_name, last_name, birthdate FROM attendees WHERE last_name LIKE :lname");
     $stmt->execute(array('lname' => $_GET['lname']));
 
 }
@@ -47,33 +47,12 @@ function MM_goToURL() { //v3.0
     <th scope="col">Name</th>
     <th scope="col">Birth Date</th>
   </tr>
-  <?php do {  
-
-	$fname = $results['first_name'];
-	$lname = $results['last_name'];
-	$Birthdate = $results['birthdate'];
-
-	if ($Birthdate != "") {
-		
-		$Birthdate_array = explode("-", $Birthdate);
-		$BirthYear = $Birthdate_array[0];
-		$BirthMonth = $Birthdate_array[1];
-		$BirthDay = $Birthdate_array[2];
-
-		$BDate = $BirthYear . "-" . $BirthMonth . "-" . $BirthDay;
-
-		$date = new DateTime($BDate);
-		$now = new DateTime();
-		$interval = $now->diff($date);
-		$year_diff = $interval->y;
-	
-	}
-  ?>
+  <?php while($row = $stmt->fetch()) { ?>
     <tr>
-      <td><a href="/reg_pages/badgereprint.php?fname=<?php echo $fname; ?>&lname=<?php echo $lname; ?>&year_diff=<?php echo $year_diff; ?>" target="_new"><?php echo $fname . " " . $lname; ?></a></td>
-      <td><?php echo $Birthdate; ?></td>
+      <td><a href="/reg_pages/badgereprint.php?print=<?php echo $row['id']; ?>" target="_new"><?php echo $row['first_name'] . " " . $row['last_name']; ?></a></td>
+      <td><?php echo $row['birthdate'] ?></td>
     </tr>
-    <?php } while ($results = $stmt->fetch(PDO::FETCH_ASSOC)); ?>
+    <?php } ?>
 </table>
 <?php } // Show if search term ?>
 <!-- InstanceEndEditable --></div>
@@ -81,6 +60,4 @@ function MM_goToURL() { //v3.0
 <!-- InstanceBeginEditable name="Javascript" --><!-- InstanceEndEditable -->
 </body>
 <!-- InstanceEnd --></html>
-<?php
-mysql_free_result($rs_update_list);
-?>
+

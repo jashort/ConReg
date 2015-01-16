@@ -1,12 +1,9 @@
 <?php
 require_once('../Connections/kumo_conn.php');
 require_once('../includes/authcheck.php');
+require_once('../includes/functions.php');
 
 require_right('badge_print');
-
-if (!isset($_SESSION)) {
-  session_start();
-}
 
 include("../includes/pdf/mpdf.php");
 $mpdf=new mPDF('utf-8', array(215.9,279.4), 0, '', 0, 0, 0, 0, 0, 0, 'L');
@@ -14,11 +11,14 @@ $mpdf=new mPDF('utf-8', array(215.9,279.4), 0, '', 0, 0, 0, 0, 0, 0, 'L');
 // Buffer the following html with PHP so we can store it to a variable later
 ob_start();
 
-try {
-
-	
-} catch(PDOException $e) {
-    echo 'ERROR: ' . $e->getMessage();
+$attendee = getAttendee($_GET['print']);
+$age = $attendee->getAge();
+if ($age >= 18) {
+	$stripeColor = "#323e99";
+} elseif (($age > 12) && ($age <= 17)) {
+	$stripeColor = "#e39426";
+} else {
+	$stripeColor = "#cc202a";
 }
 
 ?>
@@ -39,7 +39,7 @@ try {
 	width: 4in;
 	height: 3.127in;
 	padding: 0;
-	background-color: <?php if ($_SESSION["year_diff"] > 17) {echo "#323e99";} elseif (($_SESSION["year_diff"] <= 17) && ($_SESSION["year_diff"] > 12)) {echo "#e39426";} else {echo "#cc202a";} ?>;
+	background-color: <?php echo $stripeColor; ?>;
 	margin-top: 0;
 	margin-right: auto;
 	margin-left: auto;
@@ -66,7 +66,7 @@ try {
 <!--<div id="stripe">
 </div>-->
 <div id="name">
-<?php echo $_SESSION["FirstName"] . " " . $_SESSION["LastName"]; ?>
+<?php echo $attendee->first_name . " " . $attendee->last_name; ?>
 </div>
 </div>
 </body>

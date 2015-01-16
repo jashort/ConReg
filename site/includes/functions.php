@@ -236,6 +236,22 @@ function regCheckinParentFormReceived($Id) {
 	$stmt->execute(array('id' => $Id));
 }
 
+function attendeeSearchLastName($name) {
+	global $conn;
+	$stmt = $conn->prepare("SELECT * FROM attendees WHERE last_name like :lname");
+	$stmt->execute(array('lname' => $name));
+	$stmt->setFetchMode(PDO::FETCH_CLASS, "Attendee");
+	return $stmt;
+}
+
+function attendeeSearchBadgeNumber($badgeNumber) {
+	global $conn;
+	$stmt = $conn->prepare("SELECT * FROM attendees WHERE badge_number like :badge");
+	$stmt->execute(array('badge' => $badgeNumber));
+	$stmt->setFetchMode(PDO::FETCH_CLASS, "Attendee");
+	return $stmt;
+}
+
 
 /**
  * @param $name	First or Lost Name
