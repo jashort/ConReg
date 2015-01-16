@@ -29,13 +29,13 @@ function getnextbadgenumber($username) {
     global $conn;
 
     // Get number
-    $stmt = $conn->prepare("SELECT kumo_reg_staff_bnumber FROM kumo_reg_staff WHERE kumo_reg_staff_username = :uname");
+    $stmt = $conn->prepare("SELECT last_badge_number FROM reg_staff WHERE username = :uname");
     $stmt->execute(array('uname' => $username));
     $results = $stmt->fetch(PDO::FETCH_ASSOC);
-    $BNumber = $results['kumo_reg_staff_bnumber']+1;
+    $BNumber = $results['last_badge_number']+1;
 
     // Save new number
-    $stmt = $conn->prepare("UPDATE kumo_reg_staff SET kumo_reg_staff_bnumber = :bnumber WHERE kumo_reg_staff_username = :uname");
+    $stmt = $conn->prepare("UPDATE reg_staff SET last_badge_number = :bnumber WHERE username = :uname");
     $stmt->execute(array('bnumber' => $BNumber, 'uname' => $username));
     return $BNumber;    
 }

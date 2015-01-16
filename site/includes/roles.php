@@ -2,7 +2,7 @@
 
 /*
  * Role rights and names. Roles configured here are stored in the database in
- * the kumo_reg_staff.kumo_reg_staff_accesslevel field.
+ * the reg_staff.access_level field.
  * On login, the individual rights are stored in $_SESSION['rights']
  *
  * Use the functions has_right() and require_right() to interact with them.

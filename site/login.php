@@ -12,32 +12,32 @@ if (isset($_GET['accesscheck'])) {
 if (isset($_POST['username'])) {
 	try {	
 		
-	$stmt = $conn->prepare('SELECT kumo_reg_staff_initials, kumo_reg_staff_username, kumo_reg_staff_password, kumo_reg_staff_accesslevel , kumo_reg_staff_enabled FROM kumo_reg_staff WHERE kumo_reg_staff_username = :username');
+	$stmt = $conn->prepare('SELECT initials, username, password, access_level, enabled FROM reg_staff WHERE username = :username');
     $stmt->execute(array('username' => $_POST["username"]));
 
 	$results = $stmt->fetch(PDO::FETCH_ASSOC);
 	
-	if(crypt($_POST["password"],$results["kumo_reg_staff_password"])==$results["kumo_reg_staff_password"]) {
+	if(crypt($_POST["password"], $results["password"])==$results["password"]) {
 		$verified = TRUE;
 	}
 
 	$redirectLoginSuccess = "/index.php";
 	$redirectLoginFailed = "/login.php";
 	
-	if (($results) && ($verified) && ($results["kumo_reg_staff_enabled"] == "1")) {
+	if (($results) && ($verified) && ($results["enabled"] == "1")) {
     
 	session_regenerate_id(true);
 	
     //Declare session variables and assign them
-    $_SESSION['username'] = $results["kumo_reg_staff_username"];
-	$_SESSION['access'] = $results["kumo_reg_staff_accesslevel"];
-	$_SESSION['initials'] = $results["kumo_reg_staff_initials"];
-	$_SESSION['rights'] = get_rights($results["kumo_reg_staff_accesslevel"]);	// Get array of rights for
-																			    // the user's role from
-																			    // includes/roles.php
+    $_SESSION['username'] = $results["username"];
+	$_SESSION['access'] = $results["access_level"];
+	$_SESSION['initials'] = $results["initials"];
+	$_SESSION['rights'] = get_rights($results["access_level"]);	// Get array of rights for
+															    // the user's role from
+															    // includes/roles.php
 
 
-	if ($results["kumo_reg_staff_password"] == crypt("password",$results["kumo_reg_staff_password"])) {
+	if ($results["password"] == crypt("password", $results["password"])) {
 		header("Location: /staff/staff_password_reset.php?username=". $_SESSION['username']);
 	} else {
     if (isset($_SESSION['PrevUrl']) && true) {

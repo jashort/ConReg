@@ -15,13 +15,13 @@ $stmt = $conn->prepare("SELECT * FROM kumo_reg_data WHERE kumo_reg_data_id= :id"
 $stmt->execute(array('id' => $Id));
 $results = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$Birthdate = $results['kumo_reg_data_bdate'];
+$Birthdate = $results['birthdate'];
 
 if ((isset($_POST["BirthYear"])) && ($_POST["BirthYear"] !="YYYY")) {
 $BDate = $_POST["BirthYear"] . "-" . $_POST["BirthMonth"] . "-" . $_POST["BirthDay"];
 }
 
-if ($results['kumo_reg_data_bdate'] != "") {
+if ($results['birthdate'] != "") {
 $Birthdate_array = explode("-", $Birthdate);
 $BirthYear = $Birthdate_array[0];
 $BirthMonth = $Birthdate_array[1];
@@ -142,27 +142,27 @@ else if (document.reg_add3.PassType_4.checked) {
 <div id="content"><!-- InstanceBeginEditable name="Content" -->
 <form name="reg_update" action="reg_update.php" method="post">
 <input name="Id" type="hidden" value="<?php echo $results['kumo_reg_data_id'] ?>" />
-<input name="OrderId" type="hidden" value="<?php echo $results['kumo_reg_data_orderid'] ?>" />
+<input name="OrderId" type="hidden" value="<?php echo $results['order_id'] ?>" />
 <fieldset id="personalinfo">
 <legend>Attendee Info</legend>
 <label>First Name:
-<input name="FirstName" type="text" class="input_20_200" id="First Name" value="<?php echo $results['kumo_reg_data_fname'] ?>" /></label>
+<input name="FirstName" type="text" class="input_20_200" id="First Name" value="<?php echo $results['first_name'] ?>" /></label>
 <label>Last Name:
-<input name="LastName" type="text" class="input_20_200" id="Last Name" value="<?php echo $results['kumo_reg_data_lname'] ?>" /></label>
+<input name="LastName" type="text" class="input_20_200" id="Last Name" value="<?php echo $results['last_name'] ?>" /></label>
 <br />
 <label>Badge Number:
-<input name="BadgeNumber" type="text" class="input_20_200" id="Badge Number" value="<?php echo $results['kumo_reg_data_bnumber'] ?>" /></label>
+<input name="BadgeNumber" type="text" class="input_20_200" id="Badge Number" value="<?php echo $results['badge_number'] ?>" /></label>
 <br />
 <label>Zip :
-<input name="Zip" type="text" class="input_20_150" id="Zip" value="<?php echo $results['kumo_reg_data_zip'] ?>"  /></label>
+<input name="Zip" type="text" class="input_20_150" id="Zip" value="<?php echo $results['zip'] ?>"  /></label>
 <br />
 <label>E-Mail :
-<input name="EMail" type="text" class="input_20_200" id="E-Mail" value="<?php echo $results['kumo_reg_data_email'] ?>"  /></label>
+<input name="EMail" type="text" class="input_20_200" id="E-Mail" value="<?php echo $results['email'] ?>"  /></label>
 <label>E-Mail Verification :
-<input name="EMailV" type="text" class="input_20_200" onBlur="verifyEmail();" value="<?php echo $results['kumo_reg_data_email'] ?>"  /></label>
+<input name="EMailV" type="text" class="input_20_200" onBlur="verifyEmail();" value="<?php echo $results['email'] ?>"  /></label>
 <br />
 <label>Phone Number:
-<input name="PhoneNumber" type="text" class="input_20_200" id="PhoneNumber" value="<?php echo $results['kumo_reg_data_phone'] ?>"  /></label>
+<input name="PhoneNumber" type="text" class="input_20_200" id="PhoneNumber" value="<?php echo $results['phone'] ?>"  /></label>
 <label>Birth Date:
 	<input type="number" class="input_20_40" maxlength="2" name="BirthMonth" id="Birth Month" value="<?php echo $BirthMonth?>" min="1" max="12" placeholder="MM">
 	<span class="bold_text">/</span>
@@ -174,31 +174,31 @@ else if (document.reg_add3.PassType_4.checked) {
 <fieldset id="emergencyinfo">
 <legend>Emergency Contact Info</legend>
 <label>Full Name:
-<input name="ECFullName" type="text" class="input_20_200" id="Emergency Contact Full Name" value="<?php echo $results['kumo_reg_data_ecfullname'] ?>"  /></label>
+<input name="ECFullName" type="text" class="input_20_200" id="Emergency Contact Full Name" value="<?php echo $results['ec_fullname'] ?>"  /></label>
 <br />
 <label>Phone Number:
-<input name="ECPhoneNumber" type="text" class="input_20_200" id="ECPhoneNumber" value="<?php echo $results['kumo_reg_data_ecphone'] ?>"  /></label>
+<input name="ECPhoneNumber" type="text" class="input_20_200" id="ECPhoneNumber" value="<?php echo $results['ec_phone'] ?>"  /></label>
 <br />
 </fieldset>
 <?php if ($year_diff < 18) { ?>
 <fieldset id="parentinfo">
 <legend>Parent Contact Info</legend>
-<input name="Same" type="checkbox" class="checkbox" onclick="sameInfo();" <?php if ($results['kumo_reg_data_same'] == "Y") { echo "value=\"Y\" checked"; } else { echo "value=\"\""; } ?> /><span class="bold_text"> SAME AS EMERGENCY CONTACT INFO</span>
+<input name="Same" type="checkbox" class="checkbox" onclick="sameInfo();" <?php if ($results['ec_same'] == "Y") { echo "value=\"Y\" checked"; } else { echo "value=\"\""; } ?> /><span class="bold_text"> SAME AS EMERGENCY CONTACT INFO</span>
 <br /><br />
 <label>Full Name:
-<input name="PCFullName" type="text" class="input_20_200" id="Parent Contact Full Name" value="<?php echo $results['kumo_reg_data_parent'] ?>"  /></label>
+<input name="PCFullName" type="text" class="input_20_200" id="Parent Contact Full Name" value="<?php echo $results['parent_fullname'] ?>"  /></label>
 <br />
 <label>Phone Number:
-<input name="PCPhoneNumber" type="text" class="input_20_200" id="PCPhoneNumber" value="<?php echo $results['kumo_reg_data_parentphone'] ?>" /></label>
+<input name="PCPhoneNumber" type="text" class="input_20_200" id="PCPhoneNumber" value="<?php echo $results['parent_phone'] ?>" /></label>
 <br /><br />
-<input name="PCFormVer" type="checkbox" <?php if ($results['kumo_reg_data_parentform'] == "Yes") { echo "value=\"Yes\" checked"; } else { echo "value=\"\""; } ?> id="Parent Contact Form Verification" class="checkbox" onclick="verifyForm();" /><span class="bold_text"> PARENTAL CONSENT FORM RECEIVED</span>
+<input name="PCFormVer" type="checkbox" <?php if ($results['parent_form'] == "Yes") { echo "value=\"Yes\" checked"; } else { echo "value=\"\""; } ?> id="Parent Contact Form Verification" class="checkbox" onclick="verifyForm();" /><span class="bold_text"> PARENTAL CONSENT FORM RECEIVED</span>
 </fieldset>
 <?php } ?>
 <fieldset id="paymentinfo">
 <legend>PASS TYPE</legend>
 <p>
 <label>
-<?php $PassType = $results['kumo_reg_data_passtype']; ?>
+<?php $PassType = $results['pass_type']; ?>
     <input type="radio" name="PassType" value="Weekend" id="PassType_0" onchange="setAmount();" <?php if ($PassType == "Weekend") echo "checked=\"checked\""; ?> />
     All Weekend - $<?php echo $Weekend ?></label>
     <hr />
@@ -216,15 +216,15 @@ else if (document.reg_add3.PassType_4.checked) {
   <br />
       <span class="radio_button_left_margin">
     <input name="PassType" type="radio" id="PassType_4" onblur="setAmount()" value="Manual Price" <?php if ($PassType == "Manual Price") echo "checked=\"checked\""; ?> />
-    Manual Price - $<?php echo $results['kumo_reg_data_paidamount'] ?>
+    Manual Price - $<?php echo $results['paid_amount'] ?>
 </span>
-  <input name="Amount" type="hidden" id="Amount" value="<?php echo $results['kumo_reg_data_paidamount'] ?>" />
+  <input name="Amount" type="hidden" id="Amount" value="<?php echo $results['paid_amount'] ?>" />
   <br />
 </p>
 </fieldset>
 <fieldset id="notes">
 <label>Notes :
-<textarea name="Notes" rows="5"><?php echo $results['kumo_reg_data_notes']; ?></textarea></label>
+<textarea name="Notes" rows="5"><?php echo $results['notes']; ?></textarea></label>
 </fieldset>
 <div class="centerbutton">
 <input name="Update" type="submit" value="update" class="submit_button" />

@@ -33,7 +33,7 @@ if ($_FILES && $_FILES['csv']['size'] > 0) {
 
 			$conn->beginTransaction();
 			// Create order if it doesn't exist. If it does, increment the total amount
-			$stmt = $conn->prepare("INSERT INTO kumo_reg_orders (order_id, total_amount, paid, paytype)
+			$stmt = $conn->prepare("INSERT INTO orders (order_id, total_amount, paid, paytype)
 									VALUES (:orderid, :amount, :paid, :paytype)
 									ON DUPLICATE KEY UPDATE total_amount = total_amount + :amount");
 			$stmt->execute(array('orderid' => $data[17],
@@ -42,14 +42,12 @@ if ($_FILES && $_FILES['csv']['size'] > 0) {
 								 'paytype' => 'ONLINE'));
 
 			$stmt = $conn->prepare("
-							INSERT INTO kumo_reg_data (kumo_reg_data_fname, kumo_reg_data_lname, kumo_reg_data_bnumber, kumo_reg_data_bname, kumo_reg_data_zip, kumo_reg_data_country,
-                           kumo_reg_data_phone, kumo_reg_data_email, kumo_reg_data_bdate, kumo_reg_data_ecfullname, kumo_reg_data_ecphone,
-                           kumo_reg_data_same, kumo_reg_data_parent, kumo_reg_data_parentphone, kumo_reg_data_parentform,
-                           kumo_reg_data_paid, kumo_reg_data_paidamount, kumo_reg_data_passtype, kumo_reg_data_regtype,
-                           kumo_reg_data_checkedin, kumo_reg_data_staff_add, kumo_reg_data_orderid) VALUES
+							INSERT INTO attendees (first_name, last_name, badge_number, badge_name, zip, country,
+                           phone, email, birthdate, ec_fullname, ec_phone, ec_same, parent_fullname, parent_phone,
+                           parent_form, paid, paid_amount, pass_type, reg_type, checked_in, added_by, order_id) VALUES
                            (:firstname, :lastname, :bnumber, :bname, :zip, :country,
-                           :phone, :email, :bdate, :ecname, :ecphone,
-                           :same, :pcname, :pcphone, :parentform, :paid, :amount, :passtype, :regtype, :checkedin, :staffadd, :orderid)");
+                           :phone, :email, :bdate, :ecname, :ecphone, :same, :pcname, :pcphone,
+                           :parentform, :paid, :amount, :passtype, :regtype, :checkedin, :staffadd, :orderid)");
 			$stmt->execute(array('firstname' => $data[0],
 				'lastname' => $data[1],
 				'bname' => $data[2],

@@ -6,7 +6,7 @@ if (isset($_GET['letter'])) {
   $colname_rs_verification_list = $_GET['letter'];
 
 mysql_select_db($db_name, $kumo_conn);
-$query_rs_verification_list = "SELECT * FROM kumo_reg_data WHERE kumo_reg_data_bnumber like '" .$colname_rs_verification_list . "%' order by kumo_reg_data_bnumber ASC";
+$query_rs_verification_list = "SELECT * FROM kumo_reg_data WHERE badge_number like '" .$colname_rs_verification_list . "%' order by badge_number ASC";
 $rs_verification_list = mysql_query($query_rs_verification_list, $kumo_conn) or die(mysql_error());
 $row_rs_verification_list = mysql_fetch_assoc($rs_verification_list);
 $totalRows_rs_verification_list = mysql_num_rows($rs_verification_list);
@@ -50,9 +50,9 @@ function MM_goToURL() { //v3.0
   </tr>
   <?php do { ?>
     <tr>
-      <td><?php echo $row_rs_verification_list['kumo_reg_data_fname'] . " "; ?><?php echo $row_rs_verification_list['kumo_reg_data_lname']; ?></a></td>
-      <td><?php echo $row_rs_verification_list['kumo_reg_data_bnumber']; ?></td>
-      <td><?php echo $row_rs_verification_list['kumo_reg_data_bname']; ?></td>
+      <td><?php echo $row_rs_verification_list['first_name'] . " "; ?><?php echo $row_rs_verification_list['last_name']; ?></a></td>
+      <td><?php echo $row_rs_verification_list['badge_number']; ?></td>
+      <td><?php echo $row_rs_verification_list['badge_name']; ?></td>
     </tr>
     <?php } while ($row_rs_verification_list = mysql_fetch_assoc($rs_verification_list)); ?>
 </table>

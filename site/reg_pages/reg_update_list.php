@@ -8,11 +8,11 @@ if (isset($_GET['id'])) {
   $colname_rs_checkin_list = $_GET['id'];
 
 if ($_GET['field'] == "ln") {
-$query_rs_update_list = sprintf("SELECT * FROM kumo_reg_data WHERE kumo_reg_data_lname LIKE '%s'", mysql_real_escape_string($colname_rs_checkin_list));
+$query_rs_update_list = sprintf("SELECT * FROM attendees WHERE last_name LIKE '%s'", mysql_real_escape_string($colname_rs_checkin_list));
 }
 
 mysql_select_db($db_name, $kumo_conn);
-//$query_rs_update_list = sprintf("SELECT * FROM kumo_reg_data WHERE kumo_reg_data_bnumber = %s", mysql_real_escape_string($colname_rs_update_list));
+//$query_rs_update_list = sprintf("SELECT * FROM kumo_reg_data WHERE badge_number = %s", mysql_real_escape_string($colname_rs_update_list));
 $rs_update_list = mysql_query($query_rs_update_list, $kumo_conn) or die(mysql_error());
 $row_rs_update_list = mysql_fetch_assoc($rs_update_list);
 $totalRows_rs_update_list = mysql_num_rows($rs_update_list);
@@ -57,8 +57,8 @@ function MM_goToURL() { //v3.0
   </tr>
   <?php do { ?>
     <tr>
-      <td><a href="/reg_pages/reg_update.php?id=<?php echo $row_rs_update_list['kumo_reg_data_id']; ?>"><?php echo $row_rs_update_list['kumo_reg_data_fname'] . " "; ?><?php echo $row_rs_update_list['kumo_reg_data_lname']; ?></a></td>
-      <td><?php echo $row_rs_update_list['kumo_reg_data_bnumber']; ?></td>
+      <td><a href="/reg_pages/reg_update.php?id=<?php echo $row_rs_update_list['kumo_reg_data_id']; ?>"><?php echo $row_rs_update_list['first_name'] . " "; ?><?php echo $row_rs_update_list['last_name']; ?></a></td>
+      <td><?php echo $row_rs_update_list['badge_number']; ?></td>
     </tr>
     <?php } while ($row_rs_update_list = mysql_fetch_assoc($rs_update_list)); ?>
 </table>

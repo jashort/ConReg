@@ -1,31 +1,13 @@
 <?php
 require('../includes/functions.php');
 require('../includes/authcheck.php');
+require_once('../includes/Attendee.php');
 
 require_right('ops_search');
 
-$colname_rs_attendee = "-1";
+$attendee = new Attendee();
 if (isset($_GET['id'])) {
-  $colname_rs_attendee = $_GET['id'];
-}
-mysql_select_db($db_name, $kumo_conn);
-$query_rs_attendee = sprintf("SELECT * FROM kumo_reg_data WHERE kumo_reg_data_id = %s", mysql_real_escape_string($colname_rs_attendee));
-$rs_attendee = mysql_query($query_rs_attendee, $kumo_conn) or die(mysql_error());
-$row_rs_attendee = mysql_fetch_assoc($rs_attendee);
-$totalRows_rs_attendee = mysql_num_rows($rs_attendee);
-
-$Birthdate = $row_rs_attendee['kumo_reg_data_bdate'];
-
-$Birthdate_array = explode("-", $Birthdate);
-$BirthYear = $Birthdate_array[0];
-$BirthMonth = $Birthdate_array[1];
-$BirthDay = $Birthdate_array[2];
-
-$year_diff  = date("Y") - $BirthYear;
-$month_diff = date("m") - $BirthMonth;
-$day_diff   = date("d") - $BirthDay;
-if ($day_diff < 0 || $month_diff < 0){
-$year_diff--;
+  $attendee = getAttendee($_GET['id']);
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -44,57 +26,54 @@ $year_diff--;
 <fieldset id="personalinfo">
 <legend>Attendee Info</legend>
 <label>First Name: </label>
-<span class="display_text"><?php echo $row_rs_attendee['kumo_reg_data_fname']; ?></span>
+<span class="display_text"><?php echo $attendee->first_name; ?></span>
 <label>Last Name: </label>
-<span class="display_text"><?php echo $row_rs_attendee['kumo_reg_data_lname']; ?></span>
+<span class="display_text"><?php echo $attendee->last_name; ?></span>
 <br />
 <label>Badge Name: </label>
-<span class="display_text"><?php echo $row_rs_attendee['kumo_reg_data_bname']; ?></span>
+<span class="display_text"><?php echo $attendee->badge_name; ?></span>
 <label>Badge Number: </label>
-<span class="display_text"><?php echo $row_rs_attendee['kumo_reg_data_bnumber']; ?></span>
+<span class="display_text"><?php echo $attendee->badge_number; ?></span>
 <br />
 <label>E-Mail : </label>
-<span class="display_text"><?php echo $row_rs_attendee['kumo_reg_data_email']; ?></span>
+<span class="display_text"><?php echo $attendee->email; ?></span>
 <br />
 <label>Phone Number: </label>
-<span class="display_text"><?php echo $row_rs_attendee['kumo_reg_data_phone']; ?></span>
+<span class="display_text"><?php echo $attendee->phone; ?></span>
 <label>Birth Date: </label>
-<span class="display_text"><?php echo $BirthMonth; ?>/<?php echo $BirthDay; ?>/<?php echo $BirthYear; ?></span>
+<span class="display_text"><?php echo $attendee->getBirthDate(); ?></span>
 </fieldset>
 <fieldset id="emergencyinfo">
 <legend>Emergency Contact Info</legend>
 <label>Full Name: </label>
-<span class="display_text"><?php echo $row_rs_attendee['kumo_reg_data_ecfullname']; ?></span>
+<span class="display_text"><?php echo $attendee->ec_fullname; ?></span>
 <br />
 <label>Phone Number: </label>
-<span class="display_text"><?php echo $row_rs_attendee['kumo_reg_data_ecphone']; ?></span>
+<span class="display_text"><?php echo $attendee->ec_phone; ?></span>
 <br />
 </fieldset>
-<?php if ($year_diff < 18) { ?>
+<?php if ($attendee->isMinor()) { ?>
 <fieldset id="parentinfo">
 <legend>Parent Contact Info</legend>
 <label>Full Name: </label>
-<span class="display_text"><?php echo $row_rs_attendee['kumo_reg_data_parent']; ?></span>
+<span class="display_text"><?php echo $attendee->parent_fullname; ?></span>
 <br />
 <label>Phone Number: </label>
-<span class="display_text"><?php echo $row_rs_attendee['kumo_reg_data_parentphone']; ?></span>
+<span class="display_text"><?php echo $attendee->parent_phone; ?></span>
 <br />
 <label>Parental Permission Form Submitted: </label>
-<span class="display_text"><?php echo $row_rs_attendee['kumo_reg_data_parentform']; ?> </span>
+<span class="display_text"><?php echo $attendee->parent_form; ?> </span>
 </fieldset>
 <?php } ?>
 <fieldset id="paymentinfo">
 <legend>PASS TYPE</legend>
-<span class="display_text"><?php echo $row_rs_attendee['kumo_reg_data_passtype']; ?> - $<?php echo $row_rs_attendee['kumo_reg_data_paidamount']; ?></span>
+<span class="display_text"><?php echo $attendee->pass_type; ?> - $<?php echo $attendee->paid_amount; ?></span>
 </fieldset>
 <fieldset id="paymentinfo">
-<legend>PAYMENT TYPE</legend>
-<span class="display_text"><?php echo $row_rs_attendee['kumo_reg_data_paytype']; ?>
+<legend>PAID</legend>
+<span class="display_text"><?php echo $attendee->paid; ?>
 </fieldset>
 </div>
 <div id="footer">&copy; Tim Zuidema</div>
 </body>
 </html>
-<?php
-mysql_free_result($rs_attendee);
-?>

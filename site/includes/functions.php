@@ -17,7 +17,7 @@ function regadd($FirstName, $LastName, $BadgeNumber, $PhoneNumber, $Email, $Zip,
 	
 	$Phone_Stripped = preg_replace("/[^a-zA-Z0-9s]/","",$PhoneNumber);
 
-	$stmt = $conn->prepare("INSERT INTO kumo_reg_data (kumo_reg_data_fname, kumo_reg_data_lname, kumo_reg_data_bnumber, kumo_reg_data_phone, kumo_reg_data_email, kumo_reg_data_zip, kumo_reg_data_bdate, kumo_reg_data_ecfullname, kumo_reg_data_ecphone, kumo_reg_data_same, kumo_reg_data_parent, kumo_reg_data_parentphone, kumo_reg_data_parentform, kumo_reg_data_paid, kumo_reg_data_paidamount, kumo_reg_data_passtype, kumo_reg_data_regtype, kumo_reg_data_orderid, kumo_reg_data_checkedin, kumo_reg_data_notes, kumo_reg_data_staff_add) VALUES (:firstname, :lastname, :bnumber, :phone, :email, :zip, :bdate, :ecname, :ecphone, :same, :pcname, :pcphone, :pform, :paid, :amount, :passtype, :regtype, :orderid, :checked, :notes, :staffadd)");
+	$stmt = $conn->prepare("INSERT INTO attendees (first_name, last_name, badge_number, phone, email, zip, birthdate, ec_fullname, ec_phone, ec_same, parent_fullname, parent_phone, parent_form, paid, paid_amount, pass_type, reg_type, order_id, checked_in, notes, added_by) VALUES (:firstname, :lastname, :bnumber, :phone, :email, :zip, :bdate, :ecname, :ecphone, :same, :pcname, :pcphone, :pform, :paid, :amount, :passtype, :regtype, :orderid, :checked, :notes, :staffadd)");
     $stmt->execute(array('firstname' => $FirstName,
 		'lastname' => $LastName,
 		'bnumber' => $BadgeNumber,
@@ -77,11 +77,11 @@ function badgeNumberSelect() {
 	
 	global $conn;
 					   
-	$stmt = $conn->prepare("SELECT kumo_reg_staff_bnumber FROM kumo_reg_staff WHERE kumo_reg_staff_username = :uname");
+	$stmt = $conn->prepare("SELECT last_badge_number FROM reg_staff WHERE username = :uname");
     $stmt->execute(array('uname' => $_SESSION['username']));
 	$results = $stmt->fetch(PDO::FETCH_ASSOC);
 	
-	return $results['kumo_reg_staff_bnumber']+1;
+	return $results['last_badge_number']+1;
 }
 
 function badgeNumberUpdate() {
@@ -89,7 +89,7 @@ function badgeNumberUpdate() {
 	global $conn;
 	$badgeNumber = badgeNumberSelect();
 
-	$stmt = $conn->prepare("UPDATE kumo_reg_staff SET kumo_reg_staff_bnumber=:bnumber WHERE kumo_reg_staff_username=:uname");
+	$stmt = $conn->prepare("UPDATE reg_staff SET last_badge_number=:bnumber WHERE username=:uname");
     $stmt->execute(array('bnumber' => $badgeNumber, 'uname' => $_SESSION['username']));
 
 }
@@ -102,9 +102,8 @@ function badgeNumberUpdate() {
 function badgeNumberSet($Number) {
 	global $conn;
 
-	$stmt = $conn->prepare("UPDATE kumo_reg_staff SET kumo_reg_staff_bnumber=:bnumber WHERE kumo_reg_staff_username=:uname");
+	$stmt = $conn->prepare("UPDATE reg_staff SET last_badge_number=:bnumber WHERE username=:uname");
 	$stmt->execute(array('bnumber' => $Number, 'uname' => $_SESSION['username']));
-
 }
 
 
@@ -119,7 +118,7 @@ function orderadd() {
 
 	try {
 		$conn->beginTransaction();
-		$stmt = $conn->prepare("INSERT INTO kumo_reg_orders (paid) VALUES (:paid)");
+		$stmt = $conn->prepare("INSERT INTO orders (paid) VALUES (:paid)");
 		$stmt->execute(array('paid' => 'no'));
 		$orderid = $conn->lastInsertId();
 		$conn->commit();
@@ -141,7 +140,7 @@ function orderadd() {
 function orderupdate($Id, $Amount, $PayType, $Paid) {
 	global $conn;
 	try {
-		$stmt = $conn->prepare("UPDATE kumo_reg_orders SET total_amount=:amount, paid=:paid, paytype=:paytype WHERE order_id=:id");
+		$stmt = $conn->prepare("UPDATE orders SET total_amount=:amount, paid=:paid, paytype=:paytype WHERE order_id=:id");
 		$stmt->execute(array('amount' => $Amount, 'paid' => $Paid, 'paytype' => $PayType, 'id' => $Id));
 	} catch(PDOException $e) {
 		echo 'ERROR: ' . $e->getMessage();
@@ -153,7 +152,7 @@ function orderlistattendees($OrderId) {
 
 	global $conn;
 
-	$stmt = $conn->prepare("SELECT kumo_reg_data_fname, kumo_reg_data_lname, kumo_reg_data_passtype, kumo_reg_data_paidamount FROM kumo_reg_data WHERE kumo_reg_data_orderid = :orderid");
+	$stmt = $conn->prepare("SELECT first_name, last_name, pass_type, paid_amount FROM attendees WHERE order_id = :orderid");
 	$stmt->execute(array('orderid' => $OrderId));
 	return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
@@ -168,7 +167,7 @@ function getAttendee($Id) {
 
 	global $conn;
 
-	$stmt = $conn->prepare("SELECT * FROM kumo_reg_data WHERE kumo_reg_data_id = :id");
+	$stmt = $conn->prepare("SELECT * FROM attendees WHERE id = :id");
 	$stmt->execute(array('id' => $Id));
 	$attendee = $stmt->fetchObject('Attendee');
 	return $attendee;
@@ -183,7 +182,7 @@ function ordercheckin($OrderId) {
 	try {
 		global $conn;
 
-		$stmt = $conn->prepare("UPDATE kumo_reg_data SET kumo_reg_data_checkedin='Yes' WHERE kumo_reg_data_orderid= :orderid");
+		$stmt = $conn->prepare("UPDATE attendees SET checked_in='Yes' WHERE order_id= :orderid");
 		$stmt->execute(array('orderid' => $OrderId));
 	} catch(PDOException $e) {
 		echo 'ERROR: ' . $e->getMessage();
@@ -196,9 +195,9 @@ function orderpaid($OrderId, $PaymentType, $Total) {
 	try {
 		$conn->beginTransaction();
 
-		$stmt = $conn->prepare("UPDATE kumo_reg_data SET kumo_reg_data_paid='Yes' WHERE kumo_reg_data_orderid= :orderid");
+		$stmt = $conn->prepare("UPDATE attendees SET paid='Yes' WHERE order_id= :orderid");
 		$stmt->execute(array('orderid' => $OrderId));
-		$stmt = $conn->prepare("UPDATE kumo_reg_orders SET paid='Yes', paytype=:paymenttype, total_amount=:total WHERE order_id= :orderid");
+		$stmt = $conn->prepare("UPDATE orders SET paid='Yes', paytype=:paymenttype, total_amount=:total WHERE order_id= :orderid");
 		$stmt->execute(array('orderid' => $OrderId, 'paymenttype' => $PaymentType, 'total' => $Total));
 		$conn->commit();
 	} catch(PDOException $e) {
@@ -215,7 +214,7 @@ function regupdate($Id, $FirstName, $LastName, $BadgeNumber, $Zip, $EMail, $Phon
 		global $conn;
 		$Phone_Stripped = preg_replace("/[^a-zA-Z0-9s]/","",$PhoneNumber);
 
-		$stmt = $conn->prepare("UPDATE kumo_reg_data SET kumo_reg_data_fname=:firstname, kumo_reg_data_lname=:lastname, kumo_reg_data_bnumber=:badgenumber, kumo_reg_data_zip=:zip, kumo_reg_data_phone=:phone, kumo_reg_data_email=:email, kumo_reg_data_bdate=:bdate, kumo_reg_data_ecfullname=:ecname, kumo_reg_data_ecphone=:ecphone, kumo_reg_data_same=:same, kumo_reg_data_parent=:pcname, kumo_reg_data_parentphone=:pcphone, kumo_reg_data_parentform=:pform, kumo_reg_data_paidamount=:amount, kumo_reg_data_passtype=:passtype, kumo_reg_data_orderid=:orderid, kumo_reg_data_notes=:notes WHERE kumo_reg_data_id=:id");
+		$stmt = $conn->prepare("UPDATE attendees SET first_name=:firstname, last_name=:lastname, badge_number=:badgenumber, zip=:zip, phone=:phone, email=:email, birthdate=:bdate, ec_fullname=:ecname, ec_phone=:ecphone, ec_same=:same, parent_fullname=:pcname, parent_phone=:pcphone, parent_form=:pform, paid_amount=:amount, pass_type=:passtype, order_id=:orderid, notes=:notes WHERE id=:id");
 		$stmt->execute(array('firstname' => $FirstName, 'lastname' => $LastName, 'badgenumber' => $BadgeNumber, 'zip' => $Zip, 'phone' => $Phone_Stripped, 'email' => $EMail, 'bdate' => $BDate, 'ecname' => $ECFullName, 'ecphone' => $ECPhoneNumber, 'same' => $Same, 'pcname' => $PCFullName, 'pcphone' => $PCPhoneNumber, 'pform' => $PForm, 'amount' => $Amount, 'passtype' => $PassType, 'orderid' => $OrderId, 'notes' => $Notes, 'id' => $Id));
 
 	} catch(PDOException $e) {
@@ -227,13 +226,13 @@ function regupdate($Id, $FirstName, $LastName, $BadgeNumber, $Zip, $EMail, $Phon
 
 function regcheckin($Id) {
 	global $conn;
-	$stmt = $conn->prepare("UPDATE kumo_reg_data SET kumo_reg_data_checkedin='Yes' WHERE kumo_reg_data_id= :id");
+	$stmt = $conn->prepare("UPDATE attendees SET checked_in='Yes' WHERE id= :id");
 	$stmt->execute(array('id' => $Id));
 }
 
 function regCheckinParentFormReceived($Id) {
 	global $conn;
-	$stmt = $conn->prepare("UPDATE kumo_reg_data SET kumo_reg_data_parentform='Yes' WHERE kumo_reg_data_id= :id");
+	$stmt = $conn->prepare("UPDATE attendees SET parent_form='Yes' WHERE id= :id");
 	$stmt->execute(array('id' => $Id));
 }
 
@@ -246,17 +245,17 @@ function regCheckinParentFormReceived($Id) {
 function preRegSearch($name, $field) {
 	global $conn;
 	if ($field == 'fn') {
-		$stmt = $conn->prepare("SELECT kumo_reg_data_id, kumo_reg_data_fname, kumo_reg_data_lname, kumo_reg_data_bname,
-								kumo_reg_data_checkedin, kumo_reg_data_orderid
-								FROM kumo_reg_data
-								WHERE kumo_reg_data_fname LIKE :name
-								ORDER BY kumo_reg_data_orderid");
+		$stmt = $conn->prepare("SELECT id, first_name, last_name, badge_name,
+								checked_in, order_id
+								FROM attendees
+								WHERE first_name LIKE :name
+								ORDER BY order_id");
 	} else {
-		$stmt = $conn->prepare("SELECT kumo_reg_data_id, kumo_reg_data_fname, kumo_reg_data_lname, kumo_reg_data_bname,
-								kumo_reg_data_checkedin, kumo_reg_data_orderid
-								FROM kumo_reg_data
-								WHERE kumo_reg_data_lname LIKE :name
-								ORDER BY kumo_reg_data_orderid");
+		$stmt = $conn->prepare("SELECT id, first_name, last_name, badge_name,
+								checked_in, order_id
+								FROM attendees
+								WHERE last_name LIKE :name
+								ORDER BY order_id");
 	}
 	$stmt->execute(array('name' => $name));
 	return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -296,7 +295,7 @@ function staffadd($FirstName, $LastName, $Username, $Initials, $Cell, $Accesslev
 
   	global $conn;
 					   
-	$stmt = $conn->prepare("INSERT INTO kumo_reg_staff (kumo_reg_staff_fname, kumo_reg_staff_lname, kumo_reg_staff_username,  kumo_reg_staff_initials, kumo_reg_staff_password, kumo_reg_staff_phone_number, kumo_reg_staff_accesslevel, kumo_reg_staff_enabled) VALUES (:fname, :lname, :uname, :initials, :password, :cell, :access, :enabled)");
+	$stmt = $conn->prepare("INSERT INTO reg_staff (first_name, last_name, username, initials, password, phone_number, access_level, enabled) VALUES (:fname, :lname, :uname, :initials, :password, :cell, :access, :enabled)");
     $stmt->execute(array('fname' => $FirstName,'lname' => $LastName,'uname' => $Username,'initials' => $Initials,'password' => $password,'cell' => $Cell,'access' => $Accesslevel,'enabled' => $Enabled));
 	
 }
@@ -305,7 +304,7 @@ function staffupdate($Id, $FirstName, $LastName, $Initials, $Cell, $Accesslevel,
 
   	global $conn;
 					   
-	$stmt = $conn->prepare("UPDATE kumo_reg_staff SET kumo_reg_staff_fname = :fname, kumo_reg_staff_lname = :lname, kumo_reg_staff_initials = :initials, kumo_reg_staff_phone_number = :cell, kumo_reg_staff_accesslevel=:access, kumo_reg_staff_enabled=:enabled WHERE kumo_reg_staff_id=:id");
+	$stmt = $conn->prepare("UPDATE reg_staff SET first_name = :fname, last_name = :lname, initials = :initials, phone_number = :cell, access_level=:access, enabled=:enabled WHERE staff_id=:id");
     $stmt->execute(array('fname' => $FirstName,'lname' => $LastName,'initials' => $Initials,'cell' => $Cell,'access' => $Accesslevel,'enabled' => $Enabled,'id' => $Id));
 	
 }
@@ -320,7 +319,7 @@ function passwordreset($Username, $Password) {
 
 	//$passwordcrypt = password_hash($Password);
 			   
-	$stmt = $conn->prepare("UPDATE kumo_reg_staff SET kumo_reg_staff_password=:pass WHERE kumo_reg_staff_username=:uname");
+	$stmt = $conn->prepare("UPDATE reg_staff SET password=:pass WHERE username=:uname");
     $stmt->execute(array('pass' => $passwordcrypt,'uname' => $Username));
 
 	if ($_SESSION['username']==$Username) {

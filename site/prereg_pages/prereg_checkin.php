@@ -7,7 +7,7 @@ require_right('prereg_checkin');
 if (isset($_POST["Update"])) {
   // If a minor, check for parental consent form
   if (isset($_POST["Minor"]) && $_POST["Minor"] == true) {
-    if ($_POST["PCFormVer"] != "on") {
+    if (!isset($_POST["PCFormVer"]) || $_POST["PCFormVer"] != "on") {
       echo('Error: Parental consent form not verified. Click back and check "Parental Consent Form Received" after verifying attendee information');
       die();
     }
@@ -60,35 +60,35 @@ if (isset($_GET['id'])) {
 <fieldset id="personalinfo">
 <legend>Attendee Info</legend>
 <label>First Name: </label>
-<span class="display_text"><?php echo $attendee->kumo_reg_data_fname; ?></span>
+<span class="display_text"><?php echo $attendee->first_name; ?></span>
 <label>Last Name: </label>
-<span class="display_text"><?php echo $attendee->kumo_reg_data_lname; ?></span>
+<span class="display_text"><?php echo $attendee->last_name; ?></span>
 <br />
 <label>Badge Name: </label>
-<span class="display_text"><?php echo $attendee->kumo_reg_data_bname; ?></span>
+<span class="display_text"><?php echo $attendee->badge_name; ?></span>
 <label>Badge Number: </label>
-<span class="display_text"><?php echo $attendee->kumo_reg_data_bnumber; ?></span>
+<span class="display_text"><?php echo $attendee->badge_number; ?></span>
 <br />
 <label>Zip : </label>
-<span class="display_text"><?php echo $attendee->kumo_reg_data_zip; ?></span>
+<span class="display_text"><?php echo $attendee->zip; ?></span>
 <label>Country : </label>
-<span class="display_text"><?php echo $attendee->kumo_reg_data_country; ?></span>
+<span class="display_text"><?php echo $attendee->country; ?></span>
 <br />
 <label>E-Mail : </label>
-<span class="display_text"><?php echo $attendee->kumo_reg_data_email; ?></span>
+<span class="display_text"><?php echo $attendee->email; ?></span>
 <br />
 <label>Phone Number: </label>
-<span class="display_text"><?php echo $attendee->kumo_reg_data_phone; ?></span>
+<span class="display_text"><?php echo $attendee->phone; ?></span>
 <label>Birth Date: </label>
 <span class="display_text"><?php echo $attendee->getBirthDate(); ?></span>
 </fieldset>
 <fieldset id="emergencyinfo">
 <legend>Emergency Contact Info</legend>
 <label>Full Name: </label>
-<span class="display_text"><?php echo $attendee->kumo_reg_data_ecfullname; ?></span>
+<span class="display_text"><?php echo $attendee->ec_fullname; ?></span>
 <br />
 <label>Phone Number: </label>
-<span class="display_text"><?php echo $attendee->kumo_reg_data_ecphone; ?></span>
+<span class="display_text"><?php echo $attendee->ec_phone; ?></span>
 <br />
 </fieldset>
   
@@ -96,34 +96,34 @@ if (isset($_GET['id'])) {
 <fieldset id="parentinfo">
 <legend>Parent Contact Info</legend>
 <label>Full Name: </label>
-<span class="display_text"><?php echo $attendee->kumo_reg_data_parent; ?></span>
+<span class="display_text"><?php echo $attendee->parent_fullname; ?></span>
 <br />
 <label>Phone Number: </label>
-<span class="display_text"><?php echo $attendee->kumo_reg_data_parentphone; ?></span>
+<span class="display_text"><?php echo $attendee->parent_phone; ?></span>
 <br /><br />
-<input name="PCFormVer" type="checkbox" <?php if ($attendee->kumo_reg_data_parentform == "Yes") { echo "checked"; } ?> id="Parent Contact Form Verification" class="checkbox" /><span class="display_text"> PARENTAL CONSENT FORM RECEIVED</span>
+<input name="PCFormVer" type="checkbox" <?php if ($attendee->parent_form == "Yes") { echo "checked"; } ?> id="Parent Contact Form Verification" class="checkbox" /><span class="display_text"> PARENTAL CONSENT FORM RECEIVED</span>
 </fieldset>
 <?php } ?>
 
   <fieldset id="paymentinfo">
 <legend>PASS TYPE</legend>
 <p>
-  <label>Pass Type: <?echo $attendee->kumo_reg_data_passtype; ?> -
-    $<?echo $attendee->kumo_reg_data_paidamount; ?>
+  <label>Pass Type: <?echo $attendee->pass_type; ?> -
+    $<?echo $attendee->paid_amount; ?>
   </label>
 </fieldset>
 <fieldset id="notes">
 <legend>Notes</legend>
-<span class="display_text"><?php echo $attendee->kumo_reg_data_notes; ?></span>
+<span class="display_text"><?php echo $attendee->notes; ?></span>
 </fieldset>
 <fieldset id="checkin">
 <legend>CHECK IN</legend>
-<?php if ($attendee->kumo_reg_data_checkedin == "Yes") { ?>
+<?php if ($attendee->checked_in == "Yes") { ?>
   <span class='display_text'>CHECKED IN</span>
 <? } else { ?>
   <input name='checkin' type='checkbox' id='Information Verification' class='checkbox' />
   <span class='display_text'>VERIFIED INFO</span><br />
-  <input name="Id" type="hidden" value="<? echo $attendee->kumo_reg_data_id ?>" />
+  <input name="Id" type="hidden" value="<? echo $attendee->id ?>" />
   <input name="Minor" type="hidden" value="<? echo $attendee->isMinor(); ?>" />
   <div class='centerbutton'>
     <input name='Update' type='submit' value='update' class='submit_button' />

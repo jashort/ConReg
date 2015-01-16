@@ -174,12 +174,12 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Paid")) {
             <?php
             $total = 0;
             foreach (orderlistattendees($_SESSION['OrderId']) as $attendee) {
-                $total += $attendee['kumo_reg_data_paidamount'];
+                $total += $attendee['paid_amount'];
                 ?>
                 <tr>
-                    <td><? echo $attendee['kumo_reg_data_fname'] . ' ' . $attendee['kumo_reg_data_lname']?></td>
-                    <td><? echo $attendee['kumo_reg_data_passtype']?></td>
-                    <td>$<? echo $attendee['kumo_reg_data_paidamount']?></td>
+                    <td><? echo $attendee['first_name'] . ' ' . $attendee['last_name']?></td>
+                    <td><? echo $attendee['pass_type']?></td>
+                    <td>$<? echo $attendee['paid_amount']?></td>
                 </tr>
             <?php } ?>
             <tr>

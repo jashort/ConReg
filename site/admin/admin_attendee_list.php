@@ -9,10 +9,10 @@ if (isset($_GET['id'])) {
 
 
 if ($_GET['field'] == "bid") {
-$query_rs_checkin_list = sprintf("SELECT * FROM kumo_reg_data WHERE kumo_reg_data_bnumber = '%s'", mysql_real_escape_string($colname_rs_checkin_list));
+$query_rs_checkin_list = sprintf("SELECT * FROM attendees WHERE badge_number = '%s'", mysql_real_escape_string($colname_rs_checkin_list));
 }
 elseif ($_GET['field'] == "ln") {
-$query_rs_checkin_list = sprintf("SELECT * FROM kumo_reg_data WHERE kumo_reg_data_lname LIKE '%s'", mysql_real_escape_string($colname_rs_checkin_list));
+$query_rs_checkin_list = sprintf("SELECT * FROM attendees WHERE last_name LIKE '%s'", mysql_real_escape_string($colname_rs_checkin_list));
 }
 
 mysql_select_db($db_name, $kumo_conn);
@@ -85,9 +85,9 @@ function validateLN(){
   </tr>
   <?php do { ?>
     <tr>
-      <td><a href="/admin/admin_attendee_display.php?id=<?php echo $row_rs_checkin_list['kumo_reg_data_id']; ?>"><?php echo $row_rs_checkin_list['kumo_reg_data_fname'] . " "; ?><?php echo $row_rs_checkin_list['kumo_reg_data_lname']; ?></a></td>
-      <td><?php echo $row_rs_checkin_list['kumo_reg_data_bnumber']; ?></td>
-      <td><?php echo $row_rs_checkin_list['kumo_reg_data_bname']; ?></td>
+      <td><a href="/admin/admin_attendee_display.php?id=<?php echo $row_rs_checkin_list['id']; ?>"><?php echo $row_rs_checkin_list['first_name'] . " "; ?><?php echo $row_rs_checkin_list['last_name']; ?></a></td>
+      <td><?php echo $row_rs_checkin_list['badge_number']; ?></td>
+      <td><?php echo $row_rs_checkin_list['badge_name']; ?></td>
     </tr>
     <?php } while ($row_rs_checkin_list = mysql_fetch_assoc($rs_checkin_list)); ?>
 </table>

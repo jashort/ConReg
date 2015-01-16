@@ -6,7 +6,7 @@ require_right('badge_reprint');
 
 if (isset($_GET['lname'])) {
 
-	$stmt = $conn->prepare("SELECT kumo_reg_data_fname, kumo_reg_data_lname, kumo_reg_data_bdate FROM kumo_reg_data WHERE kumo_reg_data_lname LIKE :lname");
+	$stmt = $conn->prepare("SELECT first_name, last_name, birthdate FROM kumo_reg_data WHERE last_name LIKE :lname");
     $stmt->execute(array('lname' => $_GET['lname']));
 
 }
@@ -49,9 +49,9 @@ function MM_goToURL() { //v3.0
   </tr>
   <?php do {  
 
-	$fname = $results['kumo_reg_data_fname'];
-	$lname = $results['kumo_reg_data_lname'];
-	$Birthdate = $results['kumo_reg_data_bdate'];
+	$fname = $results['first_name'];
+	$lname = $results['last_name'];
+	$Birthdate = $results['birthdate'];
 
 	if ($Birthdate != "") {
 		

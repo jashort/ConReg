@@ -7,37 +7,37 @@
  */
 
 class Attendee {
-    public $kumo_reg_data_id;
-    public $kumo_reg_data_fname;
-    public $kumo_reg_data_lname;
-    public $kumo_reg_data_bname;
-    public $kumo_reg_data_bnumber;
-    public $kumo_reg_data_zip;
-    public $kumo_reg_data_country;
-    public $kumo_reg_data_phone;
-    public $kumo_reg_data_email;
-    public $kumo_reg_data_bdate;        // Birthdate in YYYY-MM-DD format
-    public $kumo_reg_data_ecfullname;
-    public $kumo_reg_data_ecphone;
-    public $kumo_reg_data_same;
-    public $kumo_reg_data_parent;
-    public $kumo_reg_data_parentphone;
-    public $kumo_reg_data_parentform;
-    public $kumo_reg_data_paid;
-    public $kumo_reg_data_paidamount;
-    public $kumo_reg_data_passtype;
-    public $kumo_reg_data_regtype;      // Registration type. Reg or PreReg
-    public $kumo_reg_data_orderid;
-    public $kumo_reg_data_checkedin;
-    public $kumo_reg_data_notes;
-    public $kumo_reg_data_staff_add;
-    public $kumo_reg_data_timestamp;
+    public $id;
+    public $first_name;
+    public $last_name;
+    public $badge_name;
+    public $badge_number;
+    public $zip;
+    public $country;
+    public $phone;
+    public $email;
+    public $birthdate;        // Birthdate in YYYY-MM-DD format
+    public $ec_fullname;
+    public $ec_phone;
+    public $ec_same;
+    public $parent_fullname;
+    public $parent_phone;
+    public $parent_form;
+    public $paid;
+    public $paid_amount;
+    public $pass_type;
+    public $reg_type;      // Registration type. Reg or PreReg
+    public $order_id;
+    public $checked_in;
+    public $notes;
+    public $added_by;
+    public $created;
 
     /**
      * @return string Birthdate in MM/DD/YYYY format
      */
     public function getBirthDate() {
-        $date = new DateTime($this->kumo_reg_data_bdate);
+        $date = new DateTime($this->birthdate);
         return $date->format('m/d/Y');
     }
 
@@ -56,7 +56,7 @@ class Attendee {
      * @return int Returns age in years
      */
     public function getAge() {
-        $date = new DateTime($this->kumo_reg_data_bdate);
+        $date = new DateTime($this->birthdate);
         $now = new DateTime();
         return $now->diff($date)->y;
     }
