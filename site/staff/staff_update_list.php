@@ -3,8 +3,8 @@ require('../Connections/kumo_conn.php');
 require('../includes/authcheck.php');
 require_right('manage_staff');
 
-$stmt = $conn->prepare("SELECT * FROM reg_staff ORDER BY username ASC");
-$stmt->execute();
+$stmt = "SELECT staff_id, username FROM reg_staff ORDER BY username ASC";
+$results = $conn->query($stmt);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/main.dwt.php" codeOutsideHTMLIsLocked="false" -->
@@ -32,16 +32,12 @@ function MM_goToURL() { //v3.0
     <fieldset id="list_table_search">
       <label>Staff Username :
       <select name="username" id="username"  class="select_25_150" >
-        <?php
-do {  
-?>
-        <option value="<?php echo $results['username']?>"><?php echo $results['username']?></option>
-        <?php
-} while ($results = $stmt->fetch(PDO::FETCH_ASSOC));
-?>
+        <?php foreach ($results as $result) { ?>
+          <option value="<?php echo $result['username']?>"><?php echo $result['username']?></option>
+        <?php } ?>
       </select></label>
-<input name="Submit" type="submit" class="submit_button" value="Go" />
-      </fieldset>
+      <input name="Submit" type="submit" class="submit_button" value="Go" />
+    </fieldset>
   </form>
 <!-- InstanceEndEditable --></div>
 <div id="footer">&copy; Tim Zuidema</div> 
