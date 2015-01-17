@@ -1,5 +1,4 @@
 <?php
-require_once('../Connections/kumo_conn.php');
 require_once('../includes/functions.php');
 
 require_once('../includes/authcheck.php');

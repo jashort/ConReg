@@ -1,26 +1,16 @@
 <?php
-require_once('../Connections/kumo_conn.php');
+require_once('../includes/functions.php');
 
 require_once('../includes/authcheck.php');
 require_right('attendee_search');
 
 if (isset($_GET['id'])) {
-  $colname_rs_checkin_list = $_GET['id'];
-
-
-if ($_GET['field'] == "bid") {
-$query_rs_checkin_list = sprintf("SELECT * FROM attendees WHERE badge_number = '%s'", mysql_real_escape_string($colname_rs_checkin_list));
+    if ($_GET['field'] == "bid") {
+        $attendees = attendeeSearchBadgeNumber($_GET['id']);
+    } else {
+        $attendees = attendeeSearchLastName($_GET['id']);
+    }
 }
-elseif ($_GET['field'] == "ln") {
-$query_rs_checkin_list = sprintf("SELECT * FROM attendees WHERE last_name LIKE '%s'", mysql_real_escape_string($colname_rs_checkin_list));
-}
-
-mysql_select_db($db_name, $kumo_conn);
-$rs_checkin_list = mysql_query($query_rs_checkin_list, $kumo_conn) or die(mysql_error());
-$row_rs_checkin_list = mysql_fetch_assoc($rs_checkin_list);
-$totalRows_rs_checkin_list = mysql_num_rows($rs_checkin_list);
-}
-//echo $query_rs_checkin_list;
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/main.dwt.php" codeOutsideHTMLIsLocked="false" -->
@@ -83,17 +73,16 @@ function validateLN(){
     <th scope="col">Badge Number</th>
     <th scope="col">Badge Name</th>
   </tr>
-  <?php do { ?>
-    <tr>
-      <td><a href="/admin/admin_attendee_display.php?id=<?php echo $row_rs_checkin_list['id']; ?>"><?php echo $row_rs_checkin_list['first_name'] . " "; ?><?php echo $row_rs_checkin_list['last_name']; ?></a></td>
-      <td><?php echo $row_rs_checkin_list['badge_number']; ?></td>
-      <td><?php echo $row_rs_checkin_list['badge_name']; ?></td>
-    </tr>
-    <?php } while ($row_rs_checkin_list = mysql_fetch_assoc($rs_checkin_list)); ?>
+
+    <?php while ($attendee = $attendees->fetch(PDO::FETCH_CLASS)) { ?>
+        <tr>
+            <td><a href="/admin/admin_attendee_display.php?id=<?php echo $attendee->id ?>" ><?php echo $attendee->first_name . " " . $attendee->last_name ?></a></td>
+            <td><?php echo $attendee->badge_number; ?></td>
+            <td><?php echo $attendee->badge_name; ?></td>
+        </tr>
+    <?php } ?>
 </table>
-<?php
-    mysql_free_result($rs_checkin_list);
-} ?>
+<?php } ?>
 <!-- InstanceEndEditable --></div>
 <div id="footer">&copy; Tim Zuidema</div> 
 <!-- InstanceBeginEditable name="Javascript" --><!-- InstanceEndEditable -->

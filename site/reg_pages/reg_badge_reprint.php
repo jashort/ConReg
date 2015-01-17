@@ -1,14 +1,13 @@
 <?php
-require_once('../Connections/kumo_conn.php');
+require_once('../includes/functions.php');
 
 require_once('../includes/authcheck.php');
 require_right('badge_reprint');
 
 if (isset($_GET['lname'])) {
-
-	$stmt = $conn->prepare("SELECT id, first_name, last_name, birthdate FROM attendees WHERE last_name LIKE :lname");
-    $stmt->execute(array('lname' => $_GET['lname']));
-
+  $attendees = attendeeSearchLastName($_GET['lname']);
+} else {
+  $attendees = array();
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -47,12 +46,12 @@ function MM_goToURL() { //v3.0
     <th scope="col">Name</th>
     <th scope="col">Birth Date</th>
   </tr>
-  <?php while($row = $stmt->fetch()) { ?>
+  <?php while ($attendee = $attendees->fetch(PDO::FETCH_CLASS)) { ?>
     <tr>
-      <td><a href="/reg_pages/badgereprint.php?print=<?php echo $row['id']; ?>" target="_new"><?php echo $row['first_name'] . " " . $row['last_name']; ?></a></td>
-      <td><?php echo $row['birthdate'] ?></td>
+      <td><a href="/reg_pages/badgereprint.php?print=<?php echo $attendee->id ?>" target="_blank"><?php echo $attendee->first_name . " " . $attendee->last_name ?></a></td>
+      <td><?php echo $attendee->getBirthDate(); ?></td>
     </tr>
-    <?php } ?>
+  <?php } ?>
 </table>
 <?php } // Show if search term ?>
 <!-- InstanceEndEditable --></div>
