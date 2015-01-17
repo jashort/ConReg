@@ -36,17 +36,17 @@ function calculatePassCost($Age, $PassType) {
         $Sunday = 0;
         $Monday = 0;
     } else if (($Age > 5) && ($Age <= 12)){
-        $Weekend = 35;
-        $Friday = 15;
-        $Saturday = 25;
-        $Sunday = 25;
-        $Monday = 15;
+        $Weekend = 45;
+        $Friday = 20;
+        $Saturday = 30;
+        $Sunday = 30;
+        $Monday = 20;
     } else {                // 13 and up
-        $Weekend = 55;
-        $Friday = 25;
-        $Saturday = 35;
-        $Sunday = 35;
-        $Monday = 25;
+        $Weekend = 60;
+        $Friday = 30;
+        $Saturday = 40;
+        $Sunday = 40;
+        $Monday = 30;
     }
 
     switch ($PassType) {
