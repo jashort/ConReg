@@ -1,6 +1,8 @@
-<?php require('../Connections/kumo_conn.php'); ?>
-<?php
-require('../includes/authcheck.php');
+<?php 
+require_once('../Connections/kumo_conn.php');
+
+require_once('../includes/authcheck.php');
+require_right('super-admin');
 
 if (isset($_GET['letter'])) {
   $colname_rs_verification_list = $_GET['letter'];

@@ -1,8 +1,8 @@
 <?php
-require('../includes/functions.php');
-require('../includes/authcheck.php');
-require('../includes/passtypes.php');
+require_once('../includes/functions.php');
+require_once('../includes/passtypes.php');
 
+require_once('../includes/authcheck.php');
 require_right('registration_add');
 
 if (array_key_exists('part', $_GET) && $_GET["part"] == "2" && stristr($_SERVER['HTTP_REFERER'], '/reg_pages/reg_add.php' ) && !stristr($_SERVER['HTTP_REFERER'], '/reg_pages/reg_add.php?part' )) {

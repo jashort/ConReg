@@ -1,4 +1,12 @@
-<?php 
+<?php
+/*
+ * Handle checking for authentication. Note that if you're including this on a page, it
+ * should be included after any other files, so that session_start() is run after any
+ * classes are loaded. Otherwise it won't be able to serialize/deserialize objects using
+ * that class.
+ */
+
+
 if (!isset($_SESSION)) {
   session_start();
 }

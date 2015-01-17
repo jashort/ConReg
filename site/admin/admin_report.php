@@ -1,7 +1,7 @@
 <?php
-require('../includes/functions.php');
-require('../includes/authcheck.php');
+require_once('../includes/functions.php');
 
+require_once('../includes/authcheck.php');
 require_right('report_view');
 
 mysql_select_db($db_name, $kumo_conn);

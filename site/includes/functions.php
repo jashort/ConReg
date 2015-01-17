@@ -1,7 +1,7 @@
 <?php
-require('../Connections/kumo_conn.php');
-require('../includes/cryptfunc.php');
-require('Attendee.php');
+require_once('../Connections/kumo_conn.php');
+require_once('../includes/cryptfunc.php');
+require_once('Attendee.php');
 
 if (!isset($_SESSION)) {
   session_start();

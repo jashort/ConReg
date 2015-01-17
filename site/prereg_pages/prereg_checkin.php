@@ -1,7 +1,7 @@
 <?php
-require('../includes/functions.php');
-require('../includes/authcheck.php');
+require_once('../includes/functions.php');
 
+require_once('../includes/authcheck.php');
 require_right('prereg_checkin');
 
 if (isset($_POST["Update"])) {

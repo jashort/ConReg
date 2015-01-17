@@ -1,7 +1,9 @@
-<?php require('../Connections/kumo_conn.php'); ?>
-<?php
-require('../includes/functions.php');
-require('../includes/authcheck.php');
+<?php 
+require_once('../Connections/kumo_conn.php');
+require_once('../includes/functions.php');
+
+require_once('../includes/authcheck.php');
+require_right('super-admin');
 
 if (isset($_GET['id'])) {
 $colname_rs_lastyear_complete = $_GET['id'];

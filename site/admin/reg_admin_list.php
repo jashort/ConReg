@@ -1,7 +1,7 @@
 <?php
-require('../Connections/kumo_conn.php');
-require('../includes/authcheck.php');
+require_once('../Connections/kumo_conn.php');
 
+require_once('../includes/authcheck.php');
 require_right('super-admin');
 
 mysql_select_db($db_name, $kumo_conn);

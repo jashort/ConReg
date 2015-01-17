@@ -1,7 +1,9 @@
 <?php 
 require_once('../Connections/kumo_conn.php');
-require_once('../includes/authcheck.php');
 require_once('../includes/functions.php');
+
+require_once('../includes/authcheck.php');
+require_right('badge_reprint');
 
 if (isset($_GET['id'])) {
   $colname_rs_checkin_list = $_GET['id'];

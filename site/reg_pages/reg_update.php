@@ -1,8 +1,8 @@
 <?php
-require('../includes/functions.php');
-require('../includes/authcheck.php');
-require('../includes/passtypes.php');
+require_once('../includes/functions.php');
+require_once('../includes/passtypes.php');
 
+require_once('../includes/authcheck.php');
 require_right('registration_update');
 
 $attendee = getAttendee($_GET['id']);

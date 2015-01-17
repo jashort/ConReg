@@ -1,8 +1,8 @@
 <?php
-require('../includes/functions.php');
-require('../includes/authcheck.php');
+require_once('../includes/functions.php');
 require_once('../includes/Attendee.php');
 
+require_once('../includes/authcheck.php');
 require_right('attendee_search');
 
 $attendee = new Attendee();

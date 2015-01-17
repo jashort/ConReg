@@ -1,7 +1,7 @@
 <?php
-require('../Connections/kumo_conn.php');
-require('../includes/authcheck.php');
+require_once('../Connections/kumo_conn.php');
 
+require_once('../includes/authcheck.php');
 require_right('manage_staff');
 
 $stmt = $conn->prepare("SELECT * FROM reg_staff ORDER BY first_name ASC");

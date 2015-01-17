@@ -1,8 +1,8 @@
 <?php
-require('../includes/functions.php');
-require('../includes/authcheck.php');
-require('../includes/roles.php');
+require_once('../includes/functions.php');
+require_once('../includes/roles.php');
 
+require_once('../includes/authcheck.php');
 require_right('manage_staff');
 
 if (isset($_POST["create"])) {
