@@ -5,29 +5,14 @@ require_once('../includes/roles.php');
 require_once('../includes/authcheck.php');
 require_right('manage_staff');
 
-try {
-$username = "-1";
 if (isset($_GET['username'])) {
-  $username = $_GET['username'];
-}
-if (isset($_POST['username'])) {
-  $username = $_POST['username'];
-}
-	
-	$stmt = $conn->prepare("SELECT * FROM reg_staff WHERE username like :uname");
-    $stmt->execute(array('uname' => $username));
-	$results = $stmt->fetch(PDO::FETCH_ASSOC);
-
-if (isset($_POST["create"])) {
-staffupdate($_POST["id"],$_POST["fname"],$_POST["lname"],$_POST["initials"],$_POST["cellnumber"],$_POST["accesslevel"],$_POST["enabled"]);
-redirect("/index.php");
-}
-if (isset($_POST["passwordreset"])) {
-passwordreset($_POST["username"],$_POST["password"]);
-redirect("/index.php");
-}
-} catch(PDOException $e) {
-    echo 'ERROR: ' . $e->getMessage();
+    $staff = getStaff($_GET['username']);
+} elseif (isset($_POST["create"])) {
+    staffupdate($_POST["id"], $_POST["fname"], $_POST["lname"], $_POST["initials"], $_POST["cellnumber"], $_POST["accesslevel"], $_POST["enabled"]);
+    redirect("/index.php");
+} elseif (isset($_POST["passwordreset"])) {
+    passwordreset($_POST["username"],$_POST["password"]);
+    redirect("/index.php");
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -62,18 +47,18 @@ jQuery(function($){
 <fieldset id="list_table_search">
 <form name="staffupdate" action="/staff/staff_update.php" method="post">
 <label>
-<input name="id" type="hidden" value="<?php echo $results['staff_id']; ?>" />
+<input name="id" type="hidden" value="<?php echo $staff['staff_id']; ?>" />
 Username : </label>
-<span class="display_text"><?php echo $results['username']; ?></span><br /><br />
-<label>First Name : <input name="fname" type="text" class="input_20_150" value="<?php echo $results['first_name']; ?>" /></label><br />
-<label>Last Name : <input name="lname" type="text" class="input_20_150" value="<?php echo $results['last_name']; ?>" /></label><br />
-<label>Initials : <input name="initials" type="text" class="input_20_150" value="<?php echo $results['initials']; ?>" /></label><br />
-<label>Cell Phone Number : <input id="cellnumber" name="cellnumber" type="text" class="input_20_150"  value="<?php echo $results['phone_number']; ?>" /></label><br />
+<span class="display_text"><?php echo $staff['username']; ?></span><br /><br />
+<label>First Name : <input name="fname" type="text" class="input_20_150" value="<?php echo $staff['first_name']; ?>" /></label><br />
+<label>Last Name : <input name="lname" type="text" class="input_20_150" value="<?php echo $staff['last_name']; ?>" /></label><br />
+<label>Initials : <input name="initials" type="text" class="input_20_150" value="<?php echo $staff['initials']; ?>" /></label><br />
+<label>Cell Phone Number : <input id="cellnumber" name="cellnumber" type="text" class="input_20_150"  value="<?php echo $staff['phone_number']; ?>" /></label><br />
 <label>Access Level :
 <select name="accesslevel" class="select_25_125" id="accesslevel">
 <?php
     foreach (array_keys($ROLES) as $i) {
-        if ($i == $results['access_level']){
+        if ($i == $staff['access_level']){
             $selected = 'selected';
         } else {
             $selected = '';
@@ -83,13 +68,13 @@ Username : </label>
 ?>
 </select><br />
 <label>Enabled : <select name="enabled" class="select_25_75">
-<option value="1" <?php if ($results['enabled']=="1"){echo 'selected';}?>>Yes</option>
-<option value="0" <?php if ($results['enabled']=="0"){echo 'selected';}?>>No</option>
+<option value="1" <?php if ($staff['enabled']=="1"){echo 'selected';}?>>Yes</option>
+<option value="0" <?php if ($staff['enabled']=="0"){echo 'selected';}?>>No</option>
 </select></label><br />
 <input name="create" type="submit" class="submit_button" value="Update" />
 </form>
 <form name="password" action="/staff/staff_update.php" method="post">
-<input name="username" type="hidden" value="<?php echo $results['username']; ?>" />
+<input name="username" type="hidden" value="<?php echo $staff['username']; ?>" />
 <input name="password" type="hidden" value="password" />
 <input name="passwordreset" type="submit" class="submit_button" value="Password Reset" /><br />
 </form>

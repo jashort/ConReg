@@ -1,12 +1,11 @@
 <?php
-require_once('../Connections/kumo_conn.php');
+require_once('../includes/functions.php');
 
 require_once('../includes/authcheck.php');
 require_right('manage_staff');
 
-$stmt = $conn->prepare("SELECT * FROM reg_staff ORDER BY first_name ASC");
-$stmt->execute();
-$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$staffList = staffList();
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/main.dwt.php" codeOutsideHTMLIsLocked="false" -->
@@ -25,12 +24,13 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <th scope="col">Name</th>
     <th scope="col">Phone Number</th>
     </tr>
-  <?php foreach ($results as $result) { ?>
+  <?php while ($staff = $staffList->fetch()) { ?>
     <tr>
-      <td><?php echo $result['first_name'] . " " . $result['last_name']; ?></td>
-      <td><?php echo $result['phone_number']; ?></td>
-      </tr>
-    <?php } ?>
+      <td><?php echo $staff["first_name"] ?> <?php echo $staff["last_name"] ?></td>
+      <td><?php echo $staff["phone_number"] ?></td>
+    </tr>
+  <?php } ?>
+
 </table>
 <!-- InstanceEndEditable --></div>
 <div id="footer">&copy; Tim Zuidema</div> 

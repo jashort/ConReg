@@ -342,6 +342,25 @@ function staffupdate($Id, $FirstName, $LastName, $Initials, $Cell, $Accesslevel,
 	
 }
 
+function staffList(){
+	global $conn;
+
+	$stmt = $conn->prepare("SELECT * FROM reg_staff ORDER BY first_name ASC");
+	$stmt->execute();
+	$stmt->setFetchMode(PDO::FETCH_ASSOC);
+	return $stmt;
+}
+
+
+function getStaff($username) {
+	global $conn;
+
+	$stmt = $conn->prepare("SELECT * FROM reg_staff WHERE username = :user LIMIT 1");
+	$stmt->execute(array('user'=>$username));
+	$stmt->setFetchMode(PDO::FETCH_ASSOC);
+	return $stmt->fetch();
+}
+
 function passwordreset($Username, $Password) {
 	
 	global $conn;

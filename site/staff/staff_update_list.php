@@ -1,11 +1,11 @@
 <?php
-require_once('../Connections/kumo_conn.php');
+require_once('../includes/functions.php');
 
 require_once('../includes/authcheck.php');
 require_right('manage_staff');
 
-$stmt = "SELECT staff_id, username FROM reg_staff ORDER BY username ASC";
-$results = $conn->query($stmt);
+$staffList = staffList();
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/main.dwt.php" codeOutsideHTMLIsLocked="false" -->
@@ -33,8 +33,10 @@ function MM_goToURL() { //v3.0
     <fieldset id="list_table_search">
       <label>Staff Username :
       <select name="username" id="username"  class="select_25_150" >
-        <?php foreach ($results as $result) { ?>
-          <option value="<?php echo $result['username']?>"><?php echo $result['username']?></option>
+        <?php while ($staff = $staffList->fetch()) { ?>
+          <option value="<?php echo $staff["username"] ?>">
+            <?php echo $staff["first_name"] ?> <?php echo $staff["last_name"] ?>
+            (<?php echo $staff["username"] ?>)</option>
         <?php } ?>
       </select></label>
       <input name="Submit" type="submit" class="submit_button" value="Go" />
