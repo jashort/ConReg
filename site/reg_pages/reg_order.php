@@ -78,7 +78,7 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Paid")) {
         }
         <?php
         if (isset($_SESSION["FirstName"])) {
-        if (!(stristr($_SERVER['HTTP_REFERER'], '/reg_pages/reg_add.php')) || (stristr($_SERVER['HTTP_REFERER'], '/reg_pages/reg_lastyear_list.php'))) { ?>
+        if (!stristr($_SERVER['HTTP_REFERER'], '/reg_pages/reg_add.php')) { ?>
         (function() {
             var answer=confirm("Attendee information is set in this form and hasn't been submitted. If you are continuing please press Cancel, otherwise press Ok and the form will be cleared.");
             if (answer==true)
