@@ -361,6 +361,23 @@ function getStaff($username) {
 	return $stmt->fetch();
 }
 
+
+/**
+ * Returns most recent items from history
+ * @param int $number Number of items to return (default: 50)
+ * @return PDOStatement
+ */
+function historyList($number=50){
+	global $conn;
+
+	$stmt = $conn->prepare("SELECT * FROM history ORDER BY changed_at DESC LIMIT :number");
+	$stmt->bindValue('number', (int)$number, PDO::PARAM_INT);
+	$stmt->execute();
+	$stmt->setFetchMode(PDO::FETCH_ASSOC);
+	return $stmt;
+}
+
+
 function passwordreset($Username, $Password) {
 	
 	global $conn;

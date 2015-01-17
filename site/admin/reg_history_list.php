@@ -1,14 +1,10 @@
 <?php
-require_once('../Connections/kumo_conn.php');
+require_once('../includes/functions.php');
 
 require_once('../includes/authcheck.php');
 require_right('super-admin');
 
-mysql_select_db($db_name, $kumo_conn);
-$query_rsAdminList = "SELECT * FROM kumo_reg_admin ORDER BY kumo_reg_admin_timestamp DESC";
-$rsAdminList = mysql_query($query_rsAdminList, $kumo_conn) or die(mysql_error());
-$row_rsAdminList = mysql_fetch_assoc($rsAdminList);
-$totalRows_rsAdminList = mysql_num_rows($rsAdminList);
+$history = historyList(50);
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -16,15 +12,9 @@ $totalRows_rsAdminList = mysql_num_rows($rsAdminList);
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!-- InstanceBeginEditable name="doctitle" -->
-<title>Kumoricon Registration</title>
+<title>Kumoricon Registration Change History</title>
 <!-- InstanceEndEditable -->
 <link href="../assets/css/kumoreg.css" rel="stylesheet" type="text/css" /> 
-<script type="text/javascript">
-function MM_goToURL() { //v3.0
-  var i, args=MM_goToURL.arguments; document.MM_returnValue = false;
-  for (i=0; i<(args.length-1); i+=2) eval(args[i]+".location='"+args[i+1]+"'");
-}
-</script>
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
 </head>
@@ -34,19 +24,21 @@ function MM_goToURL() { //v3.0
 <div id="content"><!-- InstanceBeginEditable name="Content" -->
 <table id="list_table">
   <tr>
-    <th scope="col">Alerts</th>
-    </tr>
-  <?php do { ?>
+    <th>Time</th>
+    <th>Agent</th>
+    <th>Description</th>
+  </tr>
+  <?php while ($item = $history->fetch()) { ?>
     <tr>
-      <td><?php echo $row_rsAdminList['kumo_reg_admin_agent'] . " - " . $row_rsAdminList['kumo_reg_admin_timestamp'] . " - " . $row_rsAdminList['kumo_reg_admin_text']; ?></td>
-      </tr>
-    <?php } while ($row_rsAdminList = mysql_fetch_assoc($rsAdminList)); ?>
+      <td><?php echo $item["changed_at"] ?></td>
+      <td><?php echo $item["username"] ?></td>
+      <td><?php echo $item["description"] ?></td>
+    </tr>
+  <?php } ?>
+
 </table>
 <!-- InstanceEndEditable --></div>
 <div id="footer">&copy; Tim Zuidema</div> 
 <!-- InstanceBeginEditable name="Javascript" --><!-- InstanceEndEditable -->
 </body>
 <!-- InstanceEnd --></html>
-<?php
-mysql_free_result($rs_update_list);
-?>

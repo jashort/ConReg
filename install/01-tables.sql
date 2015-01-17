@@ -61,8 +61,8 @@ ALTER TABLE registration.attendees ADD FOREIGN KEY (order_id) REFERENCES orders 
 CREATE TABLE registration.history
 (
     id              INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    timestamp       TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    agent           VARCHAR(80) NOT NULL,
+    changed_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    username        VARCHAR(60) NOT NULL,
     description     TEXT NOT NULL
 );
 

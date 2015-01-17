@@ -42,7 +42,7 @@
             <?php } ?>
             <?php if (has_right('super_admin')) { ?>
                 <li><a href="/admin/csvimport.php">IMPORT CSV</a></li>
-                <li><a href="/admin/reg_admin_list.php">HISTORY</a></li>
+                <li><a href="/admin/reg_history_list.php">HISTORY</a></li>
             <?php } ?>
             <?php if (has_right('report_view')) { ?>
                 <li><a href="/admin/admin_report.php">REPORTS</a></li>
