@@ -208,14 +208,31 @@ function orderpaid($OrderId, $PaymentType, $Total) {
 }
 
 
-function regupdate($Id, $FirstName, $LastName, $BadgeNumber, $Zip, $EMail, $PhoneNumber, $BDate, $ECFullName, $ECPhoneNumber, $Same, $PCFullName, $PCPhoneNumber, $PForm, $Amount, $PassType, $OrderId, $Notes) {
+function regupdate($attendee) {
 
 	try {
 		global $conn;
-		$Phone_Stripped = preg_replace("/[^a-zA-Z0-9s]/","",$PhoneNumber);
+		$Phone_Stripped = preg_replace("/[^a-zA-Z0-9s]/","", $attendee->phone);
 
 		$stmt = $conn->prepare("UPDATE attendees SET first_name=:firstname, last_name=:lastname, badge_number=:badgenumber, zip=:zip, phone=:phone, email=:email, birthdate=:bdate, ec_fullname=:ecname, ec_phone=:ecphone, ec_same=:same, parent_fullname=:pcname, parent_phone=:pcphone, parent_form=:pform, paid_amount=:amount, pass_type=:passtype, order_id=:orderid, notes=:notes WHERE id=:id");
-		$stmt->execute(array('firstname' => $FirstName, 'lastname' => $LastName, 'badgenumber' => $BadgeNumber, 'zip' => $Zip, 'phone' => $Phone_Stripped, 'email' => $EMail, 'bdate' => $BDate, 'ecname' => $ECFullName, 'ecphone' => $ECPhoneNumber, 'same' => $Same, 'pcname' => $PCFullName, 'pcphone' => $PCPhoneNumber, 'pform' => $PForm, 'amount' => $Amount, 'passtype' => $PassType, 'orderid' => $OrderId, 'notes' => $Notes, 'id' => $Id));
+		$stmt->execute(array('firstname' => $attendee->first_name, 
+							 'lastname' => $attendee->last_name, 
+			                 'badgenumber' => $attendee->badge_number,
+							 'zip' => $attendee->zip,
+							 'phone' => $Phone_Stripped,
+							 'email' => $attendee->email,
+							 'bdate' => $attendee->birthdate,
+							 'ecname' => $attendee->ec_fullname,
+							 'ecphone' => $attendee->ec_phone,
+							 'same' => $attendee->ec_same,
+							 'pcname' => $attendee->parent_fullname,
+							 'pcphone' => $attendee->parent_phone,
+							 'pform' => $attendee->parent_form,
+							 'amount' => $attendee->paid_amount,
+							 'passtype' => $attendee->pass_type,
+							 'orderid' => $attendee->order_id,
+ 							 'notes' => $attendee->notes,
+ 							 'id' => $attendee->id));
 
 	} catch(PDOException $e) {
 		echo 'ERROR: ' . $e->getMessage();

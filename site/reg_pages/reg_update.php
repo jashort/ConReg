@@ -5,51 +5,13 @@ require('../includes/passtypes.php');
 
 require_right('registration_update');
 
-$Id = "-1";
-if (isset($_GET['id'])) {
-  $Id = $_GET['id'];
-}
-
-try {
-$stmt = $conn->prepare("SELECT * FROM kumo_reg_data WHERE kumo_reg_data_id= :id");
-$stmt->execute(array('id' => $Id));
-$results = $stmt->fetch(PDO::FETCH_ASSOC);
-
-$Birthdate = $results['birthdate'];
-
-if ((isset($_POST["BirthYear"])) && ($_POST["BirthYear"] !="YYYY")) {
-$BDate = $_POST["BirthYear"] . "-" . $_POST["BirthMonth"] . "-" . $_POST["BirthDay"];
-}
-
-if ($results['birthdate'] != "") {
-$Birthdate_array = explode("-", $Birthdate);
-$BirthYear = $Birthdate_array[0];
-$BirthMonth = $Birthdate_array[1];
-$BirthDay = $Birthdate_array[2];
-
-$BDate = $BirthYear . "-" . $BirthMonth . "-" . $BirthDay;
-}
-
-$year_diff = calculateAge($BDate);
-// Get pass costs based on age
-$Weekend = calculatePassCost($_SESSION["year_diff"], "Weekend");
-$Friday = calculatePassCost($_SESSION["year_diff"], "Friday");
-$Saturday = calculatePassCost($_SESSION["year_diff"], "Saturday");
-$Sunday = calculatePassCost($_SESSION["year_diff"], "Sunday");
-$Monday = calculatePassCost($_SESSION["year_diff"], "Monday");
-
-$PaidAmount = calculatePassCost($year_diff, $_POST['PassType']);
-
-
-} catch(PDOException $e) {
-    echo 'ERROR: ' . $e->getMessage();
-}
+$attendee = getAttendee($_GET['id']);
 
 if (isset($_POST["Update"])) {
-regupdate($_POST["Id"], $_POST["FirstName"], $_POST["LastName"], $_POST["BadgeNumber"], $_POST["Zip"], $_POST["EMail"], $_POST["PhoneNumber"], $BDate, $_POST["ECFullName"], $_POST["ECPhoneNumber"], $_POST["Same"], $_POST["PCFullName"], $_POST["PCPhoneNumber"], $_POST["PCFormVer"], $PaidAmount, $_POST["PassType"], $_POST["OrderId"], $_POST["Notes"]);
-
-redirect("/index.php");
-
+  $attendee = new Attendee();
+  $attendee->fromArray($_POST);
+  regupdate($attendee);
+  redirect("/index.php");
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -108,30 +70,11 @@ document.reg_update.Same.value = "";
 document.reg_update.PCFullName.value = "";
 document.reg_update.PCPhoneNumber.value = "";
 }}
-function verifyForm(){
-if (document.reg_add2.PCFormVer.checked) {
-document.reg_add2.PCFormVer.value = "Y";
-} else {
-document.reg_add2.PCFormVer.value = "";
-}}
-
-function setAmount() {
-if (document.reg_add3.PassType_0.checked) {
-	document.reg_add3.Amount.value = "<?php echo $Weekend ?>";
-	} 
-else if (document.reg_add3.PassType_1.checked) {
-	document.reg_add3.Amount.value = "<?php echo $Saturday ?>";
-	} 
-else if (document.reg_add3.PassType_2.checked) {
-	document.reg_add3.Amount.value = "<?php echo $Sunday ?>";
-	} 
-else if (document.reg_add3.PassType_3.checked) {
-	document.reg_add3.Amount.value = "<?php echo $Monday ?>";
-	}
-else if (document.reg_add3.PassType_4.checked) {
-	document.reg_add3.Amount.value = document.reg_add3.MPAmount.value;
-	}
-}
+  
+  function setAmount(amt) {
+    document.getElementById("paid_amount").value = amt;
+  }
+  
 </script>
 <!-- InstanceEndEditable -->
 </head>
@@ -141,91 +84,105 @@ else if (document.reg_add3.PassType_4.checked) {
 
 <div id="content"><!-- InstanceBeginEditable name="Content" -->
 <form name="reg_update" action="reg_update.php" method="post">
-<input name="Id" type="hidden" value="<?php echo $results['kumo_reg_data_id'] ?>" />
-<input name="OrderId" type="hidden" value="<?php echo $results['order_id'] ?>" />
+<input name="id" type="hidden" value="<?php echo $attendee->id ?>" />
+<input name="order_id" type="hidden" value="<?php echo $attendee->order_id ?>" />
 <fieldset id="personalinfo">
 <legend>Attendee Info</legend>
 <label>First Name:
-<input name="FirstName" type="text" class="input_20_200" id="First Name" value="<?php echo $results['first_name'] ?>" /></label>
+<input name="first_name" type="text" class="input_20_200" id="First Name" value="<?php echo $attendee->first_name ?>" /></label>
 <label>Last Name:
-<input name="LastName" type="text" class="input_20_200" id="Last Name" value="<?php echo $results['last_name'] ?>" /></label>
+<input name="last_name" type="text" class="input_20_200" id="Last Name" value="<?php echo $attendee->last_name ?>" /></label>
+<br />
+<label>Badge Name:
+<input name="badge_name" type="text" class="input_20_200" id="Last Name" value="<?php echo $attendee->badge_name ?>" /></label>
 <br />
 <label>Badge Number:
-<input name="BadgeNumber" type="text" class="input_20_200" id="Badge Number" value="<?php echo $results['badge_number'] ?>" /></label>
+<input name="badge_number" type="text" class="input_20_200" id="Badge Number" value="<?php echo $attendee->badge_number ?>" /></label>
 <br />
 <label>Zip :
-<input name="Zip" type="text" class="input_20_150" id="Zip" value="<?php echo $results['zip'] ?>"  /></label>
+<input name="zip" type="text" class="input_20_150" id="Zip" value="<?php echo $attendee->zip ?>"  /></label>
 <br />
 <label>E-Mail :
-<input name="EMail" type="text" class="input_20_200" id="E-Mail" value="<?php echo $results['email'] ?>"  /></label>
+<input name="email" type="text" class="input_20_200" id="E-Mail" value="<?php echo $attendee->email ?>"  /></label>
 <label>E-Mail Verification :
-<input name="EMailV" type="text" class="input_20_200" onBlur="verifyEmail();" value="<?php echo $results['email'] ?>"  /></label>
+<input name="EMailV" type="text" class="input_20_200" onBlur="verifyEmail();" value="<?php echo $attendee->email ?>"  /></label>
 <br />
 <label>Phone Number:
-<input name="PhoneNumber" type="text" class="input_20_200" id="PhoneNumber" value="<?php echo $results['phone'] ?>"  /></label>
+<input name="phone" type="text" class="input_20_200" id="PhoneNumber" value="<?php echo $attendee->phone ?>"  /></label>
 <label>Birth Date:
-	<input type="number" class="input_20_40" maxlength="2" name="BirthMonth" id="Birth Month" value="<?php echo $BirthMonth?>" min="1" max="12" placeholder="MM">
+	<input type="number" class="input_20_40" maxlength="2" name="birth_month" id="Birth Month" value="<?php echo $attendee->getBirthMonth() ?>" min="1" max="12" placeholder="MM">
 	<span class="bold_text">/</span>
-	<input type="number" class="input_20_40" maxlength="2" name="BirthDay" id="Birth Day" value="<?php echo $BirthDay?>" min="1" max="31" placeholder="DD">
+	<input type="number" class="input_20_40" maxlength="2" name="birth_day" id="Birth Day" value="<?php echo $attendee->getBirthDay() ?>" min="1" max="31" placeholder="DD">
 	<span class="bold_text">/</span>
-	<input type="number" class="input_20_60" maxlength="4" name="BirthYear" id="Birth Year" value="<?php echo $BirthYear?>" min="1900" max="2015" placeholder="YYYY">
+	<input type="number" class="input_20_60" maxlength="4" name="birth_year" id="Birth Year" value="<?php echo $attendee->getBirthYear() ?>" min="1900" max="2015" placeholder="YYYY">
 	</label>(Month / Day / Year)
 </fieldset>
 <fieldset id="emergencyinfo">
 <legend>Emergency Contact Info</legend>
 <label>Full Name:
-<input name="ECFullName" type="text" class="input_20_200" id="Emergency Contact Full Name" value="<?php echo $results['ec_fullname'] ?>"  /></label>
+<input name="ec_fullname" type="text" class="input_20_200" id="Emergency Contact Full Name" value="<?php echo $attendee->ec_fullname ?>"  /></label>
 <br />
 <label>Phone Number:
-<input name="ECPhoneNumber" type="text" class="input_20_200" id="ECPhoneNumber" value="<?php echo $results['ec_phone'] ?>"  /></label>
+<input name="ec_phone" type="text" class="input_20_200" id="ECPhoneNumber" value="<?php echo $attendee->ec_phone ?>"  /></label>
 <br />
 </fieldset>
-<?php if ($year_diff < 18) { ?>
+<?php if ($attendee->isMinor()) { ?>
 <fieldset id="parentinfo">
 <legend>Parent Contact Info</legend>
-<input name="Same" type="checkbox" class="checkbox" onclick="sameInfo();" <?php if ($results['ec_same'] == "Y") { echo "value=\"Y\" checked"; } else { echo "value=\"\""; } ?> /><span class="bold_text"> SAME AS EMERGENCY CONTACT INFO</span>
+<input name="ec_same" type="checkbox" class="checkbox" onclick="sameInfo();" <?php if ($attendee->ec_same == "Y") { echo "value=\"Y\" checked"; } else { echo "value=\"\""; } ?> /><span class="bold_text"> SAME AS EMERGENCY CONTACT INFO</span>
 <br /><br />
 <label>Full Name:
-<input name="PCFullName" type="text" class="input_20_200" id="Parent Contact Full Name" value="<?php echo $results['parent_fullname'] ?>"  /></label>
+<input name="parent_fullname" type="text" class="input_20_200" id="Parent Contact Full Name" value="<?php echo $attendee->parent_fullname ?>" /></label>
 <br />
 <label>Phone Number:
-<input name="PCPhoneNumber" type="text" class="input_20_200" id="PCPhoneNumber" value="<?php echo $results['parent_phone'] ?>" /></label>
+<input name="parent_phone" type="text" class="input_20_200" id="PCPhoneNumber" value="<?php echo $attendee->parent_phone ?>" /></label>
 <br /><br />
-<input name="PCFormVer" type="checkbox" <?php if ($results['parent_form'] == "Yes") { echo "value=\"Yes\" checked"; } else { echo "value=\"\""; } ?> id="Parent Contact Form Verification" class="checkbox" onclick="verifyForm();" /><span class="bold_text"> PARENTAL CONSENT FORM RECEIVED</span>
+<input name="parent_form" type="checkbox" <?php if ($attendee->parent_form == "Yes") { echo "value=\"Yes\" checked"; } else { echo "value=\"\""; } ?> id="Parent Contact Form Verification" class="checkbox" onclick="verifyForm();" /><span class="bold_text"> PARENTAL CONSENT FORM RECEIVED</span>
 </fieldset>
 <?php } ?>
 <fieldset id="paymentinfo">
 <legend>PASS TYPE</legend>
 <p>
 <label>
-<?php $PassType = $results['pass_type']; ?>
-    <input type="radio" name="PassType" value="Weekend" id="PassType_0" onchange="setAmount();" <?php if ($PassType == "Weekend") echo "checked=\"checked\""; ?> />
-    All Weekend - $<?php echo $Weekend ?></label>
+    <input type="radio" name="pass_type" value="Weekend" id="PassType_0" onchange="setAmount();" <?php if ($attendee->pass_type == "Weekend") echo "checked=\"checked\""; ?> />
+    All Weekend - $<?php echo calculatePassCost($attendee->getAge(), 'Weekend') ?></label>
     <hr />
   <label>
-    <input name="PassType" type="radio" id="PassType_1" onchange="setAmount();" value="Saturday" <?php if ($PassType == "Saturday") echo "checked=\"checked\""; ?> />
-    Saturday Only - $<?php echo $Saturday ?></label>
+    <? $amount = calculatePassCost($attendee->getAge(), 'Friday') ?>
+    <input name="pass_type" type="radio" id="PassType_1" onchange="setAmount(<?php echo $amount ?>);" value="Friday" <?php if ($attendee->pass_type == "Friday") echo "checked=\"checked\""; ?> />
+    Saturday Only - $<?php echo $amount ?></label>
   <br />
   <label>
-    <input type="radio" name="PassType" value="Sunday" id="PassType_2" onchange="setAmount();" <?php if ($PassType == "Sunday") echo "checked=\"checked\""; ?> />
-    Sunday Only - $<?php echo $Sunday ?></label>
+    <? $amount = calculatePassCost($attendee->getAge(), 'Saturday') ?>
+    <input name="pass_type" type="radio" id="PassType_2" onchange="setAmount(<?php echo $amount ?>);" value="Saturday" <?php if ($attendee->pass_type == "Saturday") echo "checked=\"checked\""; ?> />
+    Saturday Only - $<?php echo $amount ?></label>
   <br />
   <label>
-    <input name="PassType" type="radio" id="PassType_3" onclick="setAmount()" value="Monday" <?php if ($PassType == "Monday") echo "checked=\"checked\""; ?> />
-    Monday Only - $<?php echo $Monday ?></label>
+    <? $amount = calculatePassCost($attendee->getAge(), 'Sunday') ?>
+    <input type="radio" name="pass_type" value="Sunday" id="PassType_3" onchange="setAmount(<?php echo $amount ?>);" <?php if ($attendee->pass_type == "Sunday") echo "checked=\"checked\""; ?> />
+    Sunday Only - $<?php echo $amount ?></label>
   <br />
-      <span class="radio_button_left_margin">
-    <input name="PassType" type="radio" id="PassType_4" onblur="setAmount()" value="Manual Price" <?php if ($PassType == "Manual Price") echo "checked=\"checked\""; ?> />
-    Manual Price - $<?php echo $results['paid_amount'] ?>
-</span>
-  <input name="Amount" type="hidden" id="Amount" value="<?php echo $results['paid_amount'] ?>" />
+  <label>
+    <? $amount = calculatePassCost($attendee->getAge(), 'Monday') ?>
+    <input name="pass_type" type="radio" id="PassType_4" onclick="setAmount(<?php echo $amount ?>)" value="Monday" <?php if ($attendee->pass_type == "Monday") echo "checked=\"checked\""; ?> />
+    Monday Only - $<?php echo $amount ?></label>
   <br />
-</p>
+  <?php if (has_right('registration_manual_price')) { ?>
+    <span class="radio_button_left_margin">
+      <input name="pass_type" type="radio" id="PassType_5" onclick="setAmount(<?php echo $attendee->paid_amount ?>)" value="Manual Price" <?php if ($attendee->pass_type == "Manual Price") echo "checked=\"checked\""; ?> />
+      Manual Price - $<?php echo $attendee->paid_amount ?>
+    </span><br /><br />
+    <label>Amount Paid: $
+      <input name="paid_amount" type="text" class="input_20_200" id="paid_amount" value="<?php echo $attendee->paid_amount ?>" /></label>
+    <br />
+  <?php } ?>
 </fieldset>
 <fieldset id="notes">
 <label>Notes :
-<textarea name="Notes" rows="5"><?php echo $results['notes']; ?></textarea></label>
+<textarea name="notes" rows="5"><?php echo $attendee->notes ?></textarea></label>
 </fieldset>
+  <input type="hidden" name="reg_type" value="<?php echo $attendee->reg_type?>" />
+  <input type="hidden" name="checked_in" value="<?php echo $attendee->checked_in ?>" />
 <div class="centerbutton">
 <input name="Update" type="submit" value="update" class="submit_button" />
 </div>
@@ -235,6 +192,3 @@ else if (document.reg_add3.PassType_4.checked) {
 <!-- InstanceBeginEditable name="Javascript" --><!-- InstanceEndEditable -->
 </body>
 <!-- InstanceEnd --></html>
-<?php
-mysql_free_result($rs_update);
-?>

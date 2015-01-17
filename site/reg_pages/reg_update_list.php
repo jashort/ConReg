@@ -1,21 +1,17 @@
 <?php
 require('../Connections/kumo_conn.php');
 require('../includes/authcheck.php');
+require_once('../includes/functions.php');
 
 require_right('registration_update');
 
+
 if (isset($_GET['id'])) {
-  $colname_rs_checkin_list = $_GET['id'];
-
-if ($_GET['field'] == "ln") {
-$query_rs_update_list = sprintf("SELECT * FROM attendees WHERE last_name LIKE '%s'", mysql_real_escape_string($colname_rs_checkin_list));
-}
-
-mysql_select_db($db_name, $kumo_conn);
-//$query_rs_update_list = sprintf("SELECT * FROM kumo_reg_data WHERE badge_number = %s", mysql_real_escape_string($colname_rs_update_list));
-$rs_update_list = mysql_query($query_rs_update_list, $kumo_conn) or die(mysql_error());
-$row_rs_update_list = mysql_fetch_assoc($rs_update_list);
-$totalRows_rs_update_list = mysql_num_rows($rs_update_list);
+  if ($_GET['field'] == "bid") {
+    $attendees = attendeeSearchBadgeNumber($_GET['id']);
+  } else {
+    $attendees = attendeeSearchLastName($_GET['id']);
+  }
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -55,12 +51,13 @@ function MM_goToURL() { //v3.0
     <th scope="col">Name</th>
     <th scope="col">Badge Number</th>
   </tr>
-  <?php do { ?>
+  <?php while ($attendee = $attendees->fetch(PDO::FETCH_CLASS)) { ?>
     <tr>
-      <td><a href="/reg_pages/reg_update.php?id=<?php echo $row_rs_update_list['kumo_reg_data_id']; ?>"><?php echo $row_rs_update_list['first_name'] . " "; ?><?php echo $row_rs_update_list['last_name']; ?></a></td>
-      <td><?php echo $row_rs_update_list['badge_number']; ?></td>
+      <td><a href="/reg_pages/reg_update.php?id=<?php echo $attendee->id ?>"><?php echo $attendee->first_name . " " . $attendee->last_name; ?></a></td>
+      <td><?php echo $attendee->badge_number; ?></td>
     </tr>
-    <?php } while ($row_rs_update_list = mysql_fetch_assoc($rs_update_list)); ?>
+  <?php } ?>
+
 </table>
 <?php } // Show if no search term ?>
 <!-- InstanceEndEditable --></div>
@@ -68,6 +65,3 @@ function MM_goToURL() { //v3.0
 <!-- InstanceBeginEditable name="Javascript" --><!-- InstanceEndEditable -->
 </body>
 <!-- InstanceEnd --></html>
-<?php
-mysql_free_result($rs_update_list);
-?>
