@@ -378,6 +378,41 @@ function historyList($number=50){
 }
 
 
+function registrationsByDay() {
+	global $conn;
+
+	$stmt = $conn->prepare("SELECT DAYNAME(created) as DAYNAME, DATE_FORMAT(created, '%m/%e/%Y') as DATE, sum(paid_amount) AS DAYTOTAL, count(paid_amount) as DAYCOUNT
+							FROM attendees
+							WHERE reg_type = 'reg'
+							GROUP BY DATE(created)
+							ORDER BY DATE(created);");
+	$stmt->execute();
+	$stmt->setFetchMode(PDO::FETCH_ASSOC);
+	return $stmt;
+}
+
+function registrationStatistics() {
+	global $conn;
+
+	$stmt = $conn->prepare("SELECT DISTINCT
+ 			(SELECT count(*) FROM attendees WHERE checked_in = 'yes' AND reg_type='prereg') AS preregcheckedincount,
+			(SELECT count(*) FROM attendees WHERE checked_in = 'no' AND reg_type='prereg') AS preregnotcheckedincount,
+			(SELECT count(*) FROM attendees WHERE reg_type = 'reg' AND created > DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 HOUR)) AS reginlasthour,
+			(SELECT count(badge_number) FROM attendees WHERE pass_type = 'Weekend' OR pass_type = 'VIP') AS passtypeweekend,
+			(SELECT count(badge_number) FROM attendees WHERE pass_type = 'Friday') AS passtypefriday,
+			(SELECT count(badge_number) FROM attendees WHERE pass_type = 'Saturday') AS passtypesaturday,
+			(SELECT count(badge_number) FROM attendees WHERE pass_type = 'Sunday') AS passtypesunday,
+			(SELECT count(badge_number) FROM attendees WHERE pass_type = 'Monday') AS passtypemonday,
+			(SELECT count(*) FROM attendees WHERE reg_type like 'reg') AS regtotal,
+			(SELECT count(*) FROM attendees WHERE checked_in = 'Yes') AS checkedintotal,
+			(SELECT sum(paid_amount) FROM attendees WHERE reg_type = 'reg') AS sumregtotal
+			FROM attendees;");
+	$stmt->execute();
+	$stmt->setFetchMode(PDO::FETCH_ASSOC);
+	return $stmt->fetch();
+}
+
+
 function passwordreset($Username, $Password) {
 	
 	global $conn;
