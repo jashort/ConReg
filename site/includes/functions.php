@@ -154,7 +154,18 @@ function orderlistattendees($OrderId) {
 
 	$stmt = $conn->prepare("SELECT first_name, last_name, pass_type, paid_amount FROM attendees WHERE order_id = :orderid");
 	$stmt->execute(array('orderid' => $OrderId));
-	return $stmt->fetchAll(PDO::FETCH_ASSOC);
+	$stmt->setFetchMode(PDO::FETCH_CLASS, "Attendee");
+	return $stmt;
+}
+
+function getAttendeePDO($Id) {
+
+	global $conn;
+
+	$stmt = $conn->prepare("SELECT * FROM attendees WHERE id = :id");
+	$stmt->execute(array('id' => $Id));
+	$stmt->setFetchMode(PDO::FETCH_CLASS, "Attendee");
+	return $stmt;
 }
 
 
@@ -272,7 +283,7 @@ function attendeeSearchBadgeNumber($badgeNumber) {
 
 /**
  * @param $name	First or Lost Name
- * @param $field Field to search. fn = first name, ln = last name
+ * @param $field Field to search. fn = first name, ln = last name, ord = order id
  * @return array Array of attendee arrays
  */
 function preRegSearch($name, $field) {
@@ -282,6 +293,12 @@ function preRegSearch($name, $field) {
 								checked_in, order_id
 								FROM attendees
 								WHERE first_name LIKE :name
+								ORDER BY order_id");
+	} elseif ($field == 'ord') {
+		$stmt = $conn->prepare("SELECT id, first_name, last_name, badge_name,
+								checked_in, order_id
+								FROM attendees
+								WHERE order_id LIKE :name
 								ORDER BY order_id");
 	} else {
 		$stmt = $conn->prepare("SELECT id, first_name, last_name, badge_name,
