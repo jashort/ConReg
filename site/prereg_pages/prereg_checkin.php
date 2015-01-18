@@ -14,23 +14,21 @@ if (isset($_POST["Update"])) {
   }
 
   // Make sure information was verified
-  
   if (isset($_POST["checkin"]) && $_POST["checkin"] == true) {
-    regcheckin($_POST["Id"]);
+    regcheckin($_POST["id"]);
     if (isset($_POST["Minor"]) && $_POST["Minor"] == true && $_POST["PCFormVer"] == "on") {
       regCheckinParentFormReceived($_POST["Id"]);
-    }    
-    redirect("/index.php");
-    die();
+    }
+    // Display the print badge link below.
+
   } else {
-    /*
-     * TODO: Move error handing in to the form so the site is still displayed instead of
-     * just showing an error message
-     *
-     */
     echo('Error: Attendee Information not verified. Click back and check "Verified Info" after verifying attendee information');
     die();
   }
+}
+
+if (isset($_POST["Done"])) {
+  redirect("/prereg_pages/prereg_checkin_list.php?field=ord&id=".$_POST["oid"]);
 }
 
 if (isset($_GET['id'])) {
@@ -56,7 +54,27 @@ if (isset($_GET['id'])) {
 <?php require "../includes/leftmenu.php" ?>
 
 <div id="content"><!-- InstanceBeginEditable name="Content" -->
-<form action="/prereg_pages/prereg_checkin.php" method="post">
+  <? if (isset($_POST["checkin"]) && $_POST["checkin"] == true) { ?>
+    <br><br>
+    <form action="/reg_pages/badgeprint.php" method="post" target="_blank">
+      <input type="hidden" name="print" value="<?php echo $_POST['id'] ?>" />
+      <div class='centerbutton'>
+        <input name='printbutton' type='submit' value='Print Badge' class='submit_button' />
+      </div>
+    </form>
+
+    <form action="/prereg_pages/prereg_checkin.php" method="post">
+        <div class='centerbutton'>
+          <input name="oid" type="hidden" value="<?php echo $_POST["oid"]?>" />
+          <input name='Done' type='submit' value='Done' class='submit_button' />
+        </div>
+        
+      </form>
+  
+  <? } else { ?>
+
+  
+  <form action="/prereg_pages/prereg_checkin.php" method="post">
 <fieldset id="personalinfo">
 <legend>Attendee Info</legend>
 <label>First Name: </label>
@@ -123,8 +141,9 @@ if (isset($_GET['id'])) {
 <? } else { ?>
   <input name='checkin' type='checkbox' id='Information Verification' class='checkbox' />
   <span class='display_text'>VERIFIED INFO</span><br />
-  <input name="Id" type="hidden" value="<? echo $attendee->id ?>" />
-  <input name="Minor" type="hidden" value="<? echo $attendee->isMinor(); ?>" />
+  <input name="id" type="hidden" value="<?php echo $attendee->id ?>" />
+  <input name="oid" type="hidden" value="<?php echo $attendee->order_id ?>" />
+  <input name="Minor" type="hidden" value="<?php echo $attendee->isMinor(); ?>" />
   <div class='centerbutton'>
     <input name='Update' type='submit' value='update' class='submit_button' />
   </div>
@@ -133,6 +152,7 @@ if (isset($_GET['id'])) {
 </form>
 </fieldset>
 <!-- InstanceEndEditable --></div>
+<? } ?>
 <div id="footer">&copy; Tim Zuidema</div> 
 <!-- InstanceBeginEditable name="Javascript" --><!-- InstanceEndEditable -->
 </body>

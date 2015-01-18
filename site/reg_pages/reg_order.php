@@ -150,7 +150,11 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Paid")) {
         <legend>PRINT BADGES</legend>
     <p>
         <div class="centerbutton">
-            <input name="Badge" type="button" class="badge_button" onclick="MM_openBrWindow('/reg_pages/badgeprint.php','','');return document.MM_returnValue" value="Print Badges" />
+            <form action="/reg_pages/badgeprint.php" method="post" target="_blank">
+                <input name="order" type="hidden" value="<?php echo $_POST['orderid']?>" />
+                <input name="action" type="submit" class="badge_button" value="Print Badges" />
+                
+            </form>
         </div>
         <div class="centerbutton">
             <form name="Finish" action="reg_order.php" method="post">
@@ -174,12 +178,12 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Paid")) {
             <?php
             $total = 0;
             foreach (orderlistattendees($_SESSION['OrderId']) as $attendee) {
-                $total += $attendee['paid_amount'];
+                $total += $attendee->paid_amount;
                 ?>
                 <tr>
-                    <td><? echo $attendee['first_name'] . ' ' . $attendee['last_name']?></td>
-                    <td><? echo $attendee['pass_type']?></td>
-                    <td>$<? echo $attendee['paid_amount']?></td>
+                    <td><? echo $attendee->first_name . ' ' . $attendee->last_name ?></td>
+                    <td><? echo $attendee->pass_type ?></td>
+                    <td>$<? echo $attendee->paid_amount ?></td>
                 </tr>
             <?php } ?>
             <tr>
