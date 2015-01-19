@@ -31,7 +31,7 @@ document.status = false;
 <div id="content_login">
 <form action="staff_password_reset.php" id="passchange" name="passchange" method="post">
 <fieldset id="list_table_search">
-<input name="username" type="hidden" value="<?php echo $_GET["username"]; ?>" />
+<input name="username" type="hidden" value="<?php if(array_key_exists('username', $_GET)) { echo $_GET["username"]; } ?>" />
 <label>New Password : <input id="password" name="password" type="password" class="input_20_150" /></label><br />
 <label>Verify Password : <input id="password2" name="password2" type="password" class="input_20_150" /></label><br />
 <input name="Reset" type="submit" class="submit_button" value="Change"  onclick="verifyPassword();return document.status" />
