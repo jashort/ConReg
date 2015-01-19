@@ -5,73 +5,62 @@ require_once('../includes/passtypes.php');
 require_once('../includes/authcheck.php');
 require_right('registration_add');
 
-if (array_key_exists('part', $_GET) && $_GET["part"] == "2" && stristr($_SERVER['HTTP_REFERER'], '/reg_pages/reg_add.php' ) && !stristr($_SERVER['HTTP_REFERER'], '/reg_pages/reg_add.php?part' )) {
-
-$_SESSION["FirstName"] = $_POST["FirstName"];
-$_SESSION["LastName"] = $_POST["LastName"];
-if(array_key_exists('part', $_GET) && $_SESSION["BadgeNumber"]=="") {$_SESSION["BadgeNumber"] = $_SESSION['initials'] . str_pad(badgeNumberSelect(), 3, '0', STR_PAD_LEFT);}
-$_SESSION["PhoneNumber"] = $_POST["PhoneNumber"];
-$_SESSION["EMail"] = $_POST["EMail"];
-$_SESSION["Zip"] = $_POST["Zip"];
-$_SESSION["BirthMonth"] = $_POST["BirthMonth"];
-$_SESSION["BirthDay"] = $_POST["BirthDay"];
-$_SESSION["BirthYear"] = $_POST["BirthYear"];
-}
-elseif (array_key_exists('part', $_GET) && $_GET["part"] == "3" && stristr($_SERVER['HTTP_REFERER'], '/reg_pages/reg_add.php?part=2' )) {
-$_SESSION["ECFullName"] = $_POST["ECFullName"];
-$_SESSION["ECPhoneNumber"] = $_POST["ECPhoneNumber"];
-$_SESSION["Same"] = $_POST["Same"];
-$_SESSION["PCFullName"] = $_POST["PCFullName"];
-$_SESSION["PCPhoneNumber"] = $_POST["PCPhoneNumber"];	
-$_SESSION["PCFormVer"] = $_POST["PCFormVer"];	
-}
-elseif (array_key_exists('part', $_GET) && $_GET["part"] == "4" && stristr($_SERVER['HTTP_REFERER'], '/reg_pages/reg_add.php?part=3' )) {
-$_SESSION["PassType"] = $_POST["PassType"];
-$_SESSION["Amount"] = $_POST["Amount"];
-$_SESSION["Notes"] = $_POST["Notes"];	
-
-}
-
-if ((isset($_POST["BirthYear"]))&&($_POST["BirthYear"]!="YYYY")) {
-  $BDate = $_SESSION["BirthYear"] . "-" . $_SESSION["BirthMonth"] . "-" . $_SESSION["BirthDay"];
-  $_SESSION["BDate"] = $BDate;
-  $_SESSION["year_diff"] = calculateAge($BDate);
-} else {
-  $year_message = "Please go back and enter a birthdate!";
-}
-
-if (isset($_SESSION["year_diff"])&&($_POST["BirthYear"]!="YYYY")) { $year_message = NULL; }
-
-// Get pass costs based on age
-$Weekend = calculatePassCost($_SESSION["year_diff"], "Weekend");
-$Friday = calculatePassCost($_SESSION["year_diff"], "Friday");
-$Saturday = calculatePassCost($_SESSION["year_diff"], "Saturday");
-$Sunday = calculatePassCost($_SESSION["year_diff"], "Sunday");
-$Monday = calculatePassCost($_SESSION["year_diff"], "Monday");
-
-if ($_SESSION['PassType'] != 'Manual') {
-  $_SESSION['Amount'] = calculatePassCost($_SESSION["year_diff"], $_SESSION["PassType"]);
-}
-
-if (($_SESSION["year_diff"] > 12) && ($_SESSION["year_diff"] < 18)){
-  $ParentForm = "Yes";
-} else {
-  $ParentForm = "No";
-}
-
-if ((isset($_POST["SubmitNow"])) && ($_POST["SubmitNow"] == "Yes")) {
-  // Create an order record if it doesn't exist
-  if (!isset($_SESSION["OrderId"])) {
-    $_SESSION["OrderId"] = orderadd();
+if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) || 
+    (array_key_exists('action', $_GET) && $_GET['action'] == "clear")) {
+  // Brand new attendee
+  $_SESSION['current'] = new Attendee();
+  if (!array_key_exists('currentOrder', $_SESSION)) { // Create order array if it doesn't exist
+    $_SESSION['currentOrder'] = Array();
+  }
+  // Get it the next available badge number and set some default values
+  $badge = $_SESSION['initials'] . str_pad(badgeNumberSelect(), 4, '0', STR_PAD_LEFT);
+  $_SESSION['current']->badge_number = $badge;
+  $_SESSION['current']->added_by = $_SESSION['username'];
+  $_SESSION['current']->reg_type = "Reg";
+  $_SESSION['current']->checked_in = "N";
+  $_SESSION['current']->paid = "N";
+  $_SESSION['current']->parent_form = "N";
+  $_SESSION['current']->ec_same = "N";
+  badgeNumberUpdate();
+  redirect('/reg_pages/reg_add.php?part=1');
+} elseif (array_key_exists('part', $_POST)) {
+  // Handle posting form data and redirecting to the next section
+  if ($_POST['part'] == 1) {
+    $_SESSION['current']->first_name = $_POST["FirstName"];
+    $_SESSION['current']->last_name = $_POST["LastName"];
+    $_SESSION['current']->phone = $_POST["PhoneNumber"];
+    $_SESSION['current']->email = $_POST["EMail"];
+    $_SESSION['current']->zip = $_POST["Zip"];
+    $_SESSION['current']->birthdate = $_POST["BirthYear"] . '-' . $_POST["BirthMonth"] . '-' . $_POST["BirthDay"];
+    redirect('/reg_pages/reg_add.php?part=2');
+  } elseif ($_POST['part'] == 2) {
+    $_SESSION['current']->ec_fullname = $_POST["ECFullName"];
+    $_SESSION['current']->ec_phone = $_POST["ECPhoneNumber"];
+    if (array_key_exists("Same", $_POST)) {
+      $_SESSION['current']->ec_same = $_POST["Same"];
+    } else {
+      $_SESSION['current']->ec_same = "N";
+    }
+    $_SESSION['current']->parent_fullname = $_POST["PCFullName"];
+    $_SESSION['current']->parent_phone = $_POST["PCPhoneNumber"];
+    $_SESSION['current']->parent_form = $_POST["PCFormVer"];
+    redirect('/reg_pages/reg_add.php?part=3');
+  } elseif ($_POST['part'] == 3) {
+    $_SESSION['current']->pass_type = $_POST["PassType"];
+    if ($_POST['PassType'] != "Manual Price") {
+      $_SESSION['current']->paid_amount = calculatePassCost($_SESSION['current']->getAge(), $_POST['PassType']);
+    } else {
+      $_SESSION['current']->paid_amount = $_POST["Amount"];
+    }
+    $_SESSION['current']->notes = $_POST["Notes"];
+    redirect('/reg_pages/reg_add.php?part=4');
+  } elseif ($_POST['part'] == 4) {
+    // Add the current attendee to the open order
+    array_push($_SESSION['currentOrder'], $_SESSION['current']);
+    unset($_SESSION['current']);
+    redirect("/reg_pages/reg_order.php");
   }
 
-  regadd($_SESSION["FirstName"], $_SESSION["LastName"], $_SESSION["BadgeNumber"], $_SESSION["PhoneNumber"], $_SESSION["EMail"],  $_SESSION["Zip"], $_SESSION["BDate"], $_SESSION["ECFullName"], $_SESSION["ECPhoneNumber"], $_SESSION["Same"], $_SESSION["PCFullName"], $_SESSION["PCPhoneNumber"], $ParentForm, "Yes", $_SESSION["Amount"], $_SESSION["PassType"], "Reg", "Yes", $_SESSION["OrderId"], $_SESSION["Notes"]);
-
-  if ($_SESSION["QuickReg"] != "True") {
-    badgeNumberUpdate();
-  }
-  unset ($_SESSION["QuickReg"]);
-  redirect("/reg_pages/reg_order.php");
 }
 
 ?>
@@ -135,32 +124,9 @@ document.reg_add2.Same.value = "";
 document.reg_add2.PCFullName.value = "";
 document.reg_add2.PCPhoneNumber.value = "";
 }}
-function verifyForm(){
-if (document.reg_add2.PCFormVer.checked) {
-document.reg_add2.PCFormVer.value = "Y";
-} else {
-document.reg_add2.PCFormVer.value = "";
-}}
 function MM_goToURL() { //v3.0
   var i, args=MM_goToURL.arguments; document.MM_returnValue = false;
   for (i=0; i<(args.length-1); i+=2) eval(args[i]+".location='"+args[i+1]+"'");
-}
-function setAmount() {
-if (document.reg_add3.PassType_0.checked) {
-	document.reg_add3.Amount.value = "<?php echo $Weekend ?>";
-	}
-else if (document.reg_add3.PassType_1.checked) {
-	document.reg_add3.Amount.value = "<?php echo $Friday; ?>";
-	}  
-else if (document.reg_add3.PassType_2.checked) {
-	document.reg_add3.Amount.value = "<?php echo $Saturday ?>";
-	} 
-else if (document.reg_add3.PassType_3.checked) {
-	document.reg_add3.Amount.value = "<?php echo $Sunday ?>";
-	} 
-else if (document.reg_add3.PassType_4.checked) {
-	document.reg_add3.Amount.value = "<?php echo $Monday ?>";
-	}
 }
 function MM_openBrWindow(theURL,winName,features) { //v2.0
   window.open(theURL,winName,features);
@@ -169,11 +135,8 @@ function clearverify() {
 var answer=confirm("Are you sure you want to clear?");
 if (answer==true)
   {
-  MM_goToURL('parent','../includes/functions.php?action=clear');return document.MM_returnValue;
+    MM_goToURL('parent','/reg_pages/reg_add.php?action=clear');return document.MM_returnValue;
   }
-else
-  {
-  } 
 }
 <?php 
 if (isset($_SESSION["FirstName"])) {
@@ -228,204 +191,259 @@ document.reg_add3.AuthDisplay.value = number;
 <?php require "../includes/leftmenu.php" ?>
 
 <div id="content"><!-- InstanceBeginEditable name="Content" -->
-<?php if ($_GET["part"]==""){ ?>
-<form name="reg_add1" action="reg_add.php?part=2" method="post">
-<fieldset id="personalinfo">
-<legend>Attendee Info</legend>
-<p>
-  <label>First Name:
-  <input name="FirstName" type="text" class="input_20_200" id="First Name" value="<?php echo $_SESSION["FirstName"]; ?>" /></label>
-  <label>Last Name:
-  <input name="LastName" type="text" class="input_20_200" id="Last Name" value="<?php echo $_SESSION["LastName"]; ?>" /></label>
+<?php if (array_key_exists('part', $_GET) && $_GET["part"]=="1"){ ?>
+  <form name="reg_add1" action="reg_add.php" method="post">
+    <input name="part" type="hidden" value="1" />
+  <fieldset id="personalinfo">
+  <legend>Attendee Info</legend>
+  <p>
+    <label>First Name:
+    <input name="FirstName" type="text" class="input_20_200" id="First Name" value="<?php echo $_SESSION['current']->first_name; ?>" /></label>
+    <label>Last Name:
+    <input name="LastName" type="text" class="input_20_200" id="Last Name" value="<?php echo $_SESSION['current']->last_name; ?>" /></label>
+    <br />
+    <label>Phone Number:
+    <input name="PhoneNumber" type="text" class="input_20_200" id="PhoneNumber" value="<?php echo $_SESSION['current']->phone; ?>" /></label>
+    <br />
+    <label>EMail:
+      <input name="EMail" type="text" class="input_20_200" id="EMail" value="<?php echo $_SESSION['current']->email; ?>" /></label>
+    <br />
+      <label>Zip:
+    <input name="Zip" type="text" class="input_20_200" id="Zip" value="<?php echo $_SESSION['current']->zip; ?>" /></label>
+    <br />
+    <span class="display_text_large">
+    <label>Badge Number: <?php echo $_SESSION["current"]->badge_number ?>
+    </span><br /><br />
+    <label>Birth Date:
+      <? // If a birthdate has been set, display it. Otherwise, display blank fields
+      if ($_SESSION['current']->getAge() == -1) { ?>
+        <input type="number" class="input_20_40" maxlength="2" name="BirthMonth" id="Birth Month" value="<?php echo $_SESSION['current']->getBirthMonth() ?>" min="1" max="12" placeholder="MM">
+        <span class="bold_text">/</span>
+        <input type="number" class="input_20_40" maxlength="2" name="BirthDay" id="Birth Day" value="<?php echo $_SESSION['current']->getBirthDay() ?>" min="1" max="31" placeholder="DD">
+        <span class="bold_text">/</span>
+        <input type="number" class="input_20_60" maxlength="4" name="BirthYear" id="Birth Year" value="<?php echo $_SESSION['current']->getBirthYear()?>" min="1900" max="2015" placeholder="YYYY">
+        </label>(Month / Day / Year)
+      <? } else { ?>
+        <input type="number" class="input_20_40" maxlength="2" name="BirthMonth" id="Birth Month" min="1" max="12" placeholder="MM">
+        <span class="bold_text">/</span>
+        <input type="number" class="input_20_40" maxlength="2" name="BirthDay" id="Birth Day" min="1" max="31" placeholder="DD">
+        <span class="bold_text">/</span>
+        <input type="number" class="input_20_60" maxlength="4" name="BirthYear" id="Birth Year" min="1900" max="2015" placeholder="YYYY">
+        </label>(Month / Day / Year)
+      <? } ?>
+
+  </p>
+  </fieldset>
+  <div class="centerbutton">
+    <input name="Next" type="submit" class="next_button" onclick="MM_validateForm('First Name','','R','Last Name','','R','Phone Number','','R','Zip','','R');return document.MM_returnValue" value="Next" />
+    <input name="Clear" type="button" class="next_button" onclick="clearverify()" value="Clear" />
+  </div>
+  </form>
+<?php } ?>
+<?php if (array_key_exists('part', $_GET) && $_GET["part"]=="2") { ?>
+  <br />
+  <fieldset id="currentage">
+  <span class="display_text">Current Age: <?php echo $_SESSION['current']->getAge() ?></span>
+  </fieldset>
+  <form name="reg_add2" action="reg_add.php" method="post">
+    <input name="part" type="hidden" value="2" />
+  <fieldset id="emergencyinfo">
+  <legend>Emergency Contact Info</legend>
+  <label>Full Name:
+  <input name="ECFullName" type="text" class="input_20_200" id="Emergency Contact Full Name" value="<?php echo $_SESSION["current"]->ec_fullname; ?>"  /></label>
   <br />
   <label>Phone Number:
-  <input name="PhoneNumber" type="text" class="input_20_200" id="PhoneNumber" value="<?php echo $_SESSION["PhoneNumber"]; ?>" /></label>
+  <input name="ECPhoneNumber" type="text" class="input_20_200" id="ECPhoneNumber" value="<?php echo $_SESSION['current']->ec_phone ?>" /></label>
   <br />
-  <label>EMail:
-    <input name="EMail" type="text" class="input_20_200" id="EMail" value="<?php echo $_SESSION["EMail"]; ?>" /></label>
-  <br />
-    <label>Zip:
-  <input name="Zip" type="text" class="input_20_200" id="Zip" value="<?php echo $_SESSION["Zip"]; ?>" /></label>
-  <br />
-  <span class="display_text_large">
-  <label>Badge Number:
-  <?php if($_SESSION["BadgeNumber"]=="") {echo $_SESSION['initials'] . str_pad(badgeNumberSelect(), 3, '0', STR_PAD_LEFT);} else { echo $_SESSION["BadgeNumber"];} ?></label>
-  </span><br /><br />
-  <label>Birth Date:
-    <input type="number" class="input_20_40" maxlength="2" name="BirthMonth" id="Birth Month" value="<?php echo $_SESSION["BirthMonth"]?>" min="1" max="12" placeholder="MM">
-    <span class="bold_text">/</span>
-    <input type="number" class="input_20_40" maxlength="2" name="BirthDay" id="Birth Day" value="<?php echo $_SESSION["BirthDay"]?>" min="1" max="31" placeholder="DD">
-    <span class="bold_text">/</span>
-    <input type="number" class="input_20_60" maxlength="4" name="BirthYear" id="Birth Year" value="<?php echo $_SESSION["BirthYear"]?>" min="1900" max="2015" placeholder="YYYY">
-  </label>(Month / Day / Year)
-</p>
-</fieldset>
-<div class="centerbutton">
-<input name="Next" type="submit" class="next_button" onclick="MM_validateForm('First Name','','R','Last Name','','R','Phone Number','','R','Zip','','R');return document.MM_returnValue" value="Next" /><input name="Clear" type="button" class="next_button" onclick="clearverify()" value="Clear" />
-</div>
-</form>
+  </fieldset>
+  <?php if ($_SESSION['current']->isMinor()) { ?>
+    <fieldset id="parentinfo">
+    <legend>Parent Contact Info</legend>
+    <input name="Same" type="checkbox" class="checkbox" value="Y" onClick="sameInfo();" <?php if ($_SESSION['current']->ec_same == "Y") { echo "checked"; } ?> /><span class="bold_text"> SAME AS EMERGENCY CONTACT INFO</span>
+    <br /><br />
+    <label>Full Name:
+    <input name="PCFullName" type="text" class="input_20_200" id="Parent Contact Full Name" value="<?php echo $_SESSION['current']->ec_fullname; ?>"  /></label>
+    <br />
+    <label>Phone Number:
+    <input name="PCPhoneNumber" type="text" class="input_20_200" id="PCPhoneNumber" value="<?php echo $_SESSION['current']->ec_phone; ?>" /></label>
+    <br /><br />
+    <input name="PCFormVer" type="checkbox" value="Y" <?php if ($_SESSION['current']->parent_form == "Y") { echo "checked"; } ?> id="Parent Contact Form Verification" class="checkbox" /><span class="bold_text"> PARENTAL CONSENT FORM RECEIVED</span>
+    </fieldset>
+  <?php } else { ?>
+      <input name="Same" value="N" type="hidden" />
+      <input name="PCFullName" value="" type="hidden" />
+      <input name="PCPhoneNumber" value="" type="hidden" />
+      <input name="PCFormVer" value="N" type="hidden" />
+  <? } ?>
+  <div class="centerbutton">
+  <input name="Previous" type="button" class="next_button" onclick="MM_goToURL('parent','/reg_pages/reg_add.php?part=1');return document.MM_returnValue" value="Previous" />
+    <input name="Submit" type="submit" class="next_button" 
+      <?php if ($_SESSION['current']->isMinor()) { ?>onclick="MM_validateForm('Emergency Contact Full Name','','R','Emergency Contact Phone Number','','R','Parent Contact Full Name','','R','Parent Contact Phone Number','','R','Parent Contact Form Verification','','R');return document.MM_returnValue"<?php } else { ?>onclick="MM_validateForm('Emergency Contact Full Name','','R','Emergency Contact Phone Number','','R');return document.MM_returnValue"<?php } ?> value="Next" />
+    <input name="Clear" type="button" class="next_button" onclick="clearverify()" value="Clear" />
+  </div>
+  </form>
 <?php } ?>
-<?php if ($_GET["part"]=="2") { ?>
-<br />
-<fieldset id="currentage">
-<span class="display_text">Current Age: <?php if (!isset($year_message)) { echo $_SESSION["year_diff"]; } else { echo $year_message;} ?></span>
-</fieldset>
-<form name="reg_add2" action="reg_add.php?part=3" method="post">
-<fieldset id="emergencyinfo">
-<legend>Emergency Contact Info</legend>
-<label>Full Name:
-<input name="ECFullName" type="text" class="input_20_200" id="Emergency Contact Full Name" value="<?php echo $_SESSION["ECFullName"]; ?>"  /></label>
-<br />
-<label>Phone Number:
-<input name="ECPhoneNumber" type="text" class="input_20_200" id="ECPhoneNumber" value="<?php echo $_SESSION["ECPhoneNumber"]; ?>"  /></label>
-<br />
-</fieldset>
-<?php if (($_SESSION["year_diff"] >= 13) && ($_SESSION["year_diff"] < 18)) { ?>
-<fieldset id="parentinfo">
-<legend>Parent Contact Info</legend>
-<input name="Same" type="checkbox" class="checkbox" onClick="sameInfo();" <?php if ($_SESSION["Same"] == "Y") { echo "value=\"Y\" checked"; } else { echo "value=\"\""; } ?> /><span class="bold_text"> SAME AS EMERGENCY CONTACT INFO</span>
-<br /><br />
-<label>Full Name:
-<input name="PCFullName" type="text" class="input_20_200" id="Parent Contact Full Name" value="<?php echo $_SESSION["PCFullName"]; ?>"  /></label>
-<br />
-<label>Phone Number:
-<input name="PCPhoneNumber" type="text" class="input_20_200" id="PCPhoneNumber" value="<?php echo $_SESSION["PCPhoneNumber"]; ?>" /></label>
-<br /><br />
-<input name="PCFormVer" type="checkbox" <?php if ($_SESSION["PCFormVer"] == "Y") { echo "value=\"Y\" checked"; } else { echo "value=\"\""; } ?> id="Parent Contact Form Verification" class="checkbox" onclick="verifyForm();" /><span class="bold_text"> PARENTAL CONSENT FORM RECEIVED</span>
-</fieldset>
-<?php } ?>
-<div class="centerbutton">
-<input name="Previous" type="button" class="next_button" onclick="MM_goToURL('parent','/reg_pages/reg_add.php');return document.MM_returnValue" value="Previous" /><?php if($_POST["BirthYear"]!="YYYY") { ?><input name="Submit" type="submit" class="next_button" <?php if ($_SESSION["BirthYear"]>1994) { ?>onclick="MM_validateForm('Emergency Contact Full Name','','R','Emergency Contact Phone Number','','R','Parent Contact Full Name','','R','Parent Contact Phone Number','','R','Parent Contact Form Verification','','R');return document.MM_returnValue"<?php } else { ?>onclick="MM_validateForm('Emergency Contact Full Name','','R','Emergency Contact Phone Number','','R');return document.MM_returnValue"<?php } ?> value="Next" /><?php } ?><input name="Clear" type="button" class="next_button" onclick="clearverify()" value="Clear" />
-</div>
-</form>
-<?php } ?>
-<?php if ($_GET["part"]=="3") { ?>
-<form name="reg_add3" action="reg_add.php?part=4" method="post">
-<fieldset id="paymentinfo">
+<?php if (array_key_exists('part', $_GET) && $_GET["part"]=="3") { ?>
+  <?
+  // Get pass costs based on age
+  $Weekend = calculatePassCost($_SESSION['current']->getAge(), "Weekend");
+  $Friday = calculatePassCost($_SESSION['current']->getAge(), "Friday");
+  $Saturday = calculatePassCost($_SESSION['current']->getAge(), "Saturday");
+  $Sunday = calculatePassCost($_SESSION['current']->getAge(), "Sunday");
+  $Monday = calculatePassCost($_SESSION['current']->getAge(), "Monday");
+  ?>
+    <script type="text/javascript">
+      function setAmount() {
+        if (document.reg_add3.PassType_0.checked) {
+          document.reg_add3.Amount.value = "<?php echo $Weekend ?>";
+        }
+        else if (document.reg_add3.PassType_1.checked) {
+          document.reg_add3.Amount.value = "<?php echo $Friday; ?>";
+        }
+        else if (document.reg_add3.PassType_2.checked) {
+          document.reg_add3.Amount.value = "<?php echo $Saturday ?>";
+        }
+        else if (document.reg_add3.PassType_3.checked) {
+          document.reg_add3.Amount.value = "<?php echo $Sunday ?>";
+        }
+        else if (document.reg_add3.PassType_4.checked) {
+          document.reg_add3.Amount.value = "<?php echo $Monday ?>";
+        }
+      }
+    </script>
+
+<form name="reg_add3" action="reg_add.php" method="post">
+  <input name="part" type="hidden" value="3" />
+
+  <fieldset id="paymentinfo">
 <legend>PASS TYPE</legend>
 <p>
   <label>
-    <input type="radio" name="PassType" value="Weekend" id="PassType_0" onchange="setAmount();" <?php if ($_SESSION["PassType"] == "Weekend") echo "checked=\"checked\""; ?> />
+    <input type="radio" name="PassType" value="Weekend" id="PassType_0" onchange="setAmount();" <?php if ($_SESSION['current']->pass_type == "Weekend") echo "checked=\"checked\""; ?> />
     All Weekend - $<?php echo $Weekend ?></label>
     <hr />
   <label>
-    <input name="PassType" type="radio" id="PassType_1" onchange="setAmount();" value="Friday" <?php if ($_SESSION["PassType"] == "Friday") echo "checked=\"checked\""; ?> />
+    <input name="PassType" type="radio" id="PassType_1" onchange="setAmount();" value="Friday" <?php if ($_SESSION['current']->pass_type == "Friday") echo "checked=\"checked\""; ?> />
     Friday Only - $<?php echo $Friday ?></label>
   <br />
   <label>
-    <input name="PassType" type="radio" id="PassType_2" onchange="setAmount();" value="Saturday" <?php if ($_SESSION["PassType"] == "Saturday") echo "checked=\"checked\""; ?> />
+    <input name="PassType" type="radio" id="PassType_2" onchange="setAmount();" value="Saturday" <?php if ($_SESSION['current']->pass_type == "Saturday") echo "checked=\"checked\""; ?> />
     Saturday Only - $<?php echo $Saturday ?></label>
   <br />
   <label>
-    <input type="radio" name="PassType" value="Sunday" id="PassType_3" onchange="setAmount();" <?php if ($_SESSION["PassType"] == "Sunday") echo "checked=\"checked\""; ?> />
+    <input type="radio" name="PassType" value="Sunday" id="PassType_3" onchange="setAmount();" <?php if ($_SESSION['current']->pass_type == "Sunday") echo "checked=\"checked\""; ?> />
     Sunday Only - $<?php echo $Sunday ?></label>
   <br />
   <label>
-    <input name="PassType" type="radio" id="PassType_4" onclick="setAmount()" value="Monday" <?php if ($_SESSION["PassType"] == "Monday") echo "checked=\"checked\""; ?> />
+    <input name="PassType" type="radio" id="PassType_4" onclick="setAmount()" value="Monday" <?php if ($_SESSION['current']->pass_type == "Monday") echo "checked=\"checked\""; ?> />
     Monday Only - $<?php echo $Monday ?></label><br />
 	<?php if (has_right('registration_manual_price')) { ?>
       <span class="radio_button_left_margin">
-    <input name="PassType" type="radio" id="PassType_5" onclick="manualprice()" value="Manual Price" <?php if ($_SESSION["PassType"] == "Manual Price") echo "checked=\"checked\""; ?> />
+    <input name="PassType" type="radio" id="PassType_5" onclick="manualprice()" value="Manual Price" <?php if ($_SESSION['current']->pass_type == "Manual Price") echo "checked=\"checked\""; ?> />
     Manual Price - $
-    <input name="MPAmount" type="text" class="input_20_150" id="Manual Price Amount" value="<?php echo $_SESSION["Amount"] ?>" disabled="disabled"/>
+    <input name="MPAmount" type="text" class="input_20_150" id="Manual Price Amount" value="<?php echo $_SESSION['current']->paid_amount ?>" disabled="disabled"/>
       </span><?php } ?>
       <?php 
 	  
-	  switch ($_SESSION["PassType"]) {
+	  switch ($_SESSION['current']->pass_type) {
     	case "Weekend":
-        $_SESSION["Amount"] = $Weekend;
-        break;
+          $_SESSION['current']->paid_amount = $Weekend;
+          break;
     	case "Friday":
-        $_SESSION["Amount"] = $Friday;
-        break;
+          $_SESSION['current']->paid_amount = $Friday;
+          break;
     	case "Saturday":
-        $_SESSION["Amount"] = $Saturday;
-        break;
+          $_SESSION['current']->paid_amount = $Saturday;
+          break;
     	case "Sunday":
-        $_SESSION["Amount"] = $Sunday;
-        break;
+          $_SESSION['current']->paid_amount = $Sunday;
+          break;
     	case "Monday":
-        $_SESSION["Amount"] = $Monday;
+          $_SESSION['current']->paid_amount = $Monday;
         break;
-}
+      }
 	  
 	  ?>
-  <input name="Amount" type="hidden" id="Amount" value="<?php echo $_SESSION["Amount"] ?>" />
+  <input name="Amount" type="hidden" id="Amount" value="<?php echo $_SESSION['current']->paid_amount ?>" />
   <br />
 </p>
 </fieldset>
 <fieldset id="notes">
 <label>Notes : </label>
-<textarea name="Notes" rows="5"><?php echo $_SESSION["Notes"]; ?></textarea>
+<textarea name="Notes" rows="5"><?php echo $_SESSION['current']->notes; ?></textarea>
 </fieldset>
 <div class="centerbutton">
 <input name="Previous" type="button" class="next_button" onclick="MM_goToURL('parent','/reg_pages/reg_add.php?part=2');return document.MM_returnValue" value="Previous" /><input name="Submit" type="submit" class="next_button" value="Next" onclick="return radiobutton();" /><input name="Clear" type="button" class="next_button" onclick="clearverify()" value="Clear" />
 </div>
 </form>
 <?php } ?>
-<?php if ($_GET["part"]=="4") { ?>
+<?php if (array_key_exists('part', $_GET) && $_GET["part"]=="4") { ?>
 <fieldset id="personalinfo">
 <legend>Attendee Info</legend>
 <label>First Name: </label>
-<span class="display_text"><?php echo $_SESSION["FirstName"]; ?></span>
+<span class="display_text"><?php echo $_SESSION['current']->first_name; ?></span>
 <label>Last Name: </label>
-<span class="display_text"><?php echo $_SESSION["LastName"]; ?></span>
+<span class="display_text"><?php echo $_SESSION['current']->last_name; ?></span>
 <br />
 <label>Phone Number: </label>
-<span class="display_text"><?php echo $_SESSION["PhoneNumber"]; ?></span>
+<span class="display_text"><?php echo $_SESSION['current']->phone; ?></span>
 <br />
 <label>Email: </label>
-<span class="display_text"><?php echo $_SESSION["EMail"]; ?></span>
+<span class="display_text"><?php echo $_SESSION['current']->email; ?></span>
 <br />
 <label>Zip: </label>
-<span class="display_text"><?php echo $_SESSION["Zip"]; ?></span>
+<span class="display_text"><?php echo $_SESSION['current']->zip; ?></span>
 <br />
 <label>Badge Number: </label>
-<span class="display_text"><?php echo $_SESSION["BadgeNumber"]; ?></span>
+<span class="display_text"><?php echo $_SESSION['current']->badge_number; ?></span>
 <br />
 <label>Birth Date: </label>
-<span class="display_text"><?php echo $_SESSION["BirthMonth"]; ?>/<?php echo $_SESSION["BirthDay"] ?>/<?php echo $_SESSION["BirthYear"] ?></span>
+<span class="display_text"><?php echo $_SESSION['current']->getBirthDate() ?></span>
 </fieldset>
 <fieldset id="emergencyinfo">
 <legend>Emergency Contact Info</legend>
 <label>Full Name: </label>
-<span class="display_text"><?php echo $_SESSION["ECFullName"]; ?></span>
+<span class="display_text"><?php echo $_SESSION['current']->ec_fullname ?></span>
 <br />
 <label>Phone Number: </label>
-<span class="display_text"><?php echo $_SESSION["ECPhoneNumber"]; ?></span>
+<span class="display_text"><?php echo $_SESSION['current']->ec_phone ?></span>
 <br />
 </fieldset>
-<?php if (($year_diff < 18) && ($year_diff > 12)) { ?>
+<?php if ($_SESSION['current']->isMinor()) { ?>
 <fieldset id="parentinfo">
 <legend>Parent Contact Info</legend>
 <label>Full Name: </label>
-<span class="display_text"><?php echo $_SESSION["PCFullName"]; ?></span>
+<span class="display_text"><?php echo $_SESSION['current']->parent_fullname ?></span>
 <br />
 <label>Phone Number: </label>
-<span class="display_text"><?php echo $_SESSION["PCPhoneNumber"]; ?></span>
+<span class="display_text"><?php echo $_SESSION['current']->parent_phone ?></span>
 <br />
 <label>Parental Permission Form Submitted: </label>
-<span class="display_text"><?php echo $_SESSION["PCFormVer"]; ?> </span>
+<span class="display_text"><?php echo $_SESSION['current']->parent_form; ?> </span>
 </fieldset>
 <?php } ?>
 <fieldset id="paymentinfo">
 <legend>PASS TYPE</legend>
-<span class="display_text"><?php echo $_SESSION["PassType"]; ?> - $<?php echo $_SESSION["Amount"]; ?></span>
+<span class="display_text"><?php echo $_SESSION['current']->pass_type ?> - $<?php echo $_SESSION['current']->paid_amount ?></span>
 </fieldset>
-  <!--<fieldset id="paymentinfo">
-<legend>PAYMENT TYPE</legend>
-<span class="display_text"><?php if ($_SESSION["PayType"]=="") { echo "Please enter a payment type!"; } else { echo $_SESSION["PayType"]; } ?>
-</fieldset>-->
-<fieldset id="paymentinfo">
+
+  <fieldset id="paymentinfo">
 <legend>NOTES</legend>
-<span class="display_text"><?php echo $_SESSION["Notes"]; ?>
+<span class="display_text"><?php echo $_SESSION['current']->notes; ?>
 </fieldset>
 
 <div class="centerbutton">
-<form name="reg_add" action="reg_add.php" method="post"><input type="hidden" name="SubmitNow" value="Yes" /><input name="Previous" type="button" class="next_button" onclick="MM_goToURL('parent','/reg_pages/reg_add.php?part=3');return document.MM_returnValue" value="Previous" /><input name="Clear" type="button" class="next_button" onclick="clearverify()" value="Clear" /><input name="Submit" type="submit" class="next_button" value="Confirm" /></form>
+<form name="reg_add" action="reg_add.php" method="post">
+  <input type="hidden" name="SubmitNow" value="Yes" />
+  <input type="hidden" name="part" value="4" />
+  <input name="Previous" type="button" class="next_button" onclick="MM_goToURL('parent','/reg_pages/reg_add.php?part=3');return document.MM_returnValue" value="Previous" />
+  <input name="Clear" type="button" class="next_button" onclick="clearverify()" value="Clear" />
+  <input name="Submit" type="submit" class="next_button" value="Confirm" />
+</form>
 </div><br />
 <?php } ?>
-<!-- InstanceEndEditable --></div>
+
+  <!-- InstanceEndEditable --></div>
 <div id="footer">&copy; Tim Zuidema</div> 
 <!-- InstanceBeginEditable name="Javascript" --><!-- InstanceEndEditable -->
 </body>

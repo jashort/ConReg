@@ -6,13 +6,15 @@ require_once('../includes/authcheck.php');
 require_right('registration_add');
 
 if ((isset($_POST["action"])) && ($_POST["action"] == "Finish")) {
-    ordercheckin($_SESSION["OrderId"]);
-    unset ($_SESSION["OrderId"]);
+    $_SESSION["currentOrder"] = Array();
+    unset ($_SESSION["current"]);
     redirect("/index.php");
 }
 
 if ((isset($_POST["action"])) && ($_POST["action"] == "Paid")) {
-    orderpaid($_SESSION["OrderId"], $_POST["PayType"], $_POST["total"]);
+    $orderId = regAddOrder($_SESSION['currentOrder']);
+    ordercheckin($orderId);
+    orderpaid($orderId, $_POST["PayType"], $_POST["total"], $_POST['Notes']);
 }
 
 ?>
@@ -76,67 +78,20 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Paid")) {
             {
             }
         }
-        <?php
-        if (isset($_SESSION["FirstName"])) {
-        if (!stristr($_SERVER['HTTP_REFERER'], '/reg_pages/reg_add.php')) { ?>
-        (function() {
-            var answer=confirm("Attendee information is set in this form and hasn't been submitted. If you are continuing please press Cancel, otherwise press Ok and the form will be cleared.");
-            if (answer==true)
-            {
-                MM_goToURL('parent','../includes/functions.php?action=clear');return document.MM_returnValue;
-            }
-            else
-            {
-            }
-        })();
-        <?php } }?>
-        function manualprice() {
 
-            do {
-                var amount=prompt("Please enter the amount","ex 40.00");
-                var currencycheck=new RegExp("^(([0-9]\.[0-9][0-9])|([0-9][0-9]\.[0-9][0-9]))$");
-                var currencyformat = currencycheck.test(amount);
-            } while ((amount=="") || (currencyformat==false));
-
-            do {
-                var reason=prompt("Please enter the reason for the manual pricing","");
-            } while (reason=="");
-
-            document.reg_add3.MPAmount.value = amount;
-            document.reg_add3.Amount.value = amount;
-            document.reg_add3.Notes.value = reason;
-
-        }
-        function creditauth() {
-
+        function creditAuth() {
             do {
                 var number=prompt("Please enter the authorization number","ex 123456");
             } while ((number=="") || (number=="ex 123456"));
 
-            if (document.reg_add3.Notes.value == "") {
-                document.reg_add3.Notes.value = "The Credit Card Authorization Number is: " + number;
+            if (document.getElementById('Notes').value == "") {
+                document.getElementById('Notes').value = "The Credit Card Authorization Number is: " + number;
             } else {
-                document.reg_add3.Notes.value = document.reg_add3.Notes.value + "---" + "The Credit Card Authorization Number is: " + number;
+                document.getElementById('Notes').value = document.getElementById('Notes').value + "---" + "The Credit Card Authorization Number is: " + number;
             }
 
-            document.reg_add3.AuthDisplay.value = number;
+            document.getElementById("AuthDisplay").value = number;
         }
-        <?php if ($year_diff > 5) { ?>
-        function radiobutton() {
-
-            //var len = document.form.name.length;
-            var len = document.reg_add3.PayType.length;
-
-            for (i = 0; i < len; i++) {
-                if ( document.reg_add3.PayType[i].checked ) {
-                    return true;
-                }
-            }
-            alert('Please select a payment type!');
-            return false;
-
-        }
-        <?php } ?>
     </script>
     <!-- InstanceEndEditable -->
 </head>
@@ -145,13 +100,13 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Paid")) {
 <?php require "../includes/leftmenu.php" ?>
 
 <div id="content"><!-- InstanceBeginEditable name="Content" -->
-    <? if ($_POST["action"] == "Paid") { ?>
+    <? if (array_key_exists('action', $_POST) && $_POST["action"] == "Paid") { ?>
     <fieldset id="paymentinfo">
         <legend>PRINT BADGES</legend>
     <p>
         <div class="centerbutton">
             <form action="/reg_pages/badgeprint.php" method="post" target="_blank">
-                <input name="order" type="hidden" value="<?php echo $_POST['orderid']?>" />
+                <input name="order" type="hidden" value="<?php echo $orderId?>" />
                 <input name="action" type="submit" class="badge_button" value="Print Badges" />
                 
             </form>
@@ -177,7 +132,7 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Paid")) {
             </tr>
             <?php
             $total = 0;
-            foreach (orderlistattendees($_SESSION['OrderId']) as $attendee) {
+            foreach ($_SESSION['currentOrder'] as $attendee) {
                 $total += $attendee->paid_amount;
                 ?>
                 <tr>
@@ -193,7 +148,6 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Paid")) {
 
     </fieldset>
     <form action="reg_order.php" method="post">
-        <input type="hidden" name="orderid" value="<?php echo $_SESSION['OrderId']?>" />
         <input type="hidden" name="total" value="<?php echo $total?>" />
         <input type="hidden" name="action" value="Paid" />
 
@@ -201,21 +155,21 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Paid")) {
         <legend>PAYMENT TYPE</legend>
         <p>
             <label>
-                <input type="radio" name="PayType" value="Cash" id="PayType_1" <?php if ($_SESSION["PayType"] == "Cash") echo "checked=\"checked\""; ?> />
+                <input type="radio" name="PayType" value="Cash" id="PayType_1"  />
                 Cash</label>
             <br />
             <label>
-                <input type="radio" name="PayType" value="Check" id="PayType_2" <?php if ($_SESSION["PayType"] == "Check") echo "checked=\"checked\""; ?> />
+                <input type="radio" name="PayType" value="Check" id="PayType_2" />
                 Check</label>
             <br />
             <label>
-                <input type="radio" name="PayType" value="Money Order" id="PayType_3" <?php if ($_SESSION["PayType"] == "Money Order") echo "checked=\"checked\""; ?>/>
+                <input type="radio" name="PayType" value="Money Order" id="PayType_3" />
                 Money Order</label>
             <br />
             <label>
-                <input type="radio" name="PayType" value="Credit/Debit" id="PayType_3" onclick="creditauth()" <?php if ($_SESSION["PayType"] == "Credit/Debit") echo "checked=\"checked\""; ?>/>
+                <input type="radio" name="PayType" value="Credit/Debit" id="PayType_3" onclick="creditAuth()" />
                 Credit Card</label>
-            <input name="AuthDisplay" type="text" class="input_20_150" id="AuthDisplay" value="<?php echo $_SESSION["AuthNumber"] ?>" disabled="disabled"/>
+            <input name="AuthDisplay" type="text" class="input_20_150" id="AuthDisplay" disabled="disabled"/>
             </span>
             <br />
 
@@ -224,12 +178,17 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Paid")) {
             <?php } ?>
         </p>
     </fieldset>
+        <fieldset id="notes">
+            <label>Notes : </label>
+            <textarea name="Notes" id="Notes" rows="5"></textarea>
+        </fieldset>
 
         <div class="centerbutton">
             <input name="Paid" type="submit" class="badge_button" value="Take Money" />
         </div>
     </form>
     <?php } ?>
+    
     <!-- InstanceEndEditable --></div>
 <div id="footer">&copy; Tim Zuidema</div>
 <!-- InstanceBeginEditable name="Javascript" --><!-- InstanceEndEditable -->

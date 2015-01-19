@@ -23,7 +23,8 @@ CREATE TABLE registration.orders
     order_id        INT PRIMARY KEY NOT NULL UNIQUE AUTO_INCREMENT,
     total_amount    DECIMAL(10,0) NOT NULL,
     paid            CHAR(3) NOT NULL COMMENT 'yes or no',
-    paytype         VARCHAR(60) NOT NULL
+    paytype         VARCHAR(60) NOT NULL,
+    notes           TEXT
 );
 
 
@@ -41,7 +42,7 @@ CREATE TABLE registration.attendees
     birthdate       DATE NOT NULL,
     ec_fullname     VARCHAR(250) NOT NULL,
     ec_phone        VARCHAR(250) NOT NULL,
-    ec_same         CHAR(1) COMMENT 'Values: Y or empty string',
+    ec_same         CHAR(1) COMMENT 'Values: Y or N',
     parent_fullname VARCHAR(250),
     parent_phone    VARCHAR(60),
     parent_form     CHAR(3) COMMENT 'Values: yes or no',

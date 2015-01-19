@@ -37,23 +37,39 @@ class Attendee {
      * @return string Birthdate in MM/DD/YYYY format
      */
     public function getBirthDate() {
-        $date = new DateTime($this->birthdate);
-        return $date->format('m/d/Y');
+        try {
+            $date = new DateTime($this->birthdate);
+            return $date->format('m/d/Y');
+        } catch (Exception $e) {
+            return '';
+        }
     }
 
     public function getBirthDay() {
-        $date = new DateTime($this->birthdate);
-        return $date->format('d');
+        try {
+            $date = new DateTime($this->birthdate);
+            return $date->format('d');
+        } catch (Exception $e) {
+            return '';
+        }
     }
 
     public function getBirthMonth() {
-        $date = new DateTime($this->birthdate);
-        return $date->format('m');
+        try {
+            $date = new DateTime($this->birthdate);
+            return $date->format('m');
+        } catch (Exception $e) {
+            return '';
+        }
     }
 
     public function getBirthYear() {
-        $date = new DateTime($this->birthdate);
-        return $date->format('Y');
+        try {
+            $date = new DateTime($this->birthdate);
+            return $date->format('Y');
+        } catch (Exception $e) {
+            return '';
+        }
     }
     
     /**
@@ -71,9 +87,13 @@ class Attendee {
      * @return int Returns age in years
      */
     public function getAge() {
-        $date = new DateTime($this->birthdate);
-        $now = new DateTime();
-        return $now->diff($date)->y;
+        try {
+            $date = new DateTime($this->birthdate);
+            $now = new DateTime();
+            return $now->diff($date)->y;
+        } catch (Exception $e) {
+            return -1;
+        }
     }
 
     /**
