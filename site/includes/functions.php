@@ -396,13 +396,13 @@ function passwordReset($Username, $Password) {
 	}
 }
 
-function redirect($location){
-	$insertGoTo = $location;
-	if (isset($_SERVER['QUERY_STRING'])) {
-		$insertGoTo .= (strpos($insertGoTo, '?')) ? "&" : "?";
-		$insertGoTo .= $_SERVER['QUERY_STRING'];
-	}
-	header(sprintf("Location: %s", $insertGoTo, 303));
+/**
+ * Redirect to the given URL and stop running the current page
+ * @param $location	Location to redirect to
+ * @param int $statusCode HTTP status code
+ */
+function redirect($location, $statusCode=303) {
+	header(sprintf("Location: %s", $location, intval($statusCode)));
 	die();
 }
 
