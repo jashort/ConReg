@@ -7,53 +7,7 @@ if (!isset($_SESSION)) {
   session_start();
 }
 
-if (array_key_exists('action',$_GET) && $_GET["action"] == "clear") {
-	regclear();
-	redirect("/index.php");
-}
 
-
-function regAddOrder($attendees) {
-	global $conn;
-
-	try {
-		$conn->beginTransaction();
-		$stmt = $conn->prepare("INSERT INTO orders (paid) VALUES (:paid)");
-		$stmt->execute(array('paid' => 'no'));
-		$orderId = $conn->lastInsertId();
-		$stmt = $conn->prepare("INSERT INTO attendees (first_name, last_name, badge_number, phone, email, zip, birthdate, ec_fullname, ec_phone, ec_same, parent_fullname, parent_phone, parent_form, paid, paid_amount, pass_type, reg_type, order_id, checked_in, notes, added_by) VALUES (:firstname, :lastname, :bnumber, :phone, :email, :zip, :bdate, :ecname, :ecphone, :same, :pcname, :pcphone, :pform, :paid, :amount, :passtype, :regtype, :orderId, :checked, :notes, :addedBy)");
-		foreach ($attendees as $attendee) {
-			$Phone_Stripped = preg_replace("/[^a-zA-Z0-9s]/","",$attendee->phone);
-	
-			$stmt->execute(array('firstname' => $attendee->first_name,
-				'lastname' => $attendee->last_name,
-				'bnumber' => $attendee->badge_number,
-				'phone' => $Phone_Stripped,
-				'email' => $attendee->email,
-				'zip' => $attendee->zip,
-				'bdate' => $attendee->birthdate,
-				'ecname' => $attendee->ec_fullname,
-				'ecphone' => $attendee->ec_phone,
-				'same' => $attendee->ec_same,
-				'pcname' => $attendee->parent_fullname,
-				'pcphone' => $attendee->parent_phone,
-				'pform' => $attendee->parent_form,
-				'paid' => $attendee->paid,
-				'amount' => $attendee->paid_amount,
-				'passtype' => $attendee->pass_type,
-				'orderId' => $orderId,
-				'regtype' => $attendee->reg_type,
-				'checked' => $attendee->checked_in,
-				'notes' => $attendee->notes,
-				'addedBy' => $attendee->added_by));
-		}
-		$conn->commit();
-	} catch(PDOExecption $e) {
-		$conn->rollback();
-		echo 'ERROR: ' . $e->getMessage();
-	}
-	return $orderId;
-}
 
 /**
  * Returns the next available badge number for the logged in user
@@ -104,7 +58,7 @@ function badgeNumberSet($Number) {
  * @param $PayType	Payment Type
  * @param $Paid		Paid? (yes/no)
  */
-function orderupdate($Id, $Amount, $PayType, $Paid) {
+function orderUpdate($Id, $Amount, $PayType, $Paid) {
 	global $conn;
 	try {
 		$stmt = $conn->prepare("UPDATE orders SET total_amount=:amount, paid=:paid, paytype=:paytype WHERE order_id=:id");
@@ -115,7 +69,7 @@ function orderupdate($Id, $Amount, $PayType, $Paid) {
 }
 
 
-function orderlistattendees($OrderId) {
+function orderListAttendees($OrderId) {
 
 	global $conn;
 
@@ -153,10 +107,59 @@ function getAttendee($Id) {
 
 
 /**
+ * Add one or more attendees to the database and create an order record for them
+ * @param $attendees Array containing Attendee objects
+ * @return int The order ID that was created
+ */
+function regAddOrder($attendees) {
+	global $conn;
+
+	try {
+		$conn->beginTransaction();
+		$stmt = $conn->prepare("INSERT INTO orders (paid) VALUES (:paid)");
+		$stmt->execute(array('paid' => 'no'));
+		$orderId = $conn->lastInsertId();
+		$stmt = $conn->prepare("INSERT INTO attendees (first_name, last_name, badge_number, phone, email, zip, birthdate, ec_fullname, ec_phone, ec_same, parent_fullname, parent_phone, parent_form, paid, paid_amount, pass_type, reg_type, order_id, checked_in, notes, added_by) VALUES (:firstname, :lastname, :bnumber, :phone, :email, :zip, :bdate, :ecname, :ecphone, :same, :pcname, :pcphone, :pform, :paid, :amount, :passtype, :regtype, :orderId, :checked, :notes, :addedBy)");
+		foreach ($attendees as $attendee) {
+			$Phone_Stripped = preg_replace("/[^a-zA-Z0-9s]/","",$attendee->phone);
+
+			$stmt->execute(array('firstname' => $attendee->first_name,
+				'lastname' => $attendee->last_name,
+				'bnumber' => $attendee->badge_number,
+				'phone' => $Phone_Stripped,
+				'email' => $attendee->email,
+				'zip' => $attendee->zip,
+				'bdate' => $attendee->birthdate,
+				'ecname' => $attendee->ec_fullname,
+				'ecphone' => $attendee->ec_phone,
+				'same' => $attendee->ec_same,
+				'pcname' => $attendee->parent_fullname,
+				'pcphone' => $attendee->parent_phone,
+				'pform' => $attendee->parent_form,
+				'paid' => $attendee->paid,
+				'amount' => $attendee->paid_amount,
+				'passtype' => $attendee->pass_type,
+				'orderId' => $orderId,
+				'regtype' => $attendee->reg_type,
+				'checked' => $attendee->checked_in,
+				'notes' => $attendee->notes,
+				'addedBy' => $attendee->added_by));
+		}
+		$conn->commit();
+	} catch(PDOExecption $e) {
+		$conn->rollback();
+		echo 'ERROR: ' . $e->getMessage();
+	}
+	return $orderId;
+}
+
+
+
+/**
  * Mark attendees as checked in for the given order ID
  * @param $OrderId
  */
-function ordercheckin($OrderId) {
+function orderCheckIn($OrderId) {
 	try {
 		global $conn;
 
@@ -168,7 +171,7 @@ function ordercheckin($OrderId) {
 
 }
 
-function orderpaid($OrderId, $PaymentType, $Total, $Notes) {
+function orderPaid($OrderId, $PaymentType, $Total, $Notes) {
 	global $conn;
 	try {
 		$conn->beginTransaction();
@@ -186,7 +189,7 @@ function orderpaid($OrderId, $PaymentType, $Total, $Notes) {
 }
 
 
-function regupdate($attendee) {
+function regUpdate($attendee) {
 
 	try {
 		global $conn;
@@ -219,13 +222,13 @@ function regupdate($attendee) {
 }
 
 
-function regcheckin($Id) {
+function regCheckIn($Id) {
 	global $conn;
 	$stmt = $conn->prepare("UPDATE attendees SET checked_in='Yes' WHERE id= :id");
 	$stmt->execute(array('id' => $Id));
 }
 
-function regCheckinParentFormReceived($Id) {
+function regCheckInParentFormReceived($Id) {
 	global $conn;
 	$stmt = $conn->prepare("UPDATE attendees SET parent_form='Yes' WHERE id= :id");
 	$stmt->execute(array('id' => $Id));
@@ -278,35 +281,8 @@ function preRegSearch($name, $field) {
 	return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function regclear() {
 
-unset ($_SESSION['var']);
-unset ($_SESSION["FirstName"]);
-unset ($_SESSION["LastName"]);
-unset ($_SESSION["BadgeNumber"]);
-unset ($_SESSION["Address"]);
-unset ($_SESSION["City"]);
-unset ($_SESSION["State"]);
-unset ($_SESSION["Zip"]);
-unset ($_SESSION["Country"]);
-unset ($_SESSION["EMail"]);
-unset ($_SESSION["PhoneNumber"]);
-unset ($_SESSION["BirthMonth"]);
-unset ($_SESSION["BirthDay"]);
-unset ($_SESSION["BirthYear"]);
-unset ($_SESSION["ECFullName"]);
-unset ($_SESSION["ECPhoneNumber"]);
-unset ($_SESSION["Same"]);
-unset ($_SESSION["PCFullName"]);
-unset ($_SESSION["PCPhoneNumber"]);	
-unset ($_SESSION["PCFormVer"]);
-unset ($_SESSION["PassType"]);
-unset ($_SESSION["Amount"]);
-unset ($_SESSION["Notes"]);
-
-}
-
-function staffadd($FirstName, $LastName, $Username, $Initials, $Cell, $Accesslevel, $Enabled) {
+function staffAdd($FirstName, $LastName, $Username, $Initials, $Cell, $Accesslevel, $Enabled) {
 	
 	$password = crypt("password");
 
@@ -317,7 +293,7 @@ function staffadd($FirstName, $LastName, $Username, $Initials, $Cell, $Accesslev
 	
 }
 
-function staffupdate($Id, $FirstName, $LastName, $Initials, $Cell, $Accesslevel, $Enabled) {
+function staffUpdate($Id, $FirstName, $LastName, $Initials, $Cell, $Accesslevel, $Enabled) {
 
   	global $conn;
 					   
@@ -397,7 +373,7 @@ function registrationStatistics() {
 }
 
 
-function passwordreset($Username, $Password) {
+function passwordReset($Username, $Password) {
 	
 	global $conn;
 	
@@ -421,11 +397,12 @@ function passwordreset($Username, $Password) {
 }
 
 function redirect($location){
-  $insertGoTo = $location;
-  if (isset($_SERVER['QUERY_STRING'])) {
-    $insertGoTo .= (strpos($insertGoTo, '?')) ? "&" : "?";
-    $insertGoTo .= $_SERVER['QUERY_STRING'];
-  }
-  header(sprintf("Location: %s", $insertGoTo));
+	$insertGoTo = $location;
+	if (isset($_SERVER['QUERY_STRING'])) {
+		$insertGoTo .= (strpos($insertGoTo, '?')) ? "&" : "?";
+		$insertGoTo .= $_SERVER['QUERY_STRING'];
+	}
+	header(sprintf("Location: %s", $insertGoTo, 303));
+	die();
 }
 

@@ -4,7 +4,7 @@ require_once('../includes/functions.php');
 require_once('../includes/authcheck.php');
 
 if (isset($_POST["Reset"])) {
-passwordreset($_POST["username"],$_POST["password"]);
+passwordReset($_POST["username"],$_POST["password"]);
 redirect("/index.php");
 }
 ?>

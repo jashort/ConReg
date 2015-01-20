@@ -13,8 +13,8 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Finish")) {
 
 if ((isset($_POST["action"])) && ($_POST["action"] == "Paid")) {
     $orderId = regAddOrder($_SESSION['currentOrder']);
-    ordercheckin($orderId);
-    orderpaid($orderId, $_POST["PayType"], $_POST["total"], $_POST['Notes']);
+    orderCheckIn($orderId);
+    orderPaid($orderId, $_POST["PayType"], $_POST["total"], $_POST['Notes']);
 }
 
 ?>

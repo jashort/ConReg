@@ -8,10 +8,10 @@ require_right('manage_staff');
 if (isset($_GET['username'])) {
     $staff = getStaff($_GET['username']);
 } elseif (isset($_POST["create"])) {
-    staffupdate($_POST["id"], $_POST["fname"], $_POST["lname"], $_POST["initials"], $_POST["cellnumber"], $_POST["accesslevel"], $_POST["enabled"]);
+    staffUpdate($_POST["id"], $_POST["fname"], $_POST["lname"], $_POST["initials"], $_POST["cellnumber"], $_POST["accesslevel"], $_POST["enabled"]);
     redirect("/index.php");
-} elseif (isset($_POST["passwordreset"])) {
-    passwordreset($_POST["username"],$_POST["password"]);
+} elseif (isset($_POST["passwordReset"])) {
+    passwordReset($_POST["username"],$_POST["password"]);
     redirect("/index.php");
 }
 ?>

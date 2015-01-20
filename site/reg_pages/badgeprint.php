@@ -12,7 +12,7 @@ $attendees = array();
 if (isset($_POST['print'])) {
 	$attendees = getAttendeePDO($_POST['print']);
 } elseif (isset($_POST['order'])) {
-	$attendees = orderlistattendees($_POST['order']);
+	$attendees = orderListAttendees($_POST['order']);
 } else {
 	die("No parameters");
 }

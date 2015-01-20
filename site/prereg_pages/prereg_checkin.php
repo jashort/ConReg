@@ -15,9 +15,9 @@ if (isset($_POST["Update"])) {
 
   // Make sure information was verified
   if (isset($_POST["checkin"]) && $_POST["checkin"] == true) {
-    regcheckin($_POST["id"]);
+    regCheckIn($_POST["id"]);
     if (isset($_POST["Minor"]) && $_POST["Minor"] == true && $_POST["PCFormVer"] == "on") {
-      regCheckinParentFormReceived($_POST["Id"]);
+      regCheckInParentFormReceived($_POST["Id"]);
     }
     // Display the print badge link below.
 

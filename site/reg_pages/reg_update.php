@@ -10,7 +10,7 @@ $attendee = getAttendee($_GET['id']);
 if (isset($_POST["Update"])) {
   $attendee = new Attendee();
   $attendee->fromArray($_POST);
-  regupdate($attendee);
+  regUpdate($attendee);
   redirect("/index.php");
 }
 ?>
