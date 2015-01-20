@@ -72,12 +72,6 @@ if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) ||
 <title>Kumoricon Registration</title>
 <!-- InstanceEndEditable -->
 <link href="../assets/css/kumoreg.css" rel="stylesheet" type="text/css" /> 
-<script type="text/javascript">
-function MM_goToURL() { //v3.0
-  var i, args=MM_goToURL.arguments; document.MM_returnValue = false;
-  for (i=0; i<(args.length-1); i+=2) eval(args[i]+".location='"+args[i+1]+"'");
-}
-</script>
 <script src="/assets/javascript/jquery-1.8.0.js" type="text/javascript"></script>
 <script src="/assets/javascript/jquery.maskedinput-1.3.min.js" type="text/javascript"></script>
 <script>
@@ -109,79 +103,36 @@ function MM_validateForm() { //v4.0
     } if (errors) alert('The following error(s) occurred:\n'+errors);
     document.MM_returnValue = (errors == '');
 } }
-function verifyEmail(){
-var status = false;     
-if (document.reg_add1.EMail.value != document.reg_add1.EMailV.value) {
-alert("Email addresses do not match.  Please retype them to make sure they are the same.");
-}}
+
 function sameInfo(){  
-if (document.reg_add2.Same.checked) {
-document.reg_add2.Same.value = "Y";
-document.reg_add2.PCFullName.value = document.reg_add2.ECFullName.value;
-document.reg_add2.PCPhoneNumber.value = document.reg_add2.ECPhoneNumber.value;
-} else {
-document.reg_add2.Same.value = "";
-document.reg_add2.PCFullName.value = "";
-document.reg_add2.PCPhoneNumber.value = "";
-}}
-function MM_goToURL() { //v3.0
-  var i, args=MM_goToURL.arguments; document.MM_returnValue = false;
-  for (i=0; i<(args.length-1); i+=2) eval(args[i]+".location='"+args[i+1]+"'");
-}
-function MM_openBrWindow(theURL,winName,features) { //v2.0
-  window.open(theURL,winName,features);
-}
-function clearverify() {
-var answer=confirm("Are you sure you want to clear?");
-if (answer==true)
-  {
-    MM_goToURL('parent','/reg_pages/reg_add.php?action=clear');return document.MM_returnValue;
+  if (document.reg_add2.Same.checked) {
+    document.reg_add2.Same.value = "Y";
+    document.reg_add2.PCFullName.value = document.reg_add2.ECFullName.value;
+    document.reg_add2.PCPhoneNumber.value = document.reg_add2.ECPhoneNumber.value;
+  } else {
+    document.reg_add2.Same.value = "";
+    document.reg_add2.PCFullName.value = "";
+    document.reg_add2.PCPhoneNumber.value = "";
   }
 }
-<?php 
-if (isset($_SESSION["FirstName"])) {
-if (!stristr($_SERVER['HTTP_REFERER'], '/reg_pages/reg_add.php')) { ?>
-(function() {
-var answer=confirm("Attendee information is set in this form and hasn't been submitted. If you are continuing please press Cancel, otherwise press Ok and the form will be cleared.");
-if (answer==true)
-  {
-  MM_goToURL('parent','../includes/functions.php?action=clear');return document.MM_returnValue;
+function clearVerify() {
+  var answer=confirm("Are you sure you want to clear?");
+  if (answer==true) {
+    window.location='/reg_pages/reg_add.php?action=clear';
   }
-else
-  {
-  } 
-})();
-<?php } }?>
+}
 function manualprice() {
-
-do { 
-var amount=prompt("Please enter the amount","ex 40.00");
-var currencycheck=new RegExp("^(([0-9]\.[0-9][0-9])|([0-9][0-9]\.[0-9][0-9]))$");
-var currencyformat = currencycheck.test(amount);
-} while ((amount=="") || (currencyformat==false));
-
-do {
-var reason=prompt("Please enter the reason for the manual pricing","");
-} while (reason=="");
-
-document.reg_add3.MPAmount.value = amount;
-document.reg_add3.Amount.value = amount;
-document.reg_add3.Notes.value = reason;
-
-}
-function creditauth() {
-
-do { 
-var number=prompt("Please enter the authorization number","ex 123456");
-} while ((number=="") || (number=="ex 123456"));
-
-if (document.reg_add3.Notes.value == "") {
-document.reg_add3.Notes.value = "The Credit Card Authorization Number is: " + number;
-} else {
-document.reg_add3.Notes.value = document.reg_add3.Notes.value + "---" + "The Credit Card Authorization Number is: " + number;	
-}
-
-document.reg_add3.AuthDisplay.value = number;
+  do { 
+    var amount=prompt("Please enter the amount","ex 40.00");
+    var currencycheck=new RegExp("^(([0-9]\.[0-9][0-9])|([0-9][0-9]\.[0-9][0-9]))$");
+    var currencyformat = currencycheck.test(amount);
+  } while ((amount=="") || (currencyformat==false));
+  do {
+    var reason=prompt("Please enter the reason for the manual pricing","");
+  } while (reason=="");
+  document.reg_add3.MPAmount.value = amount;
+  document.reg_add3.Amount.value = amount;
+  document.reg_add3.Notes.value = reason;
 }
 </script>
 <!-- InstanceEndEditable -->
@@ -236,7 +187,7 @@ document.reg_add3.AuthDisplay.value = number;
   </fieldset>
   <div class="centerbutton">
     <input name="Next" type="submit" class="next_button" onclick="MM_validateForm('First Name','','R','Last Name','','R','Phone Number','','R','Zip','','R');return document.MM_returnValue" value="Next" />
-    <input name="Clear" type="button" class="next_button" onclick="clearverify()" value="Clear" />
+    <input name="Clear" type="button" class="next_button" onclick="clearVerify()" value="Clear" />
   </div>
   </form>
 <?php } ?>
@@ -276,10 +227,10 @@ document.reg_add3.AuthDisplay.value = number;
       <input name="PCFormVer" value="N" type="hidden" />
   <? } ?>
   <div class="centerbutton">
-  <input name="Previous" type="button" class="next_button" onclick="MM_goToURL('parent','/reg_pages/reg_add.php?part=1');return document.MM_returnValue" value="Previous" />
+    <!--<input name="Previous" type="button" class="next_button" onclick="MM_goToURL('parent','/reg_pages/reg_add.php?part=1');return document.MM_returnValue" value="Previous" />-->
     <input name="Submit" type="submit" class="next_button" 
       <?php if ($_SESSION['current']->isMinor()) { ?>onclick="MM_validateForm('Emergency Contact Full Name','','R','Emergency Contact Phone Number','','R','Parent Contact Full Name','','R','Parent Contact Phone Number','','R','Parent Contact Form Verification','','R');return document.MM_returnValue"<?php } else { ?>onclick="MM_validateForm('Emergency Contact Full Name','','R','Emergency Contact Phone Number','','R');return document.MM_returnValue"<?php } ?> value="Next" />
-    <input name="Clear" type="button" class="next_button" onclick="clearverify()" value="Clear" />
+    <input name="Clear" type="button" class="next_button" onclick="clearVerify()" value="Clear" />
   </div>
   </form>
 <?php } ?>
@@ -373,7 +324,9 @@ document.reg_add3.AuthDisplay.value = number;
 <textarea name="Notes" rows="5"><?php echo $_SESSION['current']->notes; ?></textarea>
 </fieldset>
 <div class="centerbutton">
-<input name="Previous" type="button" class="next_button" onclick="MM_goToURL('parent','/reg_pages/reg_add.php?part=2');return document.MM_returnValue" value="Previous" /><input name="Submit" type="submit" class="next_button" value="Next" onclick="return radiobutton();" /><input name="Clear" type="button" class="next_button" onclick="clearverify()" value="Clear" />
+<!--<input name="Previous" type="button" class="next_button" onclick="MM_goToURL('parent','/reg_pages/reg_add.php?part=2');return document.MM_returnValue" value="Previous" />-->
+  <input name="Submit" type="submit" class="next_button" value="Next" />
+  <input name="Clear" type="button" class="next_button" onclick="clearVerify()" value="Clear" />
 </div>
 </form>
 <?php } ?>
@@ -436,8 +389,8 @@ document.reg_add3.AuthDisplay.value = number;
 <form name="reg_add" action="reg_add.php" method="post">
   <input type="hidden" name="SubmitNow" value="Yes" />
   <input type="hidden" name="part" value="4" />
-  <input name="Previous" type="button" class="next_button" onclick="MM_goToURL('parent','/reg_pages/reg_add.php?part=3');return document.MM_returnValue" value="Previous" />
-  <input name="Clear" type="button" class="next_button" onclick="clearverify()" value="Clear" />
+  <!--<input name="Previous" type="button" class="next_button" onclick="MM_goToURL('parent','/reg_pages/reg_add.php?part=3');return document.MM_returnValue" value="Previous" />-->
+  <input name="Clear" type="button" class="next_button" onclick="clearVerify()" value="Clear" />
   <input name="Submit" type="submit" class="next_button" value="Confirm" />
 </form>
 </div><br />
