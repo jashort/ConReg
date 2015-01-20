@@ -29,6 +29,7 @@ if (isset($_POST["Update"])) {
 
 if (isset($_POST["Done"])) {
   redirect("/prereg_pages/prereg_checkin_list.php?field=ord&id=".$_POST["oid"]);
+  die();
 }
 
 if (isset($_GET['id'])) {

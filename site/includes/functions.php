@@ -259,19 +259,19 @@ function preRegSearch($name, $field) {
 		$stmt = $conn->prepare("SELECT id, first_name, last_name, badge_name,
 								checked_in, order_id
 								FROM attendees
-								WHERE first_name LIKE :name
+								WHERE first_name LIKE :name AND reg_type LIKE 'PreReg'
 								ORDER BY order_id");
 	} elseif ($field == 'ord') {
 		$stmt = $conn->prepare("SELECT id, first_name, last_name, badge_name,
 								checked_in, order_id
 								FROM attendees
-								WHERE order_id LIKE :name
+								WHERE order_id LIKE :name AND reg_type LIKE 'PreReg'
 								ORDER BY order_id");
 	} else {
 		$stmt = $conn->prepare("SELECT id, first_name, last_name, badge_name,
 								checked_in, order_id
 								FROM attendees
-								WHERE last_name LIKE :name
+								WHERE last_name LIKE :name AND reg_type LIKE 'PreReg'
 								ORDER BY order_id");
 	}
 	$stmt->execute(array('name' => $name));
