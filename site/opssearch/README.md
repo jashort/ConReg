@@ -1,2 +1,0 @@
-Attendee List/Search Pages
-==========================

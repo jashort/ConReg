@@ -45,7 +45,7 @@ $ROLES = array(
         )),
     4 => array('name' => 'Operations',
         'rights' => Array(
-            'ops_search' => true
+            'attendee_search' => true
         )),
     99 => array('name' => 'Super Admin',
         'rights' => Array(
