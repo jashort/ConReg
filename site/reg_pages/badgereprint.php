@@ -10,7 +10,7 @@ $mpdf=new mPDF('utf-8', array(215.9,279.4), 0, '', 0, 0, 0, 0, 0, 0, 'L');
 // Buffer the following html with PHP so we can store it to a variable later
 ob_start();
 
-$attendee = getAttendee($_GET['print']);
+$attendee = getAttendee($_POST['print']);
 $age = $attendee->getAge();
 if ($age >= 18) {
 	$stripeColor = "#323e99";

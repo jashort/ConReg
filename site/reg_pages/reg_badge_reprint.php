@@ -18,12 +18,7 @@ if (isset($_GET['lname'])) {
 <title>Kumoricon Registration</title>
 <!-- InstanceEndEditable -->
 <link href="../assets/css/kumoreg.css" rel="stylesheet" type="text/css" /> 
-<script type="text/javascript">
-function MM_goToURL() { //v3.0
-  var i, args=MM_goToURL.arguments; document.MM_returnValue = false;
-  for (i=0; i<(args.length-1); i+=2) eval(args[i]+".location='"+args[i+1]+"'");
-}
-</script>
+
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
 </head>
@@ -36,20 +31,28 @@ function MM_goToURL() { //v3.0
   <form name="ln" action="/reg_pages/reg_badge_reprint.php" method="get" target="_self">
     <fieldset id="list_table_search">
       <label>Last Name : <input name="lname" type="text" class="input_20_200" /></label><br />
-      <input name="Submit" type="submit" class="submit_button" value="Search" onmousedown="validateLN();" />
+      <input name="Submit" type="submit" class="submit_button" value="Search" />
       </fieldset>
   </form>
-<?php } // Show if no search term ?>
-<?php if (isset($_GET["lname"])) { // Show if search term ?>
+<?php } elseif (isset($_GET["lname"])) { // Show if search term ?>
 <table id="list_table">
   <tr>
     <th scope="col">Name</th>
     <th scope="col">Birth Date</th>
+    <th scope="col">Checked In</th>
+    <th></th>
   </tr>
   <?php while ($attendee = $attendees->fetch(PDO::FETCH_CLASS)) { ?>
     <tr>
-      <td><a href="/reg_pages/badgereprint.php?print=<?php echo $attendee->id ?>" target="_blank"><?php echo $attendee->first_name . " " . $attendee->last_name ?></a></td>
+      <td><?php echo $attendee->first_name . " " . $attendee->last_name ?></td>
       <td><?php echo $attendee->getBirthDate(); ?></td>
+      <td><?php echo $attendee->checked_in; ?></td>
+      <td>
+        <form action="badgereprint.php" method="post" target="_blank">
+          <input type="hidden" name="print" value="<?php echo $attendee->id?>" />
+          <input type="submit" id="print<?php echo $attendee->id?>" value="Reprint Badge">
+        </form>
+      </td>
     </tr>
   <?php } ?>
 </table>
