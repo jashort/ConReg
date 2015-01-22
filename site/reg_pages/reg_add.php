@@ -47,10 +47,14 @@ if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) ||
     redirect('/reg_pages/reg_add.php?part=3');
   } elseif ($_POST['part'] == 3) {
     $_SESSION['current']->pass_type = $_POST["PassType"];
-    if ($_POST['PassType'] != "Manual Price") {
-      $_SESSION['current']->paid_amount = calculatePassCost($_SESSION['current']->getAge(), $_POST['PassType']);
+    if ($_POST['PassType'] == "Manual Price") {
+      if(preg_match('^(([0-9]\.[0-9][0-9])|([0-9][0-9]\.[0-9][0-9]))$', $_POST["MPAmount"])) {
+        $_SESSION['current']->paid_amount = $_POST["MPAmount"];
+      } else {
+        die('Manual price amount must contain numbers only. Ex: 19.99');
+      }
     } else {
-      $_SESSION['current']->paid_amount = $_POST["Amount"];
+      $_SESSION['current']->paid_amount = calculatePassCost($_SESSION['current']->getAge(), $_POST['PassType']);
     }
     $_SESSION['current']->notes = $_POST["Notes"];
     redirect('/reg_pages/reg_add.php?part=4');
@@ -104,35 +108,36 @@ function MM_validateForm() { //v4.0
     document.MM_returnValue = (errors == '');
 } }
 
-function sameInfo(){  
-  if (document.reg_add2.Same.checked) {
-    document.reg_add2.Same.value = "Y";
-    document.reg_add2.PCFullName.value = document.reg_add2.ECFullName.value;
-    document.reg_add2.PCPhoneNumber.value = document.reg_add2.ECPhoneNumber.value;
+
+function sameInfo() {
+  if (document.getElementById('Same').checked) {
+    document.getElementById('Same').value = "Y";
+    document.getElementById('PCFullName').value = document.getElementById('ECFullName').value;
+    document.getElementById('PCPhone').value = document.getElementById('ECPhoneNumber').value;
   } else {
-    document.reg_add2.Same.value = "";
-    document.reg_add2.PCFullName.value = "";
-    document.reg_add2.PCPhoneNumber.value = "";
+    document.getElementById('Same').value = "";
+    document.getElementById('PCFullName').value = "";
+    document.getElementById('PCPhone').value = "";
   }
 }
+
 function clearVerify() {
   var answer=confirm("Are you sure you want to clear?");
   if (answer==true) {
     window.location='/reg_pages/reg_add.php?action=clear';
   }
 }
-function manualprice() {
+function manualPrice() {
   do { 
-    var amount=prompt("Please enter the amount","ex 40.00");
-    var currencycheck=new RegExp("^(([0-9]\.[0-9][0-9])|([0-9][0-9]\.[0-9][0-9]))$");
-    var currencyformat = currencycheck.test(amount);
-  } while ((amount=="") || (currencyformat==false));
+    var amount = prompt("Please enter the amount","ex 40.00");
+    var currencyCheck = new RegExp("^(([0-9]\.[0-9][0-9])|([0-9][0-9]\.[0-9][0-9]))$");
+    var currencyFormat = currencyCheck.test(amount);
+  } while ((amount=="") || (currencyFormat==false));
   do {
-    var reason=prompt("Please enter the reason for the manual pricing","");
+    var reason = prompt("Please enter the reason for the manual pricing","");
   } while (reason=="");
-  document.reg_add3.MPAmount.value = amount;
-  document.reg_add3.Amount.value = amount;
-  document.reg_add3.Notes.value = reason;
+  document.getElementById('MPAmount').value = amount;
+  document.getElementById('Notes').value = reason;
 }
 </script>
 <!-- InstanceEndEditable -->
@@ -149,18 +154,18 @@ function manualprice() {
   <legend>Attendee Info</legend>
   <p>
     <label>First Name:
-    <input name="FirstName" type="text" class="input_20_200" id="First Name" value="<?php echo $_SESSION['current']->first_name; ?>" /></label>
+    <input name="FirstName" type="text" maxlength="60" class="input_20_200" id="First Name" value="<?php echo $_SESSION['current']->first_name; ?>" /></label>
     <label>Last Name:
-    <input name="LastName" type="text" class="input_20_200" id="Last Name" value="<?php echo $_SESSION['current']->last_name; ?>" /></label>
+    <input name="LastName" type="text" maxlength="60" class="input_20_200" id="Last Name" value="<?php echo $_SESSION['current']->last_name; ?>" /></label>
     <br />
     <label>Phone Number:
-    <input name="PhoneNumber" type="text" class="input_20_200" id="PhoneNumber" value="<?php echo $_SESSION['current']->phone; ?>" /></label>
+    <input name="PhoneNumber" type="text" maxlength="60" class="input_20_200" id="PhoneNumber" value="<?php echo $_SESSION['current']->phone; ?>" /></label>
     <br />
     <label>EMail:
-      <input name="EMail" type="text" class="input_20_200" id="EMail" value="<?php echo $_SESSION['current']->email; ?>" /></label>
+      <input name="EMail" type="text" class="input_20_200" maxlength="250" id="EMail" value="<?php echo $_SESSION['current']->email; ?>" /></label>
     <br />
       <label>Zip:
-    <input name="Zip" type="text" class="input_20_200" id="Zip" value="<?php echo $_SESSION['current']->zip; ?>" /></label>
+    <input name="Zip" type="text" class="input_20_200" maxlength="10" id="Zip" value="<?php echo $_SESSION['current']->zip; ?>" /></label>
     <br />
     <span class="display_text_large">
     <label>Badge Number: <?php echo $_SESSION["current"]->badge_number ?>
@@ -190,8 +195,7 @@ function manualprice() {
     <input name="Clear" type="button" class="next_button" onclick="clearVerify()" value="Clear" />
   </div>
   </form>
-<?php } ?>
-<?php if (array_key_exists('part', $_GET) && $_GET["part"]=="2") { ?>
+<?php } elseif (array_key_exists('part', $_GET) && $_GET["part"]=="2") { ?>
   <br />
   <fieldset id="currentage">
   <span class="display_text">Current Age: <?php echo $_SESSION['current']->getAge() ?></span>
@@ -201,22 +205,22 @@ function manualprice() {
   <fieldset id="emergencyinfo">
   <legend>Emergency Contact Info</legend>
   <label>Full Name:
-  <input name="ECFullName" type="text" class="input_20_200" id="Emergency Contact Full Name" value="<?php echo $_SESSION["current"]->ec_fullname; ?>"  /></label>
+  <input name="ECFullName" id="ECFullName" type="text" class="input_20_200" maxlength="250" value="<?php echo $_SESSION["current"]->ec_fullname; ?>"  /></label>
   <br />
   <label>Phone Number:
-  <input name="ECPhoneNumber" type="text" class="input_20_200" id="ECPhoneNumber" value="<?php echo $_SESSION['current']->ec_phone ?>" /></label>
+  <input name="ECPhoneNumber" id="ECPhoneNumber" type="text" class="input_20_200" maxlength="60" value="<?php echo $_SESSION['current']->ec_phone ?>" /></label>
   <br />
   </fieldset>
   <?php if ($_SESSION['current']->isMinor()) { ?>
     <fieldset id="parentinfo">
     <legend>Parent Contact Info</legend>
-    <input name="Same" type="checkbox" class="checkbox" value="Y" onClick="sameInfo();" <?php if ($_SESSION['current']->ec_same == "Y") { echo "checked"; } ?> /><span class="bold_text"> SAME AS EMERGENCY CONTACT INFO</span>
+    <input name="Same" id="Same" type="checkbox" class="checkbox" value="Y" onClick="sameInfo();" <?php if ($_SESSION['current']->ec_same == "Y") { echo "checked"; } ?> /><span class="bold_text"> SAME AS EMERGENCY CONTACT INFO</span>
     <br /><br />
     <label>Full Name:
-    <input name="PCFullName" type="text" class="input_20_200" id="Parent Contact Full Name" value="<?php echo $_SESSION['current']->ec_fullname; ?>"  /></label>
+    <input name="PCFullName" id="PCFullName" type="text" class="input_20_200" maxlength="250" value="<?php echo $_SESSION['current']->ec_fullname; ?>"  /></label>
     <br />
     <label>Phone Number:
-    <input name="PCPhoneNumber" type="text" class="input_20_200" id="PCPhoneNumber" value="<?php echo $_SESSION['current']->ec_phone; ?>" /></label>
+    <input name="PCPhoneNumber" id="PCPhoneNumber" type="text" class="input_20_200" maxlength="60" value="<?php echo $_SESSION['current']->ec_phone; ?>" /></label>
     <br /><br />
     <input name="PCFormVer" type="checkbox" value="Y" <?php if ($_SESSION['current']->parent_form == "Y") { echo "checked"; } ?> id="Parent Contact Form Verification" class="checkbox" /><span class="bold_text"> PARENTAL CONSENT FORM RECEIVED</span>
     </fieldset>
@@ -233,35 +237,16 @@ function manualprice() {
     <input name="Clear" type="button" class="next_button" onclick="clearVerify()" value="Clear" />
   </div>
   </form>
-<?php } ?>
-<?php if (array_key_exists('part', $_GET) && $_GET["part"]=="3") { ?>
+<?php } elseif (array_key_exists('part', $_GET) && $_GET["part"]=="3") { ?>
   <?
   // Get pass costs based on age
-  $Weekend = calculatePassCost($_SESSION['current']->getAge(), "Weekend");
-  $Friday = calculatePassCost($_SESSION['current']->getAge(), "Friday");
-  $Saturday = calculatePassCost($_SESSION['current']->getAge(), "Saturday");
-  $Sunday = calculatePassCost($_SESSION['current']->getAge(), "Sunday");
-  $Monday = calculatePassCost($_SESSION['current']->getAge(), "Monday");
+  $weekendCost = calculatePassCost($_SESSION['current']->getAge(), "Weekend");
+  $vipCost = calculatePassCost($_SESSION['current']->getAge(), "VIP");
+  $fridayCost = calculatePassCost($_SESSION['current']->getAge(), "Friday");
+  $saturdayCost = calculatePassCost($_SESSION['current']->getAge(), "Saturday");
+  $sundayCost = calculatePassCost($_SESSION['current']->getAge(), "Sunday");
+  $mondayCost = calculatePassCost($_SESSION['current']->getAge(), "Monday");
   ?>
-    <script type="text/javascript">
-      function setAmount() {
-        if (document.reg_add3.PassType_0.checked) {
-          document.reg_add3.Amount.value = "<?php echo $Weekend ?>";
-        }
-        else if (document.reg_add3.PassType_1.checked) {
-          document.reg_add3.Amount.value = "<?php echo $Friday; ?>";
-        }
-        else if (document.reg_add3.PassType_2.checked) {
-          document.reg_add3.Amount.value = "<?php echo $Saturday ?>";
-        }
-        else if (document.reg_add3.PassType_3.checked) {
-          document.reg_add3.Amount.value = "<?php echo $Sunday ?>";
-        }
-        else if (document.reg_add3.PassType_4.checked) {
-          document.reg_add3.Amount.value = "<?php echo $Monday ?>";
-        }
-      }
-    </script>
 
 <form name="reg_add3" action="reg_add.php" method="post">
   <input name="part" type="hidden" value="3" />
@@ -270,58 +255,41 @@ function manualprice() {
 <legend>PASS TYPE</legend>
 <p>
   <label>
-    <input type="radio" name="PassType" value="Weekend" id="PassType_0" onchange="setAmount();" <?php if ($_SESSION['current']->pass_type == "Weekend") echo "checked=\"checked\""; ?> />
-    All Weekend - $<?php echo $Weekend ?></label>
+    <input type="radio" name="PassType" value="Weekend" id="PassType_0" <?php if ($_SESSION['current']->pass_type == "Weekend") echo "checked=\"checked\""; ?> />
+    All Weekend - $<?php echo $weekendCost ?></label>
+    <hr />
+    <label>
+      <input type="radio" name="PassType" value="VIP" id="PassType_1" <?php if ($_SESSION['current']->pass_type == "VIP") echo "checked=\"checked\""; ?> />
+      VIP - $<?php echo $vipCost ?></label>
     <hr />
   <label>
-    <input name="PassType" type="radio" id="PassType_1" onchange="setAmount();" value="Friday" <?php if ($_SESSION['current']->pass_type == "Friday") echo "checked=\"checked\""; ?> />
-    Friday Only - $<?php echo $Friday ?></label>
+    <input name="PassType" type="radio" id="PassType_2" value="Friday" <?php if ($_SESSION['current']->pass_type == "Friday") echo "checked=\"checked\""; ?> />
+    Friday Only - $<?php echo $fridayCost ?></label>
   <br />
   <label>
-    <input name="PassType" type="radio" id="PassType_2" onchange="setAmount();" value="Saturday" <?php if ($_SESSION['current']->pass_type == "Saturday") echo "checked=\"checked\""; ?> />
-    Saturday Only - $<?php echo $Saturday ?></label>
+    <input name="PassType" type="radio" id="PassType_3" value="Saturday" <?php if ($_SESSION['current']->pass_type == "Saturday") echo "checked=\"checked\""; ?> />
+    Saturday Only - $<?php echo $saturdayCost ?></label>
   <br />
   <label>
-    <input type="radio" name="PassType" value="Sunday" id="PassType_3" onchange="setAmount();" <?php if ($_SESSION['current']->pass_type == "Sunday") echo "checked=\"checked\""; ?> />
-    Sunday Only - $<?php echo $Sunday ?></label>
+    <input type="radio" name="PassType" value="Sunday" id="PassType_4" <?php if ($_SESSION['current']->pass_type == "Sunday") echo "checked=\"checked\""; ?> />
+    Sunday Only - $<?php echo $sundayCost ?></label>
   <br />
   <label>
-    <input name="PassType" type="radio" id="PassType_4" onclick="setAmount()" value="Monday" <?php if ($_SESSION['current']->pass_type == "Monday") echo "checked=\"checked\""; ?> />
-    Monday Only - $<?php echo $Monday ?></label><br />
+    <input name="PassType" type="radio" id="PassType_5" value="Monday" <?php if ($_SESSION['current']->pass_type == "Monday") echo "checked=\"checked\""; ?> />
+    Monday Only - $<?php echo $mondayCost ?></label><br />
 	<?php if (has_right('registration_manual_price')) { ?>
       <span class="radio_button_left_margin">
-    <input name="PassType" type="radio" id="PassType_5" onclick="manualprice()" value="Manual Price" <?php if ($_SESSION['current']->pass_type == "Manual Price") echo "checked=\"checked\""; ?> />
+    <input name="PassType" type="radio" id="PassType_6" onclick="manualPrice()" value="Manual Price" <?php if ($_SESSION['current']->pass_type == "Manual Price") echo "checked=\"checked\""; ?> />
     Manual Price - $
-    <input name="MPAmount" type="text" class="input_20_150" id="Manual Price Amount" value="<?php echo $_SESSION['current']->paid_amount ?>" disabled="disabled"/>
+    <input name="MPAmount" type="text" class="input_20_150" id="MPAmount" value="<?php echo $_SESSION['current']->paid_amount ?>" />
       </span><?php } ?>
-      <?php 
-	  
-	  switch ($_SESSION['current']->pass_type) {
-    	case "Weekend":
-          $_SESSION['current']->paid_amount = $Weekend;
-          break;
-    	case "Friday":
-          $_SESSION['current']->paid_amount = $Friday;
-          break;
-    	case "Saturday":
-          $_SESSION['current']->paid_amount = $Saturday;
-          break;
-    	case "Sunday":
-          $_SESSION['current']->paid_amount = $Sunday;
-          break;
-    	case "Monday":
-          $_SESSION['current']->paid_amount = $Monday;
-        break;
-      }
-	  
-	  ?>
-  <input name="Amount" type="hidden" id="Amount" value="<?php echo $_SESSION['current']->paid_amount ?>" />
+
   <br />
 </p>
 </fieldset>
 <fieldset id="notes">
 <label>Notes : </label>
-<textarea name="Notes" rows="5"><?php echo $_SESSION['current']->notes; ?></textarea>
+<textarea name="Notes" id="Notes" rows="5"><?php echo $_SESSION['current']->notes; ?></textarea>
 </fieldset>
 <div class="centerbutton">
 <!--<input name="Previous" type="button" class="next_button" onclick="MM_goToURL('parent','/reg_pages/reg_add.php?part=2');return document.MM_returnValue" value="Previous" />-->
@@ -329,8 +297,7 @@ function manualprice() {
   <input name="Clear" type="button" class="next_button" onclick="clearVerify()" value="Clear" />
 </div>
 </form>
-<?php } ?>
-<?php if (array_key_exists('part', $_GET) && $_GET["part"]=="4") { ?>
+<?php } elseif (array_key_exists('part', $_GET) && $_GET["part"]=="4") { ?>
 <fieldset id="personalinfo">
 <legend>Attendee Info</legend>
 <label>First Name: </label>

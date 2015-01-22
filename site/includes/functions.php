@@ -398,8 +398,8 @@ function passwordReset($Username, $Password) {
 
 /**
  * Redirect to the given URL and stop running the current page
- * @param $location	Location to redirect to
- * @param int $statusCode HTTP status code
+ * @param $location	String Location to redirect to
+ * @param int $statusCode Int HTTP status code
  */
 function redirect($location, $statusCode=303) {
 	header(sprintf("Location: %s", $location, intval($statusCode)));

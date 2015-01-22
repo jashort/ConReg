@@ -97,7 +97,7 @@ class Attendee {
     }
 
     /**
-     * @param $array Loads object properties from the given array. Usually used with a $_POST object.
+     * @param $array Array Loads object properties from the given array. Usually used with a $_POST object.
      */
     public function fromArray($array) {
         $this->id = $array['id'];

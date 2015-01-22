@@ -2,7 +2,7 @@
 require_once('../includes/functions.php');
 
 require_once('../includes/authcheck.php');
-require_right('registration_update');
+require_right('registration_modify');
 
 
 if (isset($_GET['id'])) {
