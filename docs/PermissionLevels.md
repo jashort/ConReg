@@ -29,7 +29,7 @@ roles numerically lower on the list. (Permission names are in parenthesis)
     + Can view reports (report_view)
   
 - 4: Operations
-    + Can search for attendees and view limited information (ops_search)
+    + Can search for attendees and view limited information (attendee_search)
   
 - 99: Super User
     + All rights granted by override in the has_right() function.

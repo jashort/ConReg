@@ -17,14 +17,14 @@ Data Import Format for Attendees Who Preregister on Website
 |   4   | Badge Number      | 10 characters max, empty/NULL is okay [[2]](#2)          |
 |   5   | Zip Code          | 10 characters max                                        |
 |   6   | Country           | 250 characters max                                       |
-|   7   | Phone             | 60 characters max, numbers only                          |
+|   7   | Phone             | 60 characters max                                        |
 |   8   | Email Address     | 250 characters max                                       |
 |   9   | Birthdate         | YYYY-MM-DD format (ex: 1990-12-30)                       |
 |  10   | Emergency Contact | Emergency Contact Name, 250 characters max               |
 |  11   | Emergency Phone   | Emergency Contact Phone, 250 characters max              |
 |  12   | EC Same as Parent | "Y" if emergency contact is parent, "N" otherwise        |
 |  13   | Parent Name       | 250 characters max                                       |
-|  14   | Parent Phone      | 250 characters max                                       |
+|  14   | Parent Phone      | 60 characters max                                        |
 |  15   | Paid              | "Y" if paid, "N" otherwise                               |
 |  16   | Amount            | Amount Paid, numbers/decimal only. (ex: 50.00 )          |
 |  17   | Pass Type         | 50 characters max, valid values: "Weekend", "VIP"        |
@@ -35,7 +35,7 @@ Data Import Format for Attendees Who Preregister on Website
 Notes:
 ------
 <a name="1"></a>1: Currently we're storing 60 characters for the badge name. I believe the actual limit
-will be less. 
+is 15 characters.
 
 <a name="2"></a>2: If the website generates/stores badge numbers, put it here. Otherwise just leave it
 blank. Previously, this was generated when data was imported in to the registration system.
