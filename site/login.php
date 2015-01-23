@@ -30,6 +30,7 @@ if (isset($_POST['username'])) {
 	
     //Declare session variables and assign them
     $_SESSION['username'] = $results["username"];
+	$_SESSION['staffid'] = $results["id"];
 	$_SESSION['access'] = $results["access_level"];
 	$_SESSION['initials'] = $results["initials"];
 	$_SESSION['rights'] = get_rights($results["access_level"]);	// Get array of rights for
