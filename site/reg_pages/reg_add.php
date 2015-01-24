@@ -112,11 +112,11 @@ function sameInfo() {
   if (document.getElementById('Same').checked) {
     document.getElementById('Same').value = "Y";
     document.getElementById('PCFullName').value = document.getElementById('ECFullName').value;
-    document.getElementById('PCPhone').value = document.getElementById('ECPhoneNumber').value;
+    document.getElementById('PCPhoneNumber').value = document.getElementById('ECPhoneNumber').value;
   } else {
     document.getElementById('Same').value = "";
     document.getElementById('PCFullName').value = "";
-    document.getElementById('PCPhone').value = "";
+    document.getElementById('PCPhoneNumber').value = "";
   }
 }
 
