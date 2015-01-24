@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 DB_HOSTNAME="localhost"       # Database Server Name
+MYSQL_ROOT_USER="root"        # MySQL Root User
 MYSQL_ROOT_PWD="CHANGEME"     # MySQL Root Passowrd
 APP_DB_USER="kumoricon_rw"    # App level database username
 APP_DB_PWD="CHANGEME"         # App level database password
@@ -12,26 +13,24 @@ echo Instaling debconf-utils
 apt-get install debconf-utils -y > /dev/null
 
 echo Setting MySQL root password
-debconf-set-selections <<< "mysql-server mysql-server/root_password password $MYSQL_ROOT_PWD"
-debconf-set-selections <<< "mysql-server mysql-server/root_password_again password $MYSQL_ROOT_PWD"
+debconf-set-selections <<< "mysql-server mysql-server/root_password password ${MYSQL_ROOT_PWD}"
+debconf-set-selections <<< "mysql-server mysql-server/root_password_again password ${MYSQL_ROOT_PWD}"
 
 echo Installing MySQL
 apt-get install mysql-server -y > /dev/null
 
 echo Dropping database
-mysql -uroot -p$MYSQL_ROOT_PWD -h$DB_HOSTNAME -e "DROP USER '$APP_DB_USER'@'$DB_HOSTNAME'"
-mysql -uroot -p$MYSQL_ROOT_PWD -h$DB_HOSTNAME -e "DROP DATABASE $APP_DATABASE"
+mysql -u${MYSQL_ROOT_USER} -p${MYSQL_ROOT_PWD} -h${DB_HOSTNAME} -e "DROP USER '${APP_DB_USER}'@'${DB_HOSTNAME}'"
+mysql -u${MYSQL_ROOT_USER} -p${MYSQL_ROOT_PWD} -h${DB_HOSTNAME} -e "DROP DATABASE ${APP_DATABASE}"
 echo Creating database
-mysql -uroot -p$MYSQL_ROOT_PWD -h$DB_HOSTNAME -e "CREATE DATABASE $APP_DATABASE"
-mysql -uroot -p$MYSQL_ROOT_PWD -h$DB_HOSTNAME -e "grant SELECT, INSERT, UPDATE, DELETE on $APP_DATABASE.* to '$APP_DB_USER'@'localhost' identified by '$APP_DB_PWD'"
+mysql -u${MYSQL_ROOT_USER} -p${MYSQL_ROOT_PWD} -h${DB_HOSTNAME} -e "CREATE DATABASE ${APP_DATABASE}"
+mysql -u${MYSQL_ROOT_USER} -p${MYSQL_ROOT_PWD} -h${DB_HOSTNAME} -e "grant SELECT, INSERT, UPDATE, DELETE on ${APP_DATABASE}.* to '${APP_DB_USER}'@'${DB_HOSTNAME}' identified by '${APP_DB_PWD}'"
 
 
 echo Creating tables
-mysql -uroot -p$MYSQL_ROOT_PWD -h$DB_HOSTNAME < /vagrant/install/01-tables.sql
+mysql -u${MYSQL_ROOT_USER} -p${MYSQL_ROOT_PWD} -h${DB_HOSTNAME} ${APP_DATABASE} < /vagrant/install/01-tables.sql
 echo "Adding default user (Username: admin, Password: password)"
-mysql -uroot -p$MYSQL_ROOT_PWD -h$DB_HOSTNAME < /vagrant/install/02-defaultuser.sql
-
-
+mysql -u${MYSQL_ROOT_USER} -p${MYSQL_ROOT_PWD} -h${DB_HOSTNAME} ${APP_DATABASE} < /vagrant/install/02-defaultuser.sql
 
 echo Installing Apache and PHP
 apt-get install -y apache2 libapache2-mod-php5 php5-mysql php-db > /dev/null

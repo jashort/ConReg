@@ -1,7 +1,9 @@
-/* Create database tables */
-USE registration;
+/* Drop tables if they exist */
+DROP TABLE IF EXISTS reg_staff, orders, attendees, history;
 
-CREATE TABLE registration.reg_staff
+/* Create database tables */
+
+CREATE TABLE reg_staff
 (
     staff_id        INT(10) PRIMARY KEY NOT NULL AUTO_INCREMENT,
     username        VARCHAR(60) NOT NULL,
@@ -14,11 +16,11 @@ CREATE TABLE registration.reg_staff
     last_badge_number MEDIUMINT(5) UNSIGNED ZEROFILL DEFAULT 0 NOT NULL COMMENT 'Last badge number created by this user',
     access_level    INT DEFAULT 1 NOT NULL
 );
-ALTER TABLE registration.reg_staff ADD CONSTRAINT unique_id UNIQUE (staff_id);
-ALTER TABLE registration.reg_staff ADD CONSTRAINT unique_initials UNIQUE (initials);
+ALTER TABLE reg_staff ADD CONSTRAINT unique_id UNIQUE (staff_id);
+ALTER TABLE reg_staff ADD CONSTRAINT unique_initials UNIQUE (initials);
 
 
-CREATE TABLE registration.orders
+CREATE TABLE orders
 (
     order_id        INT PRIMARY KEY NOT NULL UNIQUE AUTO_INCREMENT,
     total_amount    DECIMAL(10,0) NOT NULL,
@@ -28,7 +30,7 @@ CREATE TABLE registration.orders
 );
 
 
-CREATE TABLE registration.attendees
+CREATE TABLE attendees
 (
     id              INT(10) PRIMARY KEY NOT NULL AUTO_INCREMENT,
     first_name      VARCHAR(60) NOT NULL,
@@ -56,10 +58,10 @@ CREATE TABLE registration.attendees
     added_by        VARCHAR(80),
     created         TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP
 );
-ALTER TABLE registration.attendees ADD FOREIGN KEY (order_id) REFERENCES orders (order_id);
+ALTER TABLE attendees ADD FOREIGN KEY (order_id) REFERENCES orders (order_id);
 
 
-CREATE TABLE registration.history
+CREATE TABLE history
 (
     id              INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     changed_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

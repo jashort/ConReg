@@ -1,5 +1,4 @@
 /* Add a default admin user */
-USE registration;
 
 INSERT INTO reg_staff (username, password, enabled,
 first_name, last_name, initials, phone_number, access_level)
