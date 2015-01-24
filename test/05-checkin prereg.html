@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://localhost:8080/" />
+<title>05-checkin prereg</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">05-checkin prereg</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/admin/admin_report.php</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=CHECK IN</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=CHECK IN</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=id</td>
+	<td>normal</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=id</td>
+	<td>normal</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>name=Submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=Submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Abby Normal</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Abby Normal</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=Information Verification</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=Information Verification</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=span.display_text</td>
+	<td>Abby</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//fieldset[@id='personalinfo']/span[4]</td>
+	<td>PR000001</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//fieldset[@id='personalinfo']/span[2]</td>
+	<td>Normal</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//fieldset[@id='personalinfo']/span[3]</td>
+	<td>Normal-San</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//fieldset[@id='personalinfo']/span[5]</td>
+	<td>97209</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//fieldset[@id='personalinfo']/span[6]</td>
+	<td>USA</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//fieldset[@id='personalinfo']/span[7]</td>
+	<td>abby@example.com</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//fieldset[@id='personalinfo']/span[8]</td>
+	<td>1231231234</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//fieldset[@id='personalinfo']/span[9]</td>
+	<td>01/17/1985</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=#emergencyinfo &gt; span.display_text</td>
+	<td>Bill Smith</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//fieldset[@id='emergencyinfo']/span[2]</td>
+	<td>1234567890</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>name=Update</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=Update</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>name=Done</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=Done</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//table[@id='list_table']/tbody/tr[2]/td[4]</td>
+	<td>Yes</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//table[@id='list_table']/tbody/tr[3]/td[4]</td>
+	<td>No</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Timmy Normal</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Timmy Normal</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=span.display_text</td>
+	<td>Timmy</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//fieldset[@id='personalinfo']/span[2]</td>
+	<td>Normal</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//fieldset[@id='personalinfo']/span[4]</td>
+	<td>PR000002</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//fieldset[@id='personalinfo']/span[5]</td>
+	<td>97209</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//fieldset[@id='personalinfo']/span[6]</td>
+	<td>USA</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//fieldset[@id='personalinfo']/span[8]</td>
+	<td>1231231234</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//fieldset[@id='personalinfo']/span[9]</td>
+	<td>03/24/2000</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=#emergencyinfo &gt; span.display_text</td>
+	<td>Abby Normal</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//fieldset[@id='emergencyinfo']/span[2]</td>
+	<td>1231231234</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=#parentinfo &gt; span.display_text</td>
+	<td>Abby Normal</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//fieldset[@id='parentinfo']/span[2]</td>
+	<td>1231231234</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=p &gt; label</td>
+	<td>Pass Type: Weekend - $35.00</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=Parent Contact Form Verification</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=Parent Contact Form Verification</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=Information Verification</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=Information Verification</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>name=Update</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=Update</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>name=Done</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=Done</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//table[@id='list_table']/tbody/tr[3]/td[4]</td>
+	<td>Yes</td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
+
