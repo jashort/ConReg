@@ -31,7 +31,7 @@ roles numerically lower on the list. (Permission names are in parenthesis)
 - 4: Operations
     + Can search for attendees and view limited information (attendee_search)
   
-- 99: Super User
+- 99: Super Admin
     + All rights granted by override in the has_right() function.
     + Can view revenue in reports (report_view_revenue)
     
