@@ -396,6 +396,96 @@ function passwordReset($Username, $Password) {
 	}
 }
 
+
+function importPreRegCsvFile(&$handle, $staffId) {
+	global $conn;
+
+	$BNumber = badgeNumberSelect($staffId);
+
+	//loop through the csv file and insert into database
+	$count = 0;
+	$first = true;
+	while (($data = fgetcsv($handle,1000,"\t","'")) !== FALSE) {
+		// Skip the first line
+		if ($first == true) {
+			$first = false;
+			continue;
+		}
+		// Skip empty lines and lines where the first field starts with "#"
+		if (count($data) != 18) {
+			die("Error: Line " . $count . " does not have 18 columns.");
+
+		}
+		if (count($data) > 1 && substr($data[0], 0, 1) != '#') {
+			if ($data[3] == "" || $data[3] == "NULL") {
+				$data[3] = sprintf("ONL%1$04d", $BNumber);
+			}
+
+			$PhoneNumber = $data[6];
+			$Phone_Stripped = preg_replace("/[^a-zA-Z0-9s]/","",$PhoneNumber);
+
+			$orderStmt = $conn->prepare("INSERT INTO orders (order_id, total_amount, paid, paytype)
+								VALUES (:orderid, :amount, :paid, :paytype)
+								ON DUPLICATE KEY UPDATE total_amount = total_amount + :amount");
+			$attendeeStmt = $conn->prepare("
+						INSERT INTO attendees (first_name, last_name, badge_number, badge_name, zip, country,
+					   phone, email, birthdate, ec_fullname, ec_phone, ec_same, parent_fullname, parent_phone,
+					   parent_form, paid, paid_amount, pass_type, reg_type, checked_in, added_by, order_id) VALUES
+					   (:firstname, :lastname, :bnumber, :bname, :zip, :country,
+					   :phone, :email, :bdate, :ecname, :ecphone, :same, :pcname, :pcphone,
+					   :parentform, :paid, :amount, :passtype, :regtype, :checkedin, :staffAdd, :orderid)");
+
+			try {
+				$conn->beginTransaction();
+				// Create order if it doesn't exist. If it does, increment the total amount
+				$orderStmt->execute(array('orderid' => $data[17],
+					'amount' => $data[15],
+					'paid' => $data[14],
+					'paytype' => 'ONLINE'));
+
+				$attendeeStmt->execute(array('firstname' => $data[0],
+					'lastname' => $data[1],
+					'bname' => $data[2],
+					'bnumber' => $data[3],
+					'zip' => $data[4],
+					'country' => $data[5],
+					'phone' => $Phone_Stripped,
+					'email' => $data[7],
+					'bdate' => $data[8],
+					'ecname' => $data[9],
+					'ecphone' => $data[10],
+					'same' => $data[11],
+					'pcname' => $data[12],
+					'pcphone' => $data[13],
+					'parentform' => 'No',
+					'paid' => $data[14],
+					'amount' => $data[15],
+					'passtype' => $data[16],
+					'regtype' => 'PreReg',
+					'checkedin' => 'No',
+					'staffAdd' => 'ONLINE',
+					'orderid' => $data[17]));
+				$conn->commit();
+			} catch(Exception $e) {
+				echo 'Error Importing line ' . $count . ':<br>';
+				echo 'Message: ' . $e->getMessage();
+				echo '<br><pre>';
+				print_r($data);
+				echo '</pre>';
+				die();
+			}
+			$BNumber++;
+			$count += 1;
+		}
+	}
+
+	// Update the logged in user's last-created badge number.
+	badgeNumberSet($staffId, $BNumber-1);
+		
+	return $count;
+}
+
+
 /**
  * Redirect to the given URL and stop running the current page
  * @param $location	String Location to redirect to
