@@ -47,11 +47,12 @@ if (isset($_GET['lname'])) {
       <td><?php echo $attendee->first_name . " " . $attendee->last_name ?></td>
       <td><?php echo $attendee->getBirthDate(); ?></td>
       <td><?php echo $attendee->checked_in; ?></td>
-      <td>
+      <td><?php if ($attendee->checked_in == "Yes") { ?>
         <form action="badgereprint.php" method="post" target="_blank">
           <input type="hidden" name="print" value="<?php echo $attendee->id?>" />
           <input type="submit" id="print<?php echo $attendee->id?>" value="Reprint Badge">
         </form>
+        <? } ?>
       </td>
     </tr>
   <?php } ?>
