@@ -8,46 +8,46 @@ if (!isset($_SESSION)) {
 }
 
 
-
 /**
- * Returns the next available badge number for the logged in user
+ * Returns the next available badge number for the given user and increments their badge count
  *
  * Each staff member has their own badge number count. So after they have created two attendees,
- * their badge number count would be 2.
+ * last_badge_number would be 2.
  *
+ * @param $staffId int ID number of staff member
  * @return int
  */
-function badgeNumberSelect() {
+function getBadgeNumber($staffId) {
 	
 	global $conn;
-					   
-	$stmt = $conn->prepare("SELECT last_badge_number FROM reg_staff WHERE username = :uname");
-    $stmt->execute(array('uname' => $_SESSION['username']));
-	$results = $stmt->fetch(PDO::FETCH_ASSOC);
 
+	try {
+		$conn->beginTransaction();
+		$stmt = $conn->prepare("SELECT last_badge_number FROM reg_staff WHERE staff_id = :id");
+		$stmt->execute(array('id' => $staffId));
+		$results = $stmt->fetch(PDO::FETCH_ASSOC);
+		$stmt = $conn->prepare("UPDATE reg_staff SET last_badge_number = last_badge_number+1 WHERE staff_id= :id;");
+		$stmt->execute(array('id' => $staffId));
+		$conn->commit();
+	} catch(PDOExecption $e) {
+		$conn->rollback();
+		die('ERROR: ' . $e->getMessage());
+}
 	return $results['last_badge_number']+1;
 }
 
-function badgeNumberUpdate() {
-	
-	global $conn;
-	$badgeNumber = badgeNumberSelect();
-
-	$stmt = $conn->prepare("UPDATE reg_staff SET last_badge_number=:bnumber WHERE username=:uname");
-    $stmt->execute(array('bnumber' => $badgeNumber, 'uname' => $_SESSION['username']));
-
-}
 
 /**
- * Set the badge number for the logged in user to the given number
+ * Set the badge number for the given staff member
  *
- * @param $Number
+ * @param $staffId int ID number of staff member
+ * @param $number int Last badge number created
  */
-function badgeNumberSet($Number) {
+function badgeNumberSet($staffId, $number) {
 	global $conn;
 
-	$stmt = $conn->prepare("UPDATE reg_staff SET last_badge_number=:bnumber WHERE username=:uname");
-	$stmt->execute(array('bnumber' => $Number, 'uname' => $_SESSION['username']));
+	$stmt = $conn->prepare("UPDATE reg_staff SET last_badge_number=:bnumber WHERE staff_id=:id");
+	$stmt->execute(array('bnumber' => $number, 'id' => $staffId));
 }
 
 
@@ -400,86 +400,88 @@ function passwordReset($Username, $Password) {
 function importPreRegCsvFile(&$handle, $staffId) {
 	global $conn;
 
-	$BNumber = badgeNumberSelect($staffId);
+	$BNumber = getBadgeNumber($staffId);
 
 	//loop through the csv file and insert into database
 	$count = 0;
 	$first = true;
-	while (($data = fgetcsv($handle,1000,"\t","'")) !== FALSE) {
-		// Skip the first line
-		if ($first == true) {
-			$first = false;
-			continue;
-		}
-		// Skip empty lines and lines where the first field starts with "#"
-		if (count($data) != 18) {
-			die("Error: Line " . $count . " does not have 18 columns.");
 
-		}
-		if (count($data) > 1 && substr($data[0], 0, 1) != '#') {
-			if ($data[3] == "" || $data[3] == "NULL") {
-				$data[3] = sprintf("ONL%1$04d", $BNumber);
+	try {
+		$conn->beginTransaction();
+
+		while (($data = fgetcsv($handle,1000,"\t","'")) !== FALSE) {
+			// Skip the first line
+			if ($first == true) {
+				$first = false;
+				continue;
 			}
+			// Skip empty lines and lines where the first field starts with "#"
+			if (count($data) != 18) {
+				die("Error: Line " . $count . " does not have 18 columns.");
 
-			$PhoneNumber = $data[6];
-			$Phone_Stripped = preg_replace("/[^a-zA-Z0-9s]/","",$PhoneNumber);
-
-			$orderStmt = $conn->prepare("INSERT INTO orders (order_id, total_amount, paid, paytype)
-								VALUES (:orderid, :amount, :paid, :paytype)
-								ON DUPLICATE KEY UPDATE total_amount = total_amount + :amount");
-			$attendeeStmt = $conn->prepare("
-						INSERT INTO attendees (first_name, last_name, badge_number, badge_name, zip, country,
-					   phone, email, birthdate, ec_fullname, ec_phone, ec_same, parent_fullname, parent_phone,
-					   parent_form, paid, paid_amount, pass_type, reg_type, checked_in, added_by, order_id) VALUES
-					   (:firstname, :lastname, :bnumber, :bname, :zip, :country,
-					   :phone, :email, :bdate, :ecname, :ecphone, :same, :pcname, :pcphone,
-					   :parentform, :paid, :amount, :passtype, :regtype, :checkedin, :staffAdd, :orderid)");
-
-			try {
-				$conn->beginTransaction();
-				// Create order if it doesn't exist. If it does, increment the total amount
-				$orderStmt->execute(array('orderid' => $data[17],
-					'amount' => $data[15],
-					'paid' => $data[14],
-					'paytype' => 'ONLINE'));
-
-				$attendeeStmt->execute(array('firstname' => $data[0],
-					'lastname' => $data[1],
-					'bname' => $data[2],
-					'bnumber' => $data[3],
-					'zip' => $data[4],
-					'country' => $data[5],
-					'phone' => $Phone_Stripped,
-					'email' => $data[7],
-					'bdate' => $data[8],
-					'ecname' => $data[9],
-					'ecphone' => $data[10],
-					'same' => $data[11],
-					'pcname' => $data[12],
-					'pcphone' => $data[13],
-					'parentform' => 'No',
-					'paid' => $data[14],
-					'amount' => $data[15],
-					'passtype' => $data[16],
-					'regtype' => 'PreReg',
-					'checkedin' => 'No',
-					'staffAdd' => 'ONLINE',
-					'orderid' => $data[17]));
-				$conn->commit();
-			} catch(Exception $e) {
-				echo 'Error Importing line ' . $count . ':<br>';
-				echo 'Message: ' . $e->getMessage();
-				echo '<br><pre>';
-				print_r($data);
-				echo '</pre>';
-				die();
 			}
-			$BNumber++;
-			$count += 1;
+			if (count($data) > 1 && substr($data[0], 0, 1) != '#') {
+				if ($data[3] == "" || $data[3] == "NULL") {
+					$data[3] = sprintf("ONL%1$04d", $BNumber);
+				}
+
+				$PhoneNumber = $data[6];
+				$Phone_Stripped = preg_replace("/[^a-zA-Z0-9s]/","",$PhoneNumber);
+
+				$orderStmt = $conn->prepare("INSERT INTO orders (order_id, total_amount, paid, paytype)
+									VALUES (:orderid, :amount, :paid, :paytype)
+									ON DUPLICATE KEY UPDATE total_amount = total_amount + :amount");
+				$attendeeStmt = $conn->prepare("
+							INSERT INTO attendees (first_name, last_name, badge_number, badge_name, zip, country,
+						   phone, email, birthdate, ec_fullname, ec_phone, ec_same, parent_fullname, parent_phone,
+						   parent_form, paid, paid_amount, pass_type, reg_type, checked_in, added_by, order_id) VALUES
+						   (:firstname, :lastname, :bnumber, :bname, :zip, :country,
+						   :phone, :email, :bdate, :ecname, :ecphone, :same, :pcname, :pcphone,
+						   :parentform, :paid, :amount, :passtype, :regtype, :checkedin, :staffAdd, :orderid)");
+
+					// Create order if it doesn't exist. If it does, increment the total amount
+					$orderStmt->execute(array('orderid' => $data[17],
+						'amount' => $data[15],
+						'paid' => $data[14],
+						'paytype' => 'ONLINE'));
+
+					$attendeeStmt->execute(array('firstname' => $data[0],
+						'lastname' => $data[1],
+						'bname' => $data[2],
+						'bnumber' => $data[3],
+						'zip' => $data[4],
+						'country' => $data[5],
+						'phone' => $Phone_Stripped,
+						'email' => $data[7],
+						'bdate' => $data[8],
+						'ecname' => $data[9],
+						'ecphone' => $data[10],
+						'same' => $data[11],
+						'pcname' => $data[12],
+						'pcphone' => $data[13],
+						'parentform' => 'No',
+						'paid' => $data[14],
+						'amount' => $data[15],
+						'passtype' => $data[16],
+						'regtype' => 'PreReg',
+						'checkedin' => 'No',
+						'staffAdd' => 'ONLINE',
+						'orderid' => $data[17]));
+				$BNumber++;
+				$count += 1;
+			}
 		}
+		$conn->commit();
+	} catch(Exception $e) {
+		echo 'Error Importing line ' . $count . ':<br>';
+		echo 'Message: ' . $e->getMessage();
+		echo '<br><pre>';
+		print_r($data);
+		echo '</pre>';
+		die();
 	}
 
-	// Update the logged in user's last-created badge number.
+	// Update the given user's last-created badge number.
 	badgeNumberSet($staffId, $BNumber-1);
 		
 	return $count;

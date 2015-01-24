@@ -13,7 +13,7 @@ if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) ||
     $_SESSION['currentOrder'] = Array();
   }
   // Get it the next available badge number and set some default values
-  $badge = $_SESSION['initials'] . str_pad(badgeNumberSelect(), 4, '0', STR_PAD_LEFT);
+  $badge = $_SESSION['initials'] . str_pad(getBadgeNumber($_SESSION['staffid']), 4, '0', STR_PAD_LEFT);
   $_SESSION['current']->badge_number = $badge;
   $_SESSION['current']->added_by = $_SESSION['username'];
   $_SESSION['current']->reg_type = "Reg";
@@ -21,7 +21,6 @@ if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) ||
   $_SESSION['current']->paid = "N";
   $_SESSION['current']->parent_form = "N";
   $_SESSION['current']->ec_same = "N";
-  badgeNumberUpdate();
   redirect('/reg_pages/reg_add.php?part=1');
 } elseif (array_key_exists('part', $_POST)) {
   // Handle posting form data and redirecting to the next section
