@@ -13,6 +13,7 @@ if (isset($_GET['username'])) {
 } elseif (isset($_POST["passwordReset"])) {
     passwordReset($_POST["username"],$_POST["password"]);
     redirect("/index.php");
+    die();
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -76,7 +77,7 @@ Username : </label>
 <form name="password" action="/staff/staff_update.php" method="post">
 <input name="username" type="hidden" value="<?php echo $staff['username']; ?>" />
 <input name="password" type="hidden" value="password" />
-<input name="passwordreset" type="submit" class="submit_button" value="Password Reset" /><br />
+<input name="passwordReset" type="submit" class="submit_button" value="Password Reset" /><br />
 </form>
 </fieldset>
 <!-- InstanceEndEditable --></div>
