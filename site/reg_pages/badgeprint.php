@@ -17,6 +17,8 @@ if (isset($_POST['print'])) {
 	die("No parameters");
 }
 
+
+
 // Buffer the following html with PHP so we can store it to a variable later
 ob_start();
 
@@ -74,6 +76,8 @@ ob_start();
 <body>
 <?php
     while ($attendee = $attendees->fetch(PDO::FETCH_CLASS)) {
+		logMessage($_SESSION['username'], "Printed badge for attendee ID ". $attendee->id);
+
 		$age = $attendee->getAge();
 		if ($age >= 18) {
 			$ageClass = "adult";

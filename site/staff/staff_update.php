@@ -9,9 +9,12 @@ if (isset($_GET['username'])) {
     $staff = getStaff($_GET['username']);
 } elseif (isset($_POST["create"])) {
     staffUpdate($_POST["id"], $_POST["fname"], $_POST["lname"], $_POST["initials"], $_POST["cellnumber"], $_POST["accesslevel"], $_POST["enabled"]);
+    logMessage($_SESSION['username'], "Updated user ". $_POST['username']);
+
     redirect("/index.php");
 } elseif (isset($_POST["passwordReset"])) {
     passwordReset($_POST["username"],$_POST["password"]);
+    logMessage($_SESSION['username'], "Reset password for ". $_POST['username']);
     redirect("/index.php");
     die();
 }

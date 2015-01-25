@@ -6,8 +6,9 @@ require_once('../includes/authcheck.php');
 require_right('manage_staff');
 
 if (isset($_POST["create"])) {
-staffAdd($_POST["fname"],$_POST["lname"],$_POST["username"],$_POST["initials"],$_POST["cellnumber"],$_POST["accesslevel"],$_POST["enabled"]);
-redirect("/index.php");
+  staffAdd($_POST["fname"],$_POST["lname"],$_POST["username"],$_POST["initials"],$_POST["cellnumber"],$_POST["accesslevel"],$_POST["enabled"]);
+  logMessage($_SESSION['username'], "Added user ". $_POST['username']);
+  redirect("/index.php");
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

@@ -73,6 +73,7 @@ function validateUser($username, $password) {
 			if ($results["password"] == crypt("password", $results["password"])) {
 				redirect("/staff/staff_password_reset.php?username=" . $_SESSION['username']);
 			} else {
+				logMessage($username, 'Logged in');
 				if (isset($_SESSION['PrevUrl'])) {
 					redirect($_SESSION['PrevUrl']);
 				} else {
@@ -85,6 +86,17 @@ function validateUser($username, $password) {
 	}
 }
 
+
+function logMessage($user, $message) {
+	global $conn;
+	
+	try {
+		$stmt = $conn->prepare("INSERT INTO history (username, description) VALUES (:username, :message)");
+		$stmt->execute(array('username' => $user, 'message' => $message));
+	} catch(PDOExecption $e) {
+		die('ERROR: ' . $e->getMessage());
+	}
+}
 
 
 /**
