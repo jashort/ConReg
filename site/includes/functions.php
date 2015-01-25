@@ -1,11 +1,90 @@
 <?php
-require_once('../Connections/kumo_conn.php');
-require_once('../includes/cryptfunc.php');
 require_once('Attendee.php');
 
 if (!isset($_SESSION)) {
   session_start();
 }
+
+$conn = getDBConnection();
+
+function getDBConnection() {
+	// Configuration defaults. Will be overridden if they are set in environment variables
+	$db_hostname = "localhost";     // Database server hostname
+	$db_name = "registration";      // Database name
+	$db_user = "kumo_rw";           // Database username (requires read/write rights)
+	$db_password = "CHANGEME";      // Database password
+
+	// Override configuration with settings in environment variables
+	if (isset($_SERVER['REG_DB_SERVER']))
+	{
+		$db_hostname = $_SERVER['REG_DB_SERVER'];
+	}
+
+	if (isset($_SERVER['REG_DB_NAME']))
+	{
+		$db_name = $_SERVER['REG_DB_NAME'];
+	}
+	if (isset($_SERVER['REG_DB_USER']))
+	{
+		$db_user = $_SERVER['REG_DB_USER'];
+	}
+	if (isset($_SERVER['REG_DB_PASS']))
+	{
+		$db_password = $_SERVER['REG_DB_PASS'];
+	}
+
+	try {
+		$conn = new PDO('mysql:host=' . $db_hostname . ';dbname=' . $db_name, $db_user, $db_password);
+		$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	} catch(PDOException $e) {
+		echo 'ERROR: ' . $e->getMessage();
+		die();
+	}
+	return $conn;
+}
+
+function validateUser($username, $password) {
+	global $conn;
+	$redirectLoginSuccess = "/index.php";
+
+	try {
+		$stmt = $conn->prepare('SELECT staff_id, initials, username, password, access_level, enabled FROM reg_staff WHERE username = :username');
+		$stmt->execute(array('username' => $username));
+
+		$results = $stmt->fetch(PDO::FETCH_ASSOC);
+
+		if(crypt($password, $results["password"])==$results["password"]) {
+			$verified = true;
+		} else {
+			$verified = false;
+		}
+		
+		if (($results) && ($verified) && ($results["enabled"] == "1")) {
+
+			session_regenerate_id(true);
+
+			//Declare session variables and assign them
+			$_SESSION['username'] = $results["username"];
+			$_SESSION['staffid'] = $results["staff_id"];
+			$_SESSION['access'] = $results["access_level"];
+			$_SESSION['initials'] = $results["initials"];
+			$_SESSION['rights'] = get_rights($results["access_level"]);
+
+			if ($results["password"] == crypt("password", $results["password"])) {
+				redirect("/staff/staff_password_reset.php?username=" . $_SESSION['username']);
+			} else {
+				if (isset($_SESSION['PrevUrl'])) {
+					redirect($_SESSION['PrevUrl']);
+				} else {
+					redirect($redirectLoginSuccess);
+				}
+			}
+		}
+	} catch(PDOException $e) {
+		echo 'ERROR: ' . $e->getMessage();
+	}
+}
+
 
 
 /**
