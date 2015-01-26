@@ -3,8 +3,17 @@ ConReg
 
 Convention attendee management software (registration/check in)
 
-- For attendee check-in and badge printing
-- Written for Kumoricon 
+- Pre-registration check in and badge printing
+- At-con registration and badge printing
+- Attendee search for operations
+- Reporting (checkins/revenue)
+- User management (security roles/permissoins) see [docs/PermissionLevels.md](docs/PermissionLevels.md)
+- Change history tracking
+
+Developed for [Kumoricon](http://www.kumoricon.org/)
+
+[![Main Screen](docs/screenshot-main_t.png)](docs/screenshot-main.png)
+[![Reports](docs/screenshot-reports_t.png)](docs/screenshot-reports.png)
 
 
 Requirements
