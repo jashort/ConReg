@@ -4,8 +4,6 @@ require_once('../includes/functions.php');
 require_once('../includes/authcheck.php');
 requireRight('report_view');
 
-logMessage($_SESSION['username'], "Viewed reports page");
-
 $regByDay = registrationsByDay();
 $regStats = registrationStatistics();
 ?>
