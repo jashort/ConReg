@@ -5,15 +5,17 @@
  * the reg_staff.access_level field.
  * On login, the individual rights are stored in $_SESSION['rights']
  *
- * Use the functions has_right() and require_right() to interact with them.
+ * Use the functions hasRight() and requireRight() to interact with them.
  *
  * For example, to create a page that will only display for users with the "badge_print" right:
  *
- * require_once('../includes/authcheck.php');
- * require_right('badge_print');
+ * require_once '../includes/authcheck.php';
+ * requireRight('badge_print');
  *
  * If the currently logged in user ($_SESSION) doesn't have the "badge_print" right, an error
  * will be displayed
+ *
+ * The role number here (1, 2, 3, etc) corresponds to the access_level column in the reg_staff table.
  */
 
 $ROLES = array(
@@ -56,8 +58,9 @@ $ROLES = array(
 
 /**
  * Return the array of rights for a given role ID number, or an empty array if not found.
- * @param $roleID
- * @return mixed
+ *
+ * @param int $roleID
+ * @return Array
  */
 function get_rights($roleID) {
     global $ROLES;

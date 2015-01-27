@@ -1,12 +1,17 @@
 <?php
-require_once('Attendee.php');
+require_once 'Attendee.php';
 
 if (!isset($_SESSION)) {
-  session_start();
+	session_start();
 }
 
 $conn = getDBConnection();
 
+/**
+ * Get a database connection configured by environment variables
+ *
+ * @return PDO
+ */
 function getDBConnection() {
 	// Configuration defaults. Will be overridden if they are set in environment variables
 	$db_hostname = "localhost";     // Database server hostname
@@ -43,6 +48,12 @@ function getDBConnection() {
 	return $conn;
 }
 
+/**
+ * Check that a given username and password are valid. If so, set session variables and redirect
+ *
+ * @param string $username
+ * @param string $password
+ */
 function validateUser($username, $password) {
 	global $conn;
 	$redirectLoginSuccess = "/index.php";
@@ -58,7 +69,7 @@ function validateUser($username, $password) {
 		} else {
 			$verified = false;
 		}
-		
+
 		if (($results) && ($verified) && ($results["enabled"] == "1")) {
 
 			session_regenerate_id(true);
@@ -86,10 +97,15 @@ function validateUser($username, $password) {
 	}
 }
 
-
+/**
+ * Write a message to history
+ *
+ * @param string $user Current username
+ * @param string $message Message to log
+ */
 function logMessage($user, $message) {
 	global $conn;
-	
+
 	try {
 		$stmt = $conn->prepare("INSERT INTO history (username, description) VALUES (:username, :message)");
 		$stmt->execute(array('username' => $user, 'message' => $message));
@@ -98,18 +114,16 @@ function logMessage($user, $message) {
 	}
 }
 
-
 /**
  * Returns the next available badge number for the given user and increments their badge count
  *
  * Each staff member has their own badge number count. So after they have created two attendees,
- * last_badge_number would be 2.
+ * last_badge_number would be 2, and the next time this function is run it will return 3.
  *
- * @param $staffId int ID number of staff member
+ * @param int $staffId ID number of staff member
  * @return int
  */
 function getBadgeNumber($staffId) {
-	
 	global $conn;
 
 	try {
@@ -123,7 +137,7 @@ function getBadgeNumber($staffId) {
 	} catch(PDOExecption $e) {
 		$conn->rollback();
 		die('ERROR: ' . $e->getMessage());
-}
+	}
 	return $results['last_badge_number']+1;
 }
 
@@ -131,8 +145,8 @@ function getBadgeNumber($staffId) {
 /**
  * Set the badge number for the given staff member
  *
- * @param $staffId int ID number of staff member
- * @param $number int Last badge number created
+ * @param int $staffId ID number of staff member
+ * @param int $number Last badge number created
  */
 function badgeNumberSet($staffId, $number) {
 	global $conn;
@@ -144,38 +158,49 @@ function badgeNumberSet($staffId, $number) {
 
 /**
  * Update an order record
- * @param $Id	int ID
- * @param $Amount 	Decimal Total amount paid
- * @param $PayType	Payment Type
- * @param $Paid		Paid? (yes/no)
+ * @param int $id ID
+ * @param float $amount Total amount paid
+ * @param string $payType Payment Type
+ * @param string $paid Paid? (yes/no)
  */
-function orderUpdate($Id, $Amount, $PayType, $Paid) {
+function orderUpdate($id, $amount, $payType, $paid) {
 	global $conn;
 	try {
 		$stmt = $conn->prepare("UPDATE orders SET total_amount=:amount, paid=:paid, paytype=:paytype WHERE order_id=:id");
-		$stmt->execute(array('amount' => $Amount, 'paid' => $Paid, 'paytype' => $PayType, 'id' => $Id));
+		$stmt->execute(array('amount' => $amount, 'paid' => $paid, 'paytype' => $payType, 'id' => $id));
 	} catch(PDOException $e) {
 		echo 'ERROR: ' . $e->getMessage();
 	}
 }
 
 
-function orderListAttendees($OrderId) {
-
+/**
+ * List attendees for a given order ID
+ *
+ * @param int $orderId
+ * @return PDOStatement
+ */
+function orderListAttendees($orderId) {
 	global $conn;
 
 	$stmt = $conn->prepare("SELECT first_name, last_name, pass_type, paid_amount FROM attendees WHERE order_id = :orderid");
-	$stmt->execute(array('orderid' => $OrderId));
+	$stmt->execute(array('orderid' => $orderId));
 	$stmt->setFetchMode(PDO::FETCH_CLASS, "Attendee");
 	return $stmt;
 }
 
-function getAttendeePDO($Id) {
 
+/**
+ * Get a PDO statement for a given attendee ID
+ *
+ * @param $id int
+ * @return PDOStatement
+ */
+function getAttendeePDO($id) {
 	global $conn;
 
 	$stmt = $conn->prepare("SELECT * FROM attendees WHERE id = :id");
-	$stmt->execute(array('id' => $Id));
+	$stmt->execute(array('id' => $id));
 	$stmt->setFetchMode(PDO::FETCH_CLASS, "Attendee");
 	return $stmt;
 }
@@ -183,15 +208,15 @@ function getAttendeePDO($Id) {
 
 /**
  * Gets attendee information from the database
- * @param $Id Attendee ID
- * @return mixed
+ *
+ * @param int $id Attendee ID
+ * @return Attendee
  */
-function getAttendee($Id) {
-
+function getAttendee($id) {
 	global $conn;
 
 	$stmt = $conn->prepare("SELECT * FROM attendees WHERE id = :id");
-	$stmt->execute(array('id' => $Id));
+	$stmt->execute(array('id' => $id));
 	$attendee = $stmt->fetchObject('Attendee');
 	return $attendee;
 }
@@ -199,7 +224,8 @@ function getAttendee($Id) {
 
 /**
  * Add one or more attendees to the database and create an order record for them
- * @param $attendees Array containing Attendee objects
+ *
+ * @param Array $attendees Array containing Attendee objects
  * @return int The order ID that was created
  */
 function regAddOrder($attendees) {
@@ -212,12 +238,10 @@ function regAddOrder($attendees) {
 		$orderId = $conn->lastInsertId();
 		$stmt = $conn->prepare("INSERT INTO attendees (first_name, last_name, badge_number, phone, email, zip, birthdate, ec_fullname, ec_phone, ec_same, parent_fullname, parent_phone, parent_form, paid, paid_amount, pass_type, reg_type, order_id, checked_in, notes, added_by) VALUES (:firstname, :lastname, :bnumber, :phone, :email, :zip, :bdate, :ecname, :ecphone, :same, :pcname, :pcphone, :pform, :paid, :amount, :passtype, :regtype, :orderId, :checked, :notes, :addedBy)");
 		foreach ($attendees as $attendee) {
-			$Phone_Stripped = preg_replace("/[^a-zA-Z0-9s]/","",$attendee->phone);
-
 			$stmt->execute(array('firstname' => $attendee->first_name,
 				'lastname' => $attendee->last_name,
 				'bnumber' => $attendee->badge_number,
-				'phone' => $Phone_Stripped,
+				'phone' => $attendee->phone,
 				'email' => $attendee->email,
 				'zip' => $attendee->zip,
 				'bdate' => $attendee->birthdate,
@@ -245,32 +269,41 @@ function regAddOrder($attendees) {
 }
 
 
-
 /**
  * Mark attendees as checked in for the given order ID
- * @param $OrderId
+ * 
+ * @param int $orderId
  */
-function orderCheckIn($OrderId) {
+function orderCheckIn($orderId) {
 	try {
 		global $conn;
 
 		$stmt = $conn->prepare("UPDATE attendees SET checked_in='Yes' WHERE order_id= :orderid");
-		$stmt->execute(array('orderid' => $OrderId));
+		$stmt->execute(array('orderid' => $orderId));
 	} catch(PDOException $e) {
 		echo 'ERROR: ' . $e->getMessage();
 	}
 
 }
 
-function orderPaid($OrderId, $PaymentType, $Total, $Notes) {
+/**
+ * Mark the given order and all attendees in that order as paid
+ *
+ * @param int $orderId
+ * @param string $paymentType
+ * @param float $total
+ * @param string $notes
+ */
+function orderPaid($orderId, $paymentType, $total, $notes) {
 	global $conn;
+
 	try {
 		$conn->beginTransaction();
 
 		$stmt = $conn->prepare("UPDATE attendees SET paid='Yes' WHERE order_id= :orderid");
-		$stmt->execute(array('orderid' => $OrderId));
+		$stmt->execute(array('orderid' => $orderId));
 		$stmt = $conn->prepare("UPDATE orders SET paid='Yes', paytype=:paymenttype, total_amount=:total, notes=:notes WHERE order_id= :orderid");
-		$stmt->execute(array('orderid' => $OrderId, 'paymenttype' => $PaymentType, 'total' => $Total, 'notes' => $Notes));
+		$stmt->execute(array('orderid' => $orderId, 'paymenttype' => $paymentType, 'total' => $total, 'notes' => $notes));
 		$conn->commit();
 	} catch(PDOException $e) {
 		$conn->rollBack();
@@ -280,59 +313,86 @@ function orderPaid($OrderId, $PaymentType, $Total, $Notes) {
 }
 
 
+/**
+ * Update the attendee represented by the given object in the database
+ *
+ * @param Attendee $attendee
+ */
 function regUpdate($attendee) {
+	global $conn;
 
 	try {
-		global $conn;
-		$Phone_Stripped = preg_replace("/[^a-zA-Z0-9s]/","", $attendee->phone);
-
 		$stmt = $conn->prepare("UPDATE attendees SET first_name=:firstname, last_name=:lastname, badge_number=:badgenumber, zip=:zip, phone=:phone, email=:email, birthdate=:bdate, ec_fullname=:ecname, ec_phone=:ecphone, ec_same=:same, parent_fullname=:pcname, parent_phone=:pcphone, parent_form=:pform, paid_amount=:amount, pass_type=:passtype, order_id=:orderid, notes=:notes WHERE id=:id");
-		$stmt->execute(array('firstname' => $attendee->first_name, 
-							 'lastname' => $attendee->last_name, 
-			                 'badgenumber' => $attendee->badge_number,
-							 'zip' => $attendee->zip,
-							 'phone' => $Phone_Stripped,
-							 'email' => $attendee->email,
-							 'bdate' => $attendee->birthdate,
-							 'ecname' => $attendee->ec_fullname,
-							 'ecphone' => $attendee->ec_phone,
-							 'same' => $attendee->ec_same,
-							 'pcname' => $attendee->parent_fullname,
-							 'pcphone' => $attendee->parent_phone,
-							 'pform' => $attendee->parent_form,
-							 'amount' => $attendee->paid_amount,
-							 'passtype' => $attendee->pass_type,
-							 'orderid' => $attendee->order_id,
- 							 'notes' => $attendee->notes,
- 							 'id' => $attendee->id));
-
+		$stmt->execute(array('firstname' => $attendee->first_name,
+			'lastname' => $attendee->last_name,
+			'badgenumber' => $attendee->badge_number,
+			'zip' => $attendee->zip,
+			'phone' => $attendee->phone,
+			'email' => $attendee->email,
+			'bdate' => $attendee->birthdate,
+			'ecname' => $attendee->ec_fullname,
+			'ecphone' => $attendee->ec_phone,
+			'same' => $attendee->ec_same,
+			'pcname' => $attendee->parent_fullname,
+			'pcphone' => $attendee->parent_phone,
+			'pform' => $attendee->parent_form,
+			'amount' => $attendee->paid_amount,
+			'passtype' => $attendee->pass_type,
+			'orderid' => $attendee->order_id,
+			'notes' => $attendee->notes,
+			'id' => $attendee->id));
 	} catch(PDOException $e) {
 		echo 'ERROR: ' . $e->getMessage();
 	}
-
 }
 
 
-function regCheckIn($Id) {
+/**
+ * Set the given attendee ID as checked in in the database
+ *
+ * @param int $id
+ */
+function regCheckIn($id) {
 	global $conn;
 	$stmt = $conn->prepare("UPDATE attendees SET checked_in='Yes' WHERE id= :id");
-	$stmt->execute(array('id' => $Id));
+	$stmt->execute(array('id' => $id));
 }
 
-function regCheckInParentFormReceived($Id) {
+
+/**
+ * Set the given attendee ID as having parental consent form received in the database
+ * 
+ * @param int $id
+ */
+function regCheckInParentFormReceived($id) {
 	global $conn;
 	$stmt = $conn->prepare("UPDATE attendees SET parent_form='Yes' WHERE id= :id");
-	$stmt->execute(array('id' => $Id));
+	$stmt->execute(array('id' => $id));
 }
 
-function attendeeSearchLastName($name) {
+
+/**
+ * Search for attendees with the given last name (exact match, case insensitive),
+ * whether or not they are checked in
+ *
+ * @param string $lastName
+ * @return PDOStatement
+ */
+function attendeeSearchLastName($lastName) {
 	global $conn;
 	$stmt = $conn->prepare("SELECT * FROM attendees WHERE last_name like :lname");
-	$stmt->execute(array('lname' => $name));
+	$stmt->execute(array('lname' => $lastName));
 	$stmt->setFetchMode(PDO::FETCH_CLASS, "Attendee");
 	return $stmt;
 }
 
+/**
+ * Search for attendees with the given badge number (exact match, case insensitive)
+ * whether or not they are checked in
+ *
+ * @param string $badgeNumber
+ * @return PDOStatement
+ */
 function attendeeSearchBadgeNumber($badgeNumber) {
 	global $conn;
 	$stmt = $conn->prepare("SELECT * FROM attendees WHERE badge_number like :badge");
@@ -343,56 +403,95 @@ function attendeeSearchBadgeNumber($badgeNumber) {
 
 
 /**
- * @param $name	First or Lost Name
- * @param $field Field to search. fn = first name, ln = last name, ord = order id
- * @return array Array of attendee arrays
+ * Search pre-registered attendees by first name, last name, or order ID
+ * 
+ * @param string $name First name, last name, or order ID
+ * @param string $field Field to search. fn = first name, ln = last name, ord = order id
+ * @return PDOStatement
  */
 function preRegSearch($name, $field) {
 	global $conn;
 	if ($field == 'fn') {
-		$stmt = $conn->prepare("SELECT id, first_name, last_name, badge_name,
-								checked_in, order_id
+		$stmt = $conn->prepare("SELECT id, first_name, last_name, badge_name, checked_in, order_id
 								FROM attendees
 								WHERE first_name LIKE :name AND reg_type LIKE 'PreReg'
 								ORDER BY order_id");
 	} elseif ($field == 'ord') {
-		$stmt = $conn->prepare("SELECT id, first_name, last_name, badge_name,
-								checked_in, order_id
+		$stmt = $conn->prepare("SELECT id, first_name, last_name, badge_name, checked_in, order_id
 								FROM attendees
 								WHERE order_id LIKE :name AND reg_type LIKE 'PreReg'
 								ORDER BY order_id");
 	} else {
-		$stmt = $conn->prepare("SELECT id, first_name, last_name, badge_name,
-								checked_in, order_id
+		$stmt = $conn->prepare("SELECT id, first_name, last_name, badge_name, checked_in, order_id
 								FROM attendees
 								WHERE last_name LIKE :name AND reg_type LIKE 'PreReg'
 								ORDER BY order_id");
 	}
 	$stmt->execute(array('name' => $name));
-	return $stmt->fetchAll(PDO::FETCH_ASSOC);
+	$stmt->setFetchMode(PDO::FETCH_CLASS, "Attendee");
+	return $stmt;
 }
 
 
-function staffAdd($FirstName, $LastName, $Username, $Initials, $Cell, $Accesslevel, $Enabled) {
-	
+/**
+ * Insert the given staff member in to the database
+ * 
+ * @param string $firstName 
+ * @param string $lastName
+ * @param string $username
+ * @param string $initials
+ * @param string $phoneNumber
+ * @param int $accessLevel Level (from roles.php)
+ * @param int $enabled (1 or 0)
+ */
+function staffAdd($firstName, $lastName, $username, $initials, $phoneNumber, $accessLevel, $enabled) {
+	global $conn;
+
 	$password = crypt("password");
 
-  	global $conn;
-					   
-	$stmt = $conn->prepare("INSERT INTO reg_staff (first_name, last_name, username, initials, password, phone_number, access_level, enabled) VALUES (:fname, :lname, :uname, :initials, :password, :cell, :access, :enabled)");
-    $stmt->execute(array('fname' => $FirstName,'lname' => $LastName,'uname' => $Username,'initials' => $Initials,'password' => $password,'cell' => $Cell,'access' => $Accesslevel,'enabled' => $Enabled));
-	
+	$stmt = $conn->prepare("INSERT INTO reg_staff 
+							(first_name, last_name, username, initials, password, phone_number, access_level, enabled) 
+							VALUES 
+							(:fname, :lname, :uname, :initials, :password, :cell, :access, :enabled)");
+	$stmt->execute(array('fname' => $firstName,
+		'lname' => $lastName,
+		'uname' => $username,
+		'initials' => $initials,
+		'password' => $password,
+		'cell' => $phoneNumber,
+		'access' => $accessLevel,
+		'enabled' => $enabled));
 }
 
-function staffUpdate($Id, $FirstName, $LastName, $Initials, $Cell, $Accesslevel, $Enabled) {
+/**
+ * Update the given staff member in the database
+ * 
+ * @param int $id int
+ * @param string $firstName
+ * @param string $lastName
+ * @param string $initials
+ * @param string $phoneNumber
+ * @param int $accessLevel Level (from roles.php)
+ * @param int $enabled (1 or 0) */
+function staffUpdate($id, $firstName, $lastName, $initials, $phoneNumber, $accessLevel, $enabled) {
+	global $conn;
 
-  	global $conn;
-					   
-	$stmt = $conn->prepare("UPDATE reg_staff SET first_name = :fname, last_name = :lname, initials = :initials, phone_number = :cell, access_level=:access, enabled=:enabled WHERE staff_id=:id");
-    $stmt->execute(array('fname' => $FirstName,'lname' => $LastName,'initials' => $Initials,'cell' => $Cell,'access' => $Accesslevel,'enabled' => $Enabled,'id' => $Id));
-	
+	$stmt = $conn->prepare("UPDATE reg_staff SET first_name = :fname, last_name = :lname, initials = :initials, 
+							phone_number = :cell, access_level=:access, enabled=:enabled WHERE staff_id=:id");
+	$stmt->execute(array('fname' => $firstName,
+		'lname' => $lastName,
+		'initials' => $initials,
+		'cell' => $phoneNumber,
+		'access' => $accessLevel,
+		'enabled' => $enabled,
+		'id' => $id));
 }
 
+/**
+ * List staff in database
+ * 
+ * @return PDOStatement
+ */
 function staffList(){
 	global $conn;
 
@@ -403,6 +502,12 @@ function staffList(){
 }
 
 
+/**
+ * Get staff record from database
+ * 
+ * @param string $username
+ * @return Array
+ */
 function getStaff($username) {
 	global $conn;
 
@@ -414,8 +519,7 @@ function getStaff($username) {
 
 
 /**
- * Returns most recent items from history
- * @param int $number Number of items to return (default: 50)
+ * @param int $number
  * @return PDOStatement
  */
 function historyList($number=50){
@@ -429,10 +533,16 @@ function historyList($number=50){
 }
 
 
+/**
+ * Get count/revenue of registrations by day
+ * 
+ * @return PDOStatement
+ */
 function registrationsByDay() {
 	global $conn;
 
-	$stmt = $conn->prepare("SELECT DAYNAME(created) as DAYNAME, DATE_FORMAT(created, '%m/%e/%Y') as DATE, sum(paid_amount) AS DAYTOTAL, count(paid_amount) as DAYCOUNT
+	$stmt = $conn->prepare("SELECT DAYNAME(created) as DAYNAME, DATE_FORMAT(created, '%m/%e/%Y') as DATE, 
+							sum(paid_amount) AS DAYTOTAL, count(paid_amount) as DAYCOUNT
 							FROM attendees
 							WHERE reg_type = 'reg'
 							GROUP BY DATE(created)
@@ -442,6 +552,12 @@ function registrationsByDay() {
 	return $stmt;
 }
 
+
+/**
+ * Get registration statistics
+ * 
+ * @return Array
+ */
 function registrationStatistics() {
 	global $conn;
 
@@ -464,30 +580,42 @@ function registrationStatistics() {
 }
 
 
-function passwordReset($Username, $Password) {
-	
+/**
+ * Set the password for the given username. Clear the session if resetting a password for the
+ * logged in user.
+ * 
+ * @param string $username
+ * @param string $password
+ */
+function passwordReset($username, $password) {
 	global $conn;
-	
+
 	try {
-		
-	$passwordcrypt = crypt($Password);
+		$passwordCrypt = crypt($password);
+		//$passwordcrypt = password_hash($Password);
 
-	//$passwordcrypt = password_hash($Password);
-			   
-	$stmt = $conn->prepare("UPDATE reg_staff SET password=:pass WHERE username=:uname");
-    $stmt->execute(array('pass' => $passwordcrypt,'uname' => $Username));
+		$stmt = $conn->prepare("UPDATE reg_staff SET password=:pass WHERE username=:uname");
+		$stmt->execute(array('pass' => $passwordCrypt, 'uname' => $username));
 
-	if ($_SESSION['username']==$Username) {
-	$_SESSION['username'] = NULL;
-	$_SESSION['access'] = NULL;
-	}
-	
+		if ($_SESSION['username']==$username) {
+			$_SESSION['username'] = NULL;
+			$_SESSION['access'] = NULL;
+		}
+
 	} catch(PDOException $e) {
-    echo 'ERROR: ' . $e->getMessage();
+		echo 'ERROR: ' . $e->getMessage();
 	}
 }
 
 
+/**
+ * Import attendees from the given file handle (used when a CSV file is uploaded. Use the given
+ * staff ID for badge numbers. If there is a failure, roll back all imported items
+ *
+ * @param resource $handle
+ * @param int $staffId
+ * @return int Number of records imported
+ */
 function importPreRegCsvFile(&$handle, $staffId) {
 	global $conn;
 
@@ -530,34 +658,34 @@ function importPreRegCsvFile(&$handle, $staffId) {
 						   :phone, :email, :bdate, :ecname, :ecphone, :same, :pcname, :pcphone,
 						   :parentform, :paid, :amount, :passtype, :regtype, :checkedin, :staffAdd, :orderid)");
 
-					// Create order if it doesn't exist. If it does, increment the total amount
-					$orderStmt->execute(array('orderid' => $data[17],
-						'amount' => $data[15],
-						'paid' => $data[14],
-						'paytype' => 'ONLINE'));
+				// Create order if it doesn't exist. If it does, increment the total amount
+				$orderStmt->execute(array('orderid' => $data[17],
+					'amount' => $data[15],
+					'paid' => $data[14],
+					'paytype' => 'ONLINE'));
 
-					$attendeeStmt->execute(array('firstname' => $data[0],
-						'lastname' => $data[1],
-						'bname' => $data[2],
-						'bnumber' => $data[3],
-						'zip' => $data[4],
-						'country' => $data[5],
-						'phone' => $Phone_Stripped,
-						'email' => $data[7],
-						'bdate' => $data[8],
-						'ecname' => $data[9],
-						'ecphone' => $data[10],
-						'same' => $data[11],
-						'pcname' => $data[12],
-						'pcphone' => $data[13],
-						'parentform' => 'No',
-						'paid' => $data[14],
-						'amount' => $data[15],
-						'passtype' => $data[16],
-						'regtype' => 'PreReg',
-						'checkedin' => 'No',
-						'staffAdd' => 'ONLINE',
-						'orderid' => $data[17]));
+				$attendeeStmt->execute(array('firstname' => $data[0],
+					'lastname' => $data[1],
+					'bname' => $data[2],
+					'bnumber' => $data[3],
+					'zip' => $data[4],
+					'country' => $data[5],
+					'phone' => $Phone_Stripped,
+					'email' => $data[7],
+					'bdate' => $data[8],
+					'ecname' => $data[9],
+					'ecphone' => $data[10],
+					'same' => $data[11],
+					'pcname' => $data[12],
+					'pcphone' => $data[13],
+					'parentform' => 'No',
+					'paid' => $data[14],
+					'amount' => $data[15],
+					'passtype' => $data[16],
+					'regtype' => 'PreReg',
+					'checkedin' => 'No',
+					'staffAdd' => 'ONLINE',
+					'orderid' => $data[17]));
 				$BNumber++;
 				$count += 1;
 			}
@@ -574,15 +702,15 @@ function importPreRegCsvFile(&$handle, $staffId) {
 
 	// Update the given user's last-created badge number.
 	badgeNumberSet($staffId, $BNumber-1);
-		
+
 	return $count;
 }
 
 
 /**
  * Redirect to the given URL and stop running the current page
- * @param $location	String Location to redirect to
- * @param int $statusCode Int HTTP status code
+ * @param string $location Location to redirect to
+ * @param int $statusCode HTTP status code
  */
 function redirect($location, $statusCode=303) {
 	header(sprintf("Location: %s", $location, intval($statusCode)));

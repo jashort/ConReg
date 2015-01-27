@@ -24,8 +24,9 @@ function calculateAge($BirthDate, $Today = "") {
 
 /**
  * Calculates payment amount based on age and pass type
- * @param int $Age in years
- * @param string $PassType One of "Weekend", "Friday", "Saturday", "Sunday", "Monday"
+ *
+ * @param int $Age Age in years
+ * @param string $PassType One of "Weekend", "VIP", "Friday", "Saturday", "Sunday", "Monday"
  * @return int
  */
 function calculatePassCost($Age, $PassType) {

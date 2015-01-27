@@ -2,7 +2,7 @@
 require_once('../includes/functions.php');
 
 require_once('../includes/authcheck.php');
-require_right('report_view');
+requireRight('report_view');
 
 logMessage($_SESSION['username'], "Viewed reports page");
 
@@ -39,7 +39,7 @@ $regStats = registrationStatistics();
             <td colspan="2">Number of registrations on <?php echo $reg["DAYNAME"] ?> (<?php echo $reg["DATE"] ?>):
             <?php echo $reg["DAYCOUNT"] ?></td>
         </tr>
-        <?php if (has_right('report_view_revenue')) { ?>
+        <?php if (hasRight('report_view_revenue')) { ?>
             <tr>
                 <td colspan="2">Revenue of registrations on <?php echo $reg["DAYNAME"] ?> (<?php echo $reg["DATE"] ?>):
                     $<?php echo $reg["DAYTOTAL"] ?></td>
@@ -78,7 +78,7 @@ $regStats = registrationStatistics();
     				<br />
       				Grand Total : <?php echo $regStats['checkedintotal']; ?></td>
       <td width="50%">
-        <?php if (has_right('report_view_revenue')) { ?>
+        <?php if (hasRight('report_view_revenue')) { ?>
           Total From All At-Con Registrations:<br /><br />$<?php echo $regStats['sumregtotal']; ?>
         <?php } ?>
       </td>

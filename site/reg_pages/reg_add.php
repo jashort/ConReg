@@ -3,7 +3,7 @@ require_once('../includes/functions.php');
 require_once('../includes/passtypes.php');
 
 require_once('../includes/authcheck.php');
-require_right('registration_add');
+requireRight('registration_add');
 
 if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) || 
     (array_key_exists('action', $_GET) && $_GET['action'] == "clear")) {
@@ -276,7 +276,7 @@ function manualPrice() {
   <label>
     <input name="PassType" type="radio" id="PassType_5" value="Monday" <?php if ($_SESSION['current']->pass_type == "Monday") echo "checked=\"checked\""; ?> />
     Monday Only - $<?php echo $mondayCost ?></label><br />
-	<?php if (has_right('registration_manual_price')) { ?>
+	<?php if (hasRight('registration_manual_price')) { ?>
       <span class="radio_button_left_margin">
     <input name="PassType" type="radio" id="PassType_6" onclick="manualPrice()" value="Manual Price" <?php if ($_SESSION['current']->pass_type == "Manual Price") echo "checked=\"checked\""; ?> />
     Manual Price - $

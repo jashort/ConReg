@@ -3,7 +3,7 @@ require_once('../includes/functions.php');
 require_once('../includes/passtypes.php');
 
 require_once('../includes/authcheck.php');
-require_right('registration_add');
+requireRight('registration_add');
 
 if ((isset($_POST["action"])) && ($_POST["action"] == "Finish")) {
     $_SESSION["currentOrder"] = Array();

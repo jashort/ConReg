@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: jason
- * Date: 1/12/15
- * Time: 10:06 PM
- */
 
 class Attendee {
     public $id;
@@ -45,6 +39,11 @@ class Attendee {
         }
     }
 
+    /**
+     * Returns day of birthdate, or empty string if unset
+     *
+     * @return string
+     */
     public function getBirthDay() {
         try {
             $date = new DateTime($this->birthdate);
@@ -54,6 +53,11 @@ class Attendee {
         }
     }
 
+    /**
+     * Returns month of birthdate, or empty string if unset
+     *
+     * @return string
+     */
     public function getBirthMonth() {
         try {
             $date = new DateTime($this->birthdate);
@@ -63,6 +67,11 @@ class Attendee {
         }
     }
 
+    /**
+     * Returns year of birthdate, or empty string if unset
+     *
+     * @return string
+     */
     public function getBirthYear() {
         try {
             $date = new DateTime($this->birthdate);
@@ -73,7 +82,9 @@ class Attendee {
     }
     
     /**
-     * @return bool Returns true if < 18 years old
+     * Returns true if attendee is < 18 years old
+     *
+     * @return bool
      */
     public function isMinor() {
         if ($this->getAge() < 18) {
@@ -84,7 +95,9 @@ class Attendee {
     }
 
     /**
-     * @return int Returns age in years
+     * Attendee age in years
+     *
+     * @return int
      */
     public function getAge() {
         try {
@@ -97,7 +110,9 @@ class Attendee {
     }
 
     /**
-     * @param $array Array Loads object properties from the given array. Usually used with a $_POST object.
+     * Loads data in to this object from the given array. Usually used with a $_POST object.
+     *
+     * @param Array $array
      */
     public function fromArray($array) {
         $this->id = $array['id'];

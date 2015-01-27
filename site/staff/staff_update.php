@@ -3,7 +3,7 @@ require_once('../includes/functions.php');
 require_once('../includes/roles.php');
 
 require_once('../includes/authcheck.php');
-require_right('manage_staff');
+requireRight('manage_staff');
 
 if (isset($_GET['username'])) {
     $staff = getStaff($_GET['username']);

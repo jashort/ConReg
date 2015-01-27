@@ -2,7 +2,7 @@
 require_once('../includes/functions.php');
 
 require_once('../includes/authcheck.php');
-require_right('super-admin');
+requireRight('super-admin');
 
 if ($_FILES && $_FILES['csv']['size'] > 0) {
 	// load the csv file

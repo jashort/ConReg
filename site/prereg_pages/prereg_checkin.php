@@ -2,7 +2,7 @@
 require_once('../includes/functions.php');
 
 require_once('../includes/authcheck.php');
-require_right('prereg_checkin');
+requireRight('prereg_checkin');
 
 if (isset($_POST["Update"])) {
   // If a minor, check for parental consent form

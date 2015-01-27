@@ -2,7 +2,7 @@
 require_once('../includes/functions.php');
 
 require_once('../includes/authcheck.php');
-require_right('badge_reprint');
+requireRight('badge_reprint');
 
 if (isset($_GET['id'])) {
   if ($_GET['field'] == "bid") {

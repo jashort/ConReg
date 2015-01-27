@@ -2,7 +2,7 @@
 require_once('../includes/functions.php');
 
 require_once('../includes/authcheck.php');
-require_right('prereg_checkin');
+requireRight('prereg_checkin');
 
 
 if (isset($_GET['id']) && isset($_GET['field'])) {
@@ -53,18 +53,21 @@ if (isset($_GET['id']) && isset($_GET['field'])) {
       <?php
         $lastOrder = -1;
         foreach ($attendees as $attendee) { 
-          if ($attendee['order_id'] == $lastOrder) {
+          if ($attendee->order_id == $lastOrder) {
             $rowClass = '';
           } else {
             $rowClass = 'spacer_row';
-            $lastOrder = $attendee['order_id'];
+            $lastOrder = $attendee->order_id;
           }
       ?>
         <tr>
-          <td class="<?php echo $rowClass ?>"><a href="/prereg_pages/prereg_checkin.php?id=<?php echo $attendee['id']; ?>"><?php echo $attendee['first_name'] . " " . $attendee['last_name']; ?></a></td>
-          <td class="<?php echo $rowClass ?>"><?php echo $attendee['badge_name']; ?></td>
-          <td class="<?php echo $rowClass ?>"><?php echo $attendee['order_id']; ?></td>
-          <td class="<?php echo $rowClass ?>"><?php echo $attendee['checked_in']; ?></td>
+          <td class="<?php echo $rowClass ?>">
+            <a href="/prereg_pages/prereg_checkin.php?id=<?php echo $attendee->id; ?>">
+              <?php echo $attendee->first_name . " " . $attendee->last_name; ?></a>
+          </td>
+          <td class="<?php echo $rowClass ?>"><?php echo $attendee->badge_name; ?></td>
+          <td class="<?php echo $rowClass ?>"><?php echo $attendee->order_id; ?></td>
+          <td class="<?php echo $rowClass ?>"><?php echo $attendee->checked_in; ?></td>
         </tr>
       <?php 
         } 

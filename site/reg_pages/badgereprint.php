@@ -2,7 +2,7 @@
 require_once('../includes/functions.php');
 
 require_once('../includes/authcheck.php');
-require_right('badge_reprint');
+requireRight('badge_reprint');
 
 include("../includes/pdf/mpdf.php");
 $mpdf=new mPDF('utf-8', array(215.9,279.4), 0, '', 0, 0, 0, 0, 0, 0, 'L');

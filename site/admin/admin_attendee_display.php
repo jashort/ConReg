@@ -3,7 +3,7 @@ require_once('../includes/functions.php');
 require_once('../includes/Attendee.php');
 
 require_once('../includes/authcheck.php');
-require_right('attendee_search');
+requireRight('attendee_search');
 
 $attendee = new Attendee();
 if (isset($_GET['id'])) {

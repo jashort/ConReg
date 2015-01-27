@@ -3,7 +3,7 @@ require_once('../includes/functions.php');
 require_once('../includes/passtypes.php');
 
 require_once('../includes/authcheck.php');
-require_right('registration_modify');
+requireRight('registration_modify');
 
 if (isset($_GET['id'])) {
   $attendee = getAttendee($_GET['id']);
@@ -169,7 +169,7 @@ function sameInfo() {
     <input name="pass_type" type="radio" id="PassType_5" onclick="setAmount(<?php echo $amount ?>)" value="Monday" <?php if ($attendee->pass_type == "Monday") echo "checked=\"checked\""; ?> />
     Monday Only - $<?php echo $amount ?></label>
   <br />
-  <?php if (has_right('registration_manual_price')) { ?>
+  <?php if (hasRight('registration_manual_price')) { ?>
     <span class="radio_button_left_margin">
       <input name="pass_type" type="radio" id="PassType_6" onclick="setAmount(<?php echo $attendee->paid_amount ?>)" value="Manual Price" <?php if ($attendee->pass_type == "Manual Price") echo "checked=\"checked\""; ?> />
       Manual Price - $<?php echo $attendee->paid_amount ?>

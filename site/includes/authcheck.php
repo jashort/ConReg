@@ -28,12 +28,13 @@ if (!(isset($_SESSION['username']))) {
  * Check if the logged in user has the given right
  *
  * Returns true if the logged in user has the given right stored in $_SESSION['rights'],
- * false otherwise. Rights are generally set in session variable at login.
+ * false otherwise. Rights are generally set in session variable at login. Note that
+ * super-admin role (access level 99) has all rights.
  *
- * @param $right
+ * @param string $right
  * @return bool
  */
-function has_right($right) {
+function hasRight($right) {
     if (array_key_exists('rights', $_SESSION) && array_key_exists($right, $_SESSION['rights'])) {
         return $_SESSION['rights'][$right];
     } elseif ($_SESSION['access'] == 99) {
@@ -48,10 +49,10 @@ function has_right($right) {
 /**
  * Abort page load if the user doesn't have the given right
  *
- * @param $right
+ * @param string $right
  */
-function require_right($right) {
-    if (!has_right($right)) {
+function requireRight($right) {
+    if (!hasRight($right)) {
         echo "Error: Permission denied.";
         die();
     }
