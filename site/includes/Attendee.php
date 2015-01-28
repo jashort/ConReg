@@ -140,3 +140,21 @@ class Attendee {
         $this->notes = $array['notes'];
     }
 }
+
+
+class Staff {
+    public $staff_id;
+    public $username;
+    private $password;
+    public $enabled;
+    public $first_name;
+    public $last_name;
+    public $initials;
+    public $phone_number;
+    public $last_badge_number;
+    public $access_level;
+    
+    public function setPassword($pass) {
+        $this->password = crypt($pass);
+    }
+}
