@@ -6,7 +6,10 @@ require_once('../includes/authcheck.php');
 requireRight('manage_staff');
 
 if (isset($_POST["create"])) {
-  staffAdd($_POST["fname"],$_POST["lname"],$_POST["username"],$_POST["initials"],$_POST["cellnumber"],$_POST["accesslevel"],$_POST["enabled"]);
+  $staff = new Staff();
+  $staff->fromArray($_POST);
+  $staff->setPassword('password');  // New user password is just "password"
+  staffAdd($staff);
   logMessage($_SESSION['username'], "Added user ". $_POST['username']);
   redirect("/index.php");
 }
@@ -64,13 +67,13 @@ function MM_validateForm() { //v4.0
 <div id="content"><!-- InstanceBeginEditable name="Content" -->
 <form action="/staff/staff_add.php" method="post">
 <fieldset id="list_table_search">
-<label>First Name : <input name="fname" id="First Name" type="text" class="input_20_150" /></label><br />
-<label>Last Name : <input name="lname" id="Last Name" type="text" class="input_20_150" /></label><br />
+<label>First Name : <input name="first_name" id="First Name" type="text" class="input_20_150" /></label><br />
+<label>Last Name : <input name="last_name" id="Last Name" type="text" class="input_20_150" /></label><br />
 <label>Initials : <input name="initials" id="Initials" type="text" class="input_20_150" /></label><br />
 <label>Username : <input name="username" id="Username" type="text" class="input_20_150" /></label><br />
-<label>Cell Phone Number : <input id="cellnumber" name="cellnumber" type="text" class="input_20_150" /></label><br />
+<label>Cell Phone Number : <input id="cellnumber" name="phone_number" type="text" class="input_20_150" /></label><br />
 <label>Access Level :
-<select name="accesslevel" class="select_25_125" id="accesslevel">
+<select name="access_level" class="select_25_125" id="accesslevel">
 <?php
   foreach (array_keys($ROLES) as $i) {
     echo "<option value='" . $i . "'>" . $ROLES[$i]['name'] . "</option>\n";

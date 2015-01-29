@@ -5,10 +5,12 @@ require_once('../includes/roles.php');
 require_once('../includes/authcheck.php');
 requireRight('manage_staff');
 
-if (isset($_GET['username'])) {
-    $staff = getStaff($_GET['username']);
+if (isset($_GET['staff_id'])) {
+    $staff = getStaff($_GET['staff_id']);
 } elseif (isset($_POST["create"])) {
-    staffUpdate($_POST["id"], $_POST["fname"], $_POST["lname"], $_POST["initials"], $_POST["cellnumber"], $_POST["accesslevel"], $_POST["enabled"]);
+    $staff = new Staff();
+    $staff->fromArray($_POST);
+    staffUpdate($staff);
     logMessage($_SESSION['username'], "Updated user ". $_POST['username']);
 
     redirect("/index.php");
@@ -50,19 +52,20 @@ jQuery(function($){
 <div id="content"><!-- InstanceBeginEditable name="Content" -->
 <fieldset id="list_table_search">
 <form name="staffupdate" action="/staff/staff_update.php" method="post">
+<input name="staff_id" type="hidden" value="<?php echo $staff->staff_id; ?>" />
+<input name="username" type="hidden" value="<?php echo $staff->username; ?>" />
 <label>
-<input name="id" type="hidden" value="<?php echo $staff['staff_id']; ?>" />
 Username : </label>
-<span class="display_text"><?php echo $staff['username']; ?></span><br /><br />
-<label>First Name : <input name="fname" type="text" class="input_20_150" value="<?php echo $staff['first_name']; ?>" /></label><br />
-<label>Last Name : <input name="lname" type="text" class="input_20_150" value="<?php echo $staff['last_name']; ?>" /></label><br />
-<label>Initials : <input name="initials" type="text" class="input_20_150" value="<?php echo $staff['initials']; ?>" /></label><br />
-<label>Cell Phone Number : <input id="cellnumber" name="cellnumber" type="text" class="input_20_150"  value="<?php echo $staff['phone_number']; ?>" /></label><br />
+<span class="display_text"><?php echo $staff->username; ?></span><br /><br />
+<label>First Name : <input name="first_name" type="text" class="input_20_150" value="<?php echo $staff->first_name; ?>" /></label><br />
+<label>Last Name : <input name="last_name" type="text" class="input_20_150" value="<?php echo $staff->last_name; ?>" /></label><br />
+<label>Initials : <input name="initials" type="text" class="input_20_150" value="<?php echo $staff->initials; ?>" /></label><br />
+<label>Cell Phone Number : <input id="cellnumber" name="phone_number" type="text" class="input_20_150"  value="<?php echo $staff->phone_number; ?>" /></label><br />
 <label>Access Level :
-<select name="accesslevel" class="select_25_125" id="accesslevel">
+<select name="access_level" class="select_25_125" id="accesslevel">
 <?php
     foreach (array_keys($ROLES) as $i) {
-        if ($i == $staff['access_level']){
+        if ($i == $staff->access_level){
             $selected = 'selected';
         } else {
             $selected = '';
@@ -72,13 +75,13 @@ Username : </label>
 ?>
 </select><br />
 <label>Enabled : <select name="enabled" class="select_25_75">
-<option value="1" <?php if ($staff['enabled']=="1"){echo 'selected';}?>>Yes</option>
-<option value="0" <?php if ($staff['enabled']=="0"){echo 'selected';}?>>No</option>
+<option value="1" <?php if ($staff->enabled=="1"){echo 'selected';}?>>Yes</option>
+<option value="0" <?php if ($staff->enabled=="0"){echo 'selected';}?>>No</option>
 </select></label><br />
 <input name="create" type="submit" class="submit_button" value="Update" />
 </form>
 <form name="password" action="/staff/staff_update.php" method="post">
-<input name="username" type="hidden" value="<?php echo $staff['username']; ?>" />
+<input name="username" type="hidden" value="<?php echo $staff->username; ?>" />
 <input name="password" type="hidden" value="password" />
 <input name="passwordReset" type="submit" class="submit_button" value="Password Reset" /><br />
 </form>

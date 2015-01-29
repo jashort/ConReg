@@ -26,8 +26,8 @@ $staffList = staffList();
     </tr>
   <?php while ($staff = $staffList->fetch()) { ?>
     <tr>
-      <td><?php echo $staff["first_name"] ?> <?php echo $staff["last_name"] ?></td>
-      <td><?php echo $staff["phone_number"] ?></td>
+      <td><?php echo $staff->first_name ?> <?php echo $staff->last_name ?></td>
+      <td><?php echo $staff->phone_number ?></td>
     </tr>
   <?php } ?>
 

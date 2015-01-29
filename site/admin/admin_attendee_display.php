@@ -1,6 +1,6 @@
 <?php
 require_once('../includes/functions.php');
-require_once('../includes/Attendee.php');
+require_once('../includes/classes.php');
 
 require_once('../includes/authcheck.php');
 requireRight('attendee_search');

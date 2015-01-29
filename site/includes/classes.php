@@ -145,7 +145,7 @@ class Attendee {
 class Staff {
     public $staff_id;
     public $username;
-    private $password;
+    public $password;
     public $enabled;
     public $first_name;
     public $last_name;
@@ -156,5 +156,21 @@ class Staff {
     
     public function setPassword($pass) {
         $this->password = crypt($pass);
+    }
+
+    public function fromArray($array) {
+        if (isset($array['staff_id'])) {
+            $this->staff_id = $array['staff_id'];
+        }
+        if (isset($array['password'])) {
+            $this->setPassword($array['password']);
+        }
+        $this->username = $array['username'];
+        $this->enabled = $array['enabled'];
+        $this->first_name = $array['first_name'];
+        $this->last_name = $array['last_name'];
+        $this->initials = $array['initials'];
+        $this->phone_number = $array['phone_number'];
+        $this->access_level = $array['access_level'];
     }
 }

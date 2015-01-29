@@ -1,5 +1,5 @@
 <?php
-require_once 'Attendee.php';
+require_once 'classes.php';
 
 if (!isset($_SESSION)) {
 	session_start();
@@ -436,55 +436,50 @@ function preRegSearch($name, $field) {
 /**
  * Insert the given staff member in to the database
  * 
- * @param string $firstName 
- * @param string $lastName
- * @param string $username
- * @param string $initials
- * @param string $phoneNumber
- * @param int $accessLevel Level (from roles.php)
- * @param int $enabled (1 or 0)
+ * @param Staff $staff 
  */
-function staffAdd($firstName, $lastName, $username, $initials, $phoneNumber, $accessLevel, $enabled) {
+function staffAdd($staff) {
 	global $conn;
 
-	$password = crypt("password");
-
-	$stmt = $conn->prepare("INSERT INTO reg_staff 
-							(first_name, last_name, username, initials, password, phone_number, access_level, enabled) 
-							VALUES 
+	try {
+		$stmt = $conn->prepare("INSERT INTO reg_staff
+							(first_name, last_name, username, initials, password, phone_number, access_level, enabled)
+							VALUES
 							(:fname, :lname, :uname, :initials, :password, :cell, :access, :enabled)");
-	$stmt->execute(array('fname' => $firstName,
-		'lname' => $lastName,
-		'uname' => $username,
-		'initials' => $initials,
-		'password' => $password,
-		'cell' => $phoneNumber,
-		'access' => $accessLevel,
-		'enabled' => $enabled));
+		$stmt->execute(array('fname' => $staff->first_name,
+			'lname' => $staff->last_name,
+			'uname' => $staff->username,
+			'initials' => $staff->initials,
+			'password' => $staff->password,
+			'cell' => $staff->phone_number,
+			'access' => $staff->access_level,
+			'enabled' => $staff->enabled));
+	} catch(PDOException $e) {
+		die('ERROR: ' . $e->getMessage());
+	}
 }
 
 /**
  * Update the given staff member in the database
  * 
- * @param int $id int
- * @param string $firstName
- * @param string $lastName
- * @param string $initials
- * @param string $phoneNumber
- * @param int $accessLevel Level (from roles.php)
- * @param int $enabled (1 or 0) */
-function staffUpdate($id, $firstName, $lastName, $initials, $phoneNumber, $accessLevel, $enabled) {
+ * @param Staff $staff
+ */
+function staffUpdate($staff) {
 	global $conn;
 
-	$stmt = $conn->prepare("UPDATE reg_staff SET first_name = :fname, last_name = :lname, initials = :initials, 
-							phone_number = :cell, access_level=:access, enabled=:enabled WHERE staff_id=:id");
-	$stmt->execute(array('fname' => $firstName,
-		'lname' => $lastName,
-		'initials' => $initials,
-		'cell' => $phoneNumber,
-		'access' => $accessLevel,
-		'enabled' => $enabled,
-		'id' => $id));
+	try {
+		$stmt = $conn->prepare("UPDATE reg_staff SET first_name = :fname, last_name = :lname, initials = :initials,
+								phone_number = :cell, access_level=:access, enabled=:enabled WHERE staff_id=:id");
+		$stmt->execute(array('fname' => $staff->first_name,
+			'lname' => $staff->last_name,
+			'initials' => $staff->initials,
+			'cell' => $staff->phone_number,
+			'access' => $staff->access_level,
+			'enabled' => $staff->enabled,
+			'id' => $staff->staff_id));
+	} catch(PDOException $e) {
+		die('ERROR: ' . $e->getMessage());
+	}
 }
 
 /**
@@ -497,7 +492,7 @@ function staffList(){
 
 	$stmt = $conn->prepare("SELECT * FROM reg_staff ORDER BY first_name ASC");
 	$stmt->execute();
-	$stmt->setFetchMode(PDO::FETCH_ASSOC);
+	$stmt->setFetchMode(PDO::FETCH_CLASS, "Staff");
 	return $stmt;
 }
 
@@ -505,15 +500,15 @@ function staffList(){
 /**
  * Get staff record from database
  * 
- * @param string $username
- * @return Array
+ * @param int $id Staff ID number
+ * @return Staff
  */
-function getStaff($username) {
+function getStaff($id) {
 	global $conn;
 
-	$stmt = $conn->prepare("SELECT * FROM reg_staff WHERE username = :user LIMIT 1");
-	$stmt->execute(array('user'=>$username));
-	$stmt->setFetchMode(PDO::FETCH_ASSOC);
+	$stmt = $conn->prepare("SELECT * FROM reg_staff WHERE staff_id = :id LIMIT 1");
+	$stmt->execute(array('id'=>$id));
+	$stmt->setFetchMode(PDO::FETCH_CLASS, "Staff");
 	return $stmt->fetch();
 }
 

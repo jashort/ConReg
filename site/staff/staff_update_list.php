@@ -32,11 +32,11 @@ function MM_goToURL() { //v3.0
   <form action="/staff/staff_update.php" method="get" target="_self">
     <fieldset id="list_table_search">
       <label>Staff Username :
-      <select name="username" id="username"  class="select_25_150" >
+      <select name="staff_id" id="staff_id"  class="select_25_150" >
         <?php while ($staff = $staffList->fetch()) { ?>
-          <option value="<?php echo $staff["username"] ?>">
-            <?php echo $staff["first_name"] ?> <?php echo $staff["last_name"] ?>
-            (<?php echo $staff["username"] ?>)</option>
+          <option value="<?php echo $staff->staff_id ?>">
+            <?php echo $staff->first_name ?> <?php echo $staff->last_name ?>
+            (<?php echo $staff->username ?>)</option>
         <?php } ?>
       </select></label>
       <input name="Submit" type="submit" class="submit_button" value="Go" />
