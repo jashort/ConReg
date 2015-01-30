@@ -28,12 +28,6 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Paid")) {
     <title>Complete Order</title>
     <!-- InstanceEndEditable -->
     <link href="../assets/css/kumoreg.css" rel="stylesheet" type="text/css" />
-    <script type="text/javascript">
-        function MM_goToURL() { //v3.0
-            var i, args=MM_goToURL.arguments; document.MM_returnValue = false;
-            for (i=0; i<(args.length-1); i+=2) eval(args[i]+".location='"+args[i+1]+"'");
-        }
-    </script>
     <script src="/assets/javascript/jquery-1.8.0.js" type="text/javascript"></script>
     <script src="/assets/javascript/jquery.maskedinput-1.3.min.js" type="text/javascript"></script>
     <!-- InstanceBeginEditable name="head" -->
@@ -58,28 +52,6 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Paid")) {
                 } if (errors) alert('The following error(s) occurred:\n'+errors);
                 document.MM_returnValue = (errors == '');
             } }
-        function verifyEmail(){
-            var status = false;
-            if (document.reg_add1.EMail.value != document.reg_add1.EMailV.value) {
-                alert("Email addresses do not match.  Please retype them to make sure they are the same.");
-            }}
-        function MM_goToURL() { //v3.0
-            var i, args=MM_goToURL.arguments; document.MM_returnValue = false;
-            for (i=0; i<(args.length-1); i+=2) eval(args[i]+".location='"+args[i+1]+"'");
-        }
-        function MM_openBrWindow(theURL,winName,features) { //v2.0
-            window.open(theURL,winName,features);
-        }
-        function clearverify() {
-            var answer=confirm("Are you sure you want to clear?");
-            if (answer==true)
-            {
-                MM_goToURL('parent','../includes/functions.php?action=clear');return document.MM_returnValue;
-            }
-            else
-            {
-            }
-        }
 
         function creditAuth() {
             do {

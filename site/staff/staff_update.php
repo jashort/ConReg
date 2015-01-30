@@ -29,12 +29,6 @@ if (isset($_GET['staff_id'])) {
 <title>Kumoricon Registration</title>
 <!-- InstanceEndEditable -->
 <link href="../assets/css/kumoreg.css" rel="stylesheet" type="text/css" /> 
-<script type="text/javascript">
-function MM_goToURL() { //v3.0
-  var i, args=MM_goToURL.arguments; document.MM_returnValue = false;
-  for (i=0; i<(args.length-1); i+=2) eval(args[i]+".location='"+args[i+1]+"'");
-}
-</script>
 <!-- InstanceBeginEditable name="head" -->
 <script src="/assets/javascript/jquery-1.8.0.js" type="text/javascript"></script>
 <script src="/assets/javascript/jquery.maskedinput-1.3.min.js" type="text/javascript"></script>
