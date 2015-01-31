@@ -5,19 +5,17 @@ DROP TABLE IF EXISTS reg_staff, orders, attendees, history;
 
 CREATE TABLE reg_staff
 (
-    staff_id        INT(10) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    staff_id        INT(10) PRIMARY KEY UNIQUE NOT NULL AUTO_INCREMENT,
     username        VARCHAR(60) NOT NULL,
     password        CHAR(98) NOT NULL,
     enabled         BOOLEAN DEFAULT TRUE NOT NULL,
     first_name      VARCHAR(60) NOT NULL,
     last_name       VARCHAR(60) NOT NULL,
-    initials        CHAR(3) NOT NULL,
+    initials        CHAR(3) UNIQUE NOT NULL,
     phone_number    VARCHAR(60),
     last_badge_number MEDIUMINT(5) UNSIGNED ZEROFILL DEFAULT 0 NOT NULL COMMENT 'Last badge number created by this user',
     access_level    INT DEFAULT 1 NOT NULL
 );
-ALTER TABLE reg_staff ADD CONSTRAINT unique_id UNIQUE (staff_id);
-ALTER TABLE reg_staff ADD CONSTRAINT unique_initials UNIQUE (initials);
 
 
 CREATE TABLE orders
@@ -34,7 +32,7 @@ CREATE TABLE attendees
 (
     id              INT(10) PRIMARY KEY NOT NULL AUTO_INCREMENT,
     first_name      VARCHAR(60) NOT NULL,
-    last_name       VARCHAR(60) NOT NULL,
+    last_name       VARCHAR(60) NOT NULL, 
     badge_name      VARCHAR(120) COMMENT 'Badge Name',
     badge_number    VARCHAR(10) UNIQUE NOT NULL,
     zip             VARCHAR(10),
@@ -52,13 +50,14 @@ CREATE TABLE attendees
     paid_amount     DECIMAL(5, 2) NOT NULL,
     pass_type       VARCHAR(50),
     reg_type        VARCHAR(50) COMMENT 'Values: Reg or PreReg',
-    order_id        INT,
+    order_id        INT REFERENCES orders(order_id),
     checked_in      CHAR(3) NOT NULL COMMENT 'Values: yes or no',
     notes           TEXT,
     added_by        VARCHAR(80),
-    created         TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP
+    created         TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    INDEX last_name_index (last_name),
+    INDEX order_id_index (order_id)
 );
-ALTER TABLE attendees ADD FOREIGN KEY (order_id) REFERENCES orders (order_id);
 
 
 CREATE TABLE history
