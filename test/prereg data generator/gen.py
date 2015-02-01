@@ -8,6 +8,17 @@ import datetime
 import random
 
 
+def generate_order_number():
+    """
+    Generate a random order number (32 characters, a-z 0-9)
+    :rtype : string
+    """
+    output = []
+    for i in range(32):
+        output.append(random.choice('abcdefghijklmnopqrstuvwxyz0123456789'))
+    return ''.join(output)
+
+
 def get_badge_name():
     n = internet.user_name()[0:15]
     n = n.replace('-', ' ')
@@ -18,10 +29,10 @@ def get_badge_name():
 fields = ['First Name', 'Last Name', 'Badge Name', 'Badge Number', 'Zipcode', 'Country',
           'Phone Number', 'Email Address', 'Birthdate', 'Emergency Contact Name',
           'Emergency Contact Phone', 'Parent is Emergency Contact', 'Parent Name', 'Parent Phone',
-          'Paid', 'Amount', 'Pass Type', 'Order ID']
+          'Paid', 'Amount', 'Pass Type', 'Order ID', 'Notes']
 
 print('\t'.join(fields))
-order_id = 1
+order_id = generate_order_number()
 
 for i in range(1, 10001):
     b_year = random.randint(1940, 2014)
@@ -63,14 +74,14 @@ for i in range(1, 10001):
     else:
         data.append("0")      # Children are free
 
-    if random.randint(1, 1000) < 2: # Random chance of VIP membership
+    if random.randint(1, 1000) < 2:  # Random chance of VIP membership
         data.append('VIP')
         data[15] = "300"
     else:
         data.append('Weekend')
-    data.append(str(order_id))
-
+    data.append(order_id)
+    data.append(' ')            # Notes
     print('\t'.join(data))
 
     if random.randint(1, 100) < 80:
-        order_id += 1
+        order_id = generate_order_number()

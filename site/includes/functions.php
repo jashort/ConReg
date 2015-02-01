@@ -223,6 +223,22 @@ function getAttendee($id) {
 
 
 /**
+ * Generates a random 32 character string containing a-z, 0-9
+ *
+ * @return string
+ */
+function generateOrderId() {
+	$id = "";
+	$characters = "abcdefghijklmnopqrstuvwxyz0123456789";
+	for ($i = 0; $i < 32; $i++) {
+		$x = mt_rand(0, 35);
+		$id .= $characters[$x];
+	}
+	return $id;
+}
+
+
+/**
  * Add one or more attendees to the database and create an order record for them
  *
  * @param Array $attendees Array containing Attendee objects
@@ -233,9 +249,9 @@ function regAddOrder($attendees) {
 
 	try {
 		$conn->beginTransaction();
-		$stmt = $conn->prepare("INSERT INTO orders (paid) VALUES (:paid)");
-		$stmt->execute(array('paid' => 'no'));
-		$orderId = $conn->lastInsertId();
+		$orderId = generateOrderId();
+		$stmt = $conn->prepare("INSERT INTO orders (order_id, paid) VALUES (:id, :paid)");
+		$stmt->execute(array('id' => $orderId, 'paid' => 'no'));
 		$stmt = $conn->prepare("INSERT INTO attendees (first_name, last_name, badge_number, phone, email, zip, birthdate, ec_fullname, ec_phone, ec_same, parent_fullname, parent_phone, parent_form, paid, paid_amount, pass_type, reg_type, order_id, checked_in, notes, added_by) VALUES (:firstname, :lastname, :bnumber, :phone, :email, :zip, :bdate, :ecname, :ecphone, :same, :pcname, :pcphone, :pform, :paid, :amount, :passtype, :regtype, :orderId, :checked, :notes, :addedBy)");
 		foreach ($attendees as $attendee) {
 			$stmt->execute(array('firstname' => $attendee->first_name,
@@ -630,8 +646,8 @@ function importPreRegCsvFile(&$handle, $staffId) {
 				continue;
 			}
 			// Skip empty lines and lines where the first field starts with "#"
-			if (count($data) != 18) {
-				die("Error: Line " . $count . " does not have 18 columns.");
+			if (count($data) != 19) {
+				die("Error: Line " . $count . " does not have 19 columns.");
 
 			}
 			if (count($data) > 1 && substr($data[0], 0, 1) != '#') {
@@ -648,10 +664,10 @@ function importPreRegCsvFile(&$handle, $staffId) {
 				$attendeeStmt = $conn->prepare("
 							INSERT INTO attendees (first_name, last_name, badge_number, badge_name, zip, country,
 						   phone, email, birthdate, ec_fullname, ec_phone, ec_same, parent_fullname, parent_phone,
-						   parent_form, paid, paid_amount, pass_type, reg_type, checked_in, added_by, order_id) VALUES
+						   parent_form, paid, paid_amount, pass_type, reg_type, checked_in, added_by, order_id, notes) VALUES
 						   (:firstname, :lastname, :bnumber, :bname, :zip, :country,
 						   :phone, :email, :bdate, :ecname, :ecphone, :same, :pcname, :pcphone,
-						   :parentform, :paid, :amount, :passtype, :regtype, :checkedin, :staffAdd, :orderid)");
+						   :parentform, :paid, :amount, :passtype, :regtype, :checkedin, :staffAdd, :orderid, :notes)");
 
 				// Create order if it doesn't exist. If it does, increment the total amount
 				$orderStmt->execute(array('orderid' => $data[17],
@@ -680,7 +696,8 @@ function importPreRegCsvFile(&$handle, $staffId) {
 					'regtype' => 'PreReg',
 					'checkedin' => 'No',
 					'staffAdd' => 'ONLINE',
-					'orderid' => $data[17]));
+					'orderid' => $data[17],
+					'notes' => $data[18]));
 				$BNumber++;
 				$count += 1;
 			}

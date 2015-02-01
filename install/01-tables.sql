@@ -20,7 +20,7 @@ CREATE TABLE reg_staff
 
 CREATE TABLE orders
 (
-    order_id        INT PRIMARY KEY NOT NULL UNIQUE AUTO_INCREMENT,
+    order_id        CHAR(32) PRIMARY KEY NOT NULL UNIQUE DEFAULT,
     total_amount    DECIMAL(10,0) NOT NULL,
     paid            CHAR(3) NOT NULL COMMENT 'yes or no',
     paytype         VARCHAR(60) NOT NULL,
@@ -50,7 +50,7 @@ CREATE TABLE attendees
     paid_amount     DECIMAL(5, 2) NOT NULL,
     pass_type       VARCHAR(50),
     reg_type        VARCHAR(50) COMMENT 'Values: Reg or PreReg',
-    order_id        INT REFERENCES orders(order_id),
+    order_id        CHAR(32) REFERENCES orders(order_id),
     checked_in      CHAR(3) NOT NULL COMMENT 'Values: yes or no',
     notes           TEXT,
     added_by        VARCHAR(80),
