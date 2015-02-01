@@ -32,12 +32,12 @@ roles numerically lower on the list. (Permission names are in parenthesis)
     + Can search for attendees and view limited information (attendee_search)
   
 - 99: Super Admin
-    + All rights granted by override in the has_right() function.
+    + All rights granted by override in the hasRight() function.
     + Can view revenue in reports (report_view_revenue)
     
     
-Permissions are set on each page, with either the has_right() function (to test if the logged in 
-user has the given right) or the require_right() functions (abort page load if the given right
+Permissions are set on each page, with either the hasRight() function (to test if the logged in
+user has the given right) or the requireRight() functions (abort page load if the given right
 isn't present).
 
     
