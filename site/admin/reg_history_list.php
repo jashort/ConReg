@@ -25,13 +25,15 @@ $history = historyList(50);
 <table id="list_table">
   <tr>
     <th>Time</th>
-    <th>Agent</th>
+    <th>Username</th>
+    <th>Type</th>
     <th>Description</th>
   </tr>
   <?php while ($item = $history->fetch()) { ?>
     <tr>
       <td><?php echo $item["changed_at"] ?></td>
       <td><?php echo $item["username"] ?></td>
+      <td><?php echo $item["type"] ?></td>
       <td><?php echo $item["description"] ?></td>
     </tr>
   <?php } ?>

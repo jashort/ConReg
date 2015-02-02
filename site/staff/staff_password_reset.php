@@ -5,7 +5,7 @@ require_once('../includes/authcheck.php');
 
 if (isset($_POST["Reset"])) {
     passwordReset($_POST["username"],$_POST["password"]);
-    logMessage($_POST['username'], "Changed password");
+    logMessage($_POST['username'], 90, "Changed password");
 
     redirect("/index.php");
 }

@@ -11,7 +11,9 @@ if (isset($_GET['id'])) {
   $attendee = new Attendee();
   $attendee->fromArray($_POST);
   regUpdate($attendee);
-  logMessage($_SESSION['username'], "Modified attendee ID " . $attendee->id);
+  logMessage($_SESSION['username'], 60, "Modified attendee " .
+      $attendee->first_name . ' ' . $attendee->last_name . "(ID " . $attendee->id . ")");
+
   redirect("/index.php");
 }
 ?>

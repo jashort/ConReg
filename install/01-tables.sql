@@ -20,8 +20,8 @@ CREATE TABLE reg_staff
 
 CREATE TABLE orders
 (
-    order_id        CHAR(32) PRIMARY KEY NOT NULL UNIQUE DEFAULT,
-    total_amount    DECIMAL(10,0) NOT NULL,
+    order_id        CHAR(32) PRIMARY KEY NOT NULL UNIQUE,
+    total_amount    DECIMAL(10, 0) NOT NULL,
     paid            CHAR(3) NOT NULL COMMENT 'yes or no',
     paytype         VARCHAR(60) NOT NULL,
     notes           TEXT
@@ -64,7 +64,31 @@ CREATE TABLE history
 (
     id              INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     changed_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    type_id         SMALLINT UNSIGNED NOT NULL REFERENCES history_types(id),
     username        VARCHAR(60) NOT NULL,
-    description     TEXT NOT NULL
+    description     TEXT NOT NULL,
+    INDEX type_index (type_id),
+    INDEX username_index (username)
 );
 
+CREATE TABLE history_types
+(
+    id              SMALLINT UNSIGNED PRIMARY KEY NOT NULL,
+    type            VARCHAR(60)
+);
+
+INSERT INTO history_types (id, type)
+    VALUES
+        (0, 'Login'),
+        (10, 'Logout'),
+        (20, 'PreReg CheckIn'),
+        (30, 'AtCon CheckIn'),
+        (40, 'Badge Print'),
+        (50, 'Badge RePrint'),
+        (60, 'Attendee Update'),
+        (70, 'Added User'),
+        (80, 'Changed User'),
+        (90, 'Set Own Password'),
+        (100, 'Reset Password'),
+        (110, 'Imported PreReg Data'),
+        (120, 'Added Order');

@@ -16,7 +16,7 @@ if (isset($_POST["Update"])) {
   // Make sure information was verified
   if (isset($_POST["checkin"]) && $_POST["checkin"] == true) {
     regCheckIn($_POST["id"]);
-    logMessage($_SESSION['username'], "PreReg checkin attendee ID ". $_POST['id']);
+    logMessage($_SESSION['username'], 20, "PreReg checkin attendee ID ". $_POST['id']);
 
     if (isset($_POST["Minor"]) && $_POST["Minor"] == true && $_POST["PCFormVer"] == "on") {
       regCheckInParentFormReceived($_POST["id"]);

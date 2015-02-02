@@ -6,7 +6,7 @@ $logoutGoTo = "/login.php";
 if (!isset($_SESSION)) {
   session_start();
 }
-logMessage($_SESSION['username'], "Logged Out");
+logMessage($_SESSION['username'], 10, "Logged Out");
 
 $_SESSION['username'] = NULL;
 $_SESSION['access'] = NULL;

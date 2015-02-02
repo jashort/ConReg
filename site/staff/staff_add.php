@@ -10,7 +10,7 @@ if (isset($_POST["create"])) {
   $staff->fromArray($_POST);
   $staff->setPassword('password');  // New user password is just "password"
   staffAdd($staff);
-  logMessage($_SESSION['username'], "Added user ". $_POST['username']);
+  logMessage($_SESSION['username'], 70, "Added user ". $_POST['username']);
   redirect("/index.php");
 }
 ?>

@@ -11,12 +11,12 @@ if (isset($_GET['staff_id'])) {
     $staff = new Staff();
     $staff->fromArray($_POST);
     staffUpdate($staff);
-    logMessage($_SESSION['username'], "Updated user ". $_POST['username']);
+    logMessage($_SESSION['username'], 80, "Updated user ". $_POST['username']);
 
     redirect("/index.php");
 } elseif (isset($_POST["passwordReset"])) {
     passwordReset($_POST["username"],$_POST["password"]);
-    logMessage($_SESSION['username'], "Reset password for ". $_POST['username']);
+    logMessage($_SESSION['username'], 100, "Reset password for ". $_POST['username']);
     redirect("/index.php");
     die();
 }

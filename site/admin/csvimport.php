@@ -10,7 +10,7 @@ if ($_FILES && $_FILES['csv']['size'] > 0) {
 	$handle = fopen($file, "r");
 	$count = importPreRegCsvFile($handle, $_SESSION['staffid']);
 
-	logMessage($_SESSION['username'], "Imported  ". $count . " prereg attendees from CSV");
+	logMessage($_SESSION['username'], 110, "Imported  ". $count . " prereg attendees from CSV");
 
 	//redirect
 	header('Location: csvimport.php?complete=1&count=' . $count);

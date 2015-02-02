@@ -84,7 +84,7 @@ function validateUser($username, $password) {
 			if ($results["password"] == crypt("password", $results["password"])) {
 				redirect("/staff/staff_password_reset.php?username=" . $_SESSION['username']);
 			} else {
-				logMessage($username, 'Logged in');
+				logMessage($username, 0, 'Logged in');
 				if (isset($_SESSION['PrevUrl'])) {
 					redirect($_SESSION['PrevUrl']);
 				} else {
@@ -101,14 +101,15 @@ function validateUser($username, $password) {
  * Write a message to history
  *
  * @param string $user Current username
+ * @param int $typeId Action type ID (from history_types table)
  * @param string $message Message to log
  */
-function logMessage($user, $message) {
+function logMessage($user, $typeId, $message) {
 	global $conn;
 
 	try {
-		$stmt = $conn->prepare("INSERT INTO history (username, description) VALUES (:username, :message)");
-		$stmt->execute(array('username' => $user, 'message' => $message));
+		$stmt = $conn->prepare("INSERT INTO history (username, type_id, description) VALUES (:username, :type, :message)");
+		$stmt->execute(array('username' => $user, 'type' => $typeId, 'message' => $message));
 	} catch(PDOExecption $e) {
 		die('ERROR: ' . $e->getMessage());
 	}
@@ -183,7 +184,7 @@ function orderUpdate($id, $amount, $payType, $paid) {
 function orderListAttendees($orderId) {
 	global $conn;
 
-	$stmt = $conn->prepare("SELECT first_name, last_name, pass_type, paid_amount FROM attendees WHERE order_id = :orderid");
+	$stmt = $conn->prepare("SELECT * FROM attendees WHERE order_id = :orderid");
 	$stmt->execute(array('orderid' => $orderId));
 	$stmt->setFetchMode(PDO::FETCH_CLASS, "Attendee");
 	return $stmt;
@@ -536,7 +537,9 @@ function getStaff($id) {
 function historyList($number=50){
 	global $conn;
 
-	$stmt = $conn->prepare("SELECT * FROM history ORDER BY changed_at DESC LIMIT :number");
+	$stmt = $conn->prepare("SELECT history.changed_at, history_types.type,  history.username, history.description
+							FROM history, history_types
+							WHERE history.type_id = history_types.id ORDER BY history.id DESC LIMIT :number");
 	$stmt->bindValue('number', (int)$number, PDO::PARAM_INT);
 	$stmt->execute();
 	$stmt->setFetchMode(PDO::FETCH_ASSOC);

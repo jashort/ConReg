@@ -24,7 +24,8 @@ if ($attendee->checked_in != "Yes") {
 	die("Error: attendee hasn't checked in yet.");
 }
 
-logMessage($_SESSION['username'], "Reprinted badge for attendee ". $_POST['print']);
+logMessage($_SESSION['username'], 50, "Reprinted badge for " .
+	$attendee->first_name . ' ' . $attendee->last_name . " (ID " . $attendee->id . ")");
 
 
 ?>

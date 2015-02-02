@@ -76,7 +76,8 @@ ob_start();
 <body>
 <?php
     while ($attendee = $attendees->fetch(PDO::FETCH_CLASS)) {
-		logMessage($_SESSION['username'], "Printed badge for attendee ID ". $attendee->id);
+		logMessage($_SESSION['username'], 40, "Printed badge for " . 
+			$attendee->first_name . ' ' . $attendee->last_name . " (ID " . $attendee->id . ")");
 
 		$age = $attendee->getAge();
 		if ($age >= 18) {
