@@ -26,7 +26,7 @@ $history = historyList(50);
   <tr>
     <th>Time</th>
     <th>Username</th>
-    <th>Type</th>
+    <th>Action</th>
     <th>Description</th>
   </tr>
   <?php while ($item = $history->fetch()) { ?>
