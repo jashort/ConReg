@@ -7,40 +7,64 @@ requireRight('super-admin');
 $history = historyList(50);
 
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/main.dwt.php" codeOutsideHTMLIsLocked="false" -->
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<!-- InstanceBeginEditable name="doctitle" -->
-<title>Kumoricon Registration Change History</title>
-<!-- InstanceEndEditable -->
-<link href="../assets/css/kumoreg.css" rel="stylesheet" type="text/css" /> 
-<!-- InstanceBeginEditable name="head" -->
-<!-- InstanceEndEditable -->
-</head>
-<body>
-<div id="header"></div>
-<?php require "../includes/leftmenu.php" ?>
-<div id="content"><!-- InstanceBeginEditable name="Content" -->
-<table id="list_table">
-  <tr>
-    <th>Time</th>
-    <th>Username</th>
-    <th>Type</th>
-    <th>Description</th>
-  </tr>
-  <?php while ($item = $history->fetch()) { ?>
-    <tr>
-      <td><?php echo $item["changed_at"] ?></td>
-      <td><?php echo $item["username"] ?></td>
-      <td><?php echo $item["type"] ?></td>
-      <td><?php echo $item["description"] ?></td>
-    </tr>
-  <?php } ?>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="favicon.ico">
 
-</table>
-<!-- InstanceEndEditable --></div>
-<div id="footer">&copy; Tim Zuidema</div> 
-<!-- InstanceBeginEditable name="Javascript" --><!-- InstanceEndEditable -->
+  <title>History</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="../assets/css/navbar-fixed-top.css" rel="stylesheet">
+
+
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+  <script src="../assets/dist/js/html5shiv-3.7.2.min.js"></script>
+  <script src="../assets/dist/js/respond-1.4.2.min.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+
+<?php require '../includes/template/navigationBar.php'; ?>
+
+<div class="container">
+
+  <!-- Main component for a primary marketing message or call to action -->
+  <div class="jumbotron">
+    <h2>History</h2>
+    <table id="list_table" class="table report">
+      <tr>
+        <th>Time</th>
+        <th>Username</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+      <?php while ($item = $history->fetch()) { ?>
+        <tr>
+          <td><?php echo $item["changed_at"] ?></td>
+          <td><?php echo $item["username"] ?></td>
+          <td><?php echo $item["type"] ?></td>
+          <td><?php echo $item["description"] ?></td>
+        </tr>
+      <?php } ?>
+      </table>
+
+  </div>
+
+  <?php require '../includes/template/footer.php' ?>
+
+</div> <!-- /container -->
+
+
+<?php require '../includes/template/scripts.php' ?>
+
 </body>
-<!-- InstanceEnd --></html>
+</html>

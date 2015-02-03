@@ -10,36 +10,68 @@ if (isset($_POST["Reset"])) {
     redirect("/index.php");
 }
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Reset Password</title>
-<link href="/assets/css/kumoreg.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript">
-function verifyPassword(){
-document.status = true;     
-if ((document.passchange.password.value != document.passchange.password2.value) || (document.passchange.password.value == "")) {
-alert("The password fields do not match or are blank.  Please retype them to make sure they are the same.");
-document.status = false; 
-}}
-</script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="favicon.ico">
+
+    <title>Reset Password</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../assets/css/navbar-fixed-top.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="../assets/dist/js/html5shiv-3.7.2.min.js"></script>
+    <script src="../assets/dist/js/respond-1.4.2.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+        function verifyPassword(){
+            document.status = true;
+            if ((document.passchange.password.value != document.passchange.password2.value) || (document.passchange.password.value == "")) {
+                alert("The password fields do not match or are blank.  Please retype them to make sure they are the same.");
+                document.status = false;
+            }}
+    </script>
 </head>
+
 <body>
-<div id="header"></div>
-<div id="subheader">
-<div id="subheader_left"><marquee></marquee></div>
-<!--<div id="subheader_right"><input name="adamalert" type="button" class="adamalert_button" value="ADAM ALERT" /><input name="adminalert" type="button" class="adminalert_button" value="ADMIN ALERT" />--></div>
-<div id="content_login">
-<form action="staff_password_reset.php" id="passchange" name="passchange" method="post">
-<fieldset id="list_table_search">
-<input name="username" type="hidden" value="<?php if(array_key_exists('username', $_GET)) { echo $_GET["username"]; } ?>" />
-<label>New Password : <input id="password" name="password" type="password" class="input_20_150" /></label><br />
-<label>Verify Password : <input id="password2" name="password2" type="password" class="input_20_150" /></label><br />
-<input name="Reset" type="submit" class="submit_button" value="Change"  onclick="verifyPassword();return document.status" />
-</fieldset>
-</form>
-</div>
-<div id="footer">&copy; DEFINITIVE LLC</div>
+
+<?php require '../includes/template/navigationBar.php'; ?>
+
+<div class="container">
+
+    <!-- Main component for a primary marketing message or call to action -->
+    <div class="jumbotron">
+        <h2>Reset Password</h2>
+
+        <form action="staff_password_reset.php" id="passchange" name="passchange" method="post" class="form">
+            <fieldset id="list_table_search">
+                <input name="username" type="hidden" value="<?php if(array_key_exists('username', $_GET)) { echo $_GET["username"]; } ?>" />
+                <label for="password" class="control-label">New Password</label>
+                <input id="password" name="password" type="password" class="form-control" required autocomplete="off" autofocus />
+                <br />
+                <label for="password2" class="control-label">Verify Password</label>
+                <input id="password2" name="password2" type="password" class="form-control" required autocomplete="off" autofocus />
+                <br />
+                <input name="Reset" type="submit" class="btn btn-primary" value="Change"  onclick="verifyPassword();return document.status" />
+            </fieldset>
+        </form>
+
+
+    </div>
+
+    <?php require '../includes/template/footer.php' ?>
+
+</div> <!-- /container -->
+
+<?php require '../includes/template/scripts.php' ?>
+
 </body>
 </html>

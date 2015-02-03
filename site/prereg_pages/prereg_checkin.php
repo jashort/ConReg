@@ -41,122 +41,141 @@ if (isset($_GET['id'])) {
 }
 
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/main.dwt.php" codeOutsideHTMLIsLocked="false" -->
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<!-- InstanceBeginEditable name="doctitle" -->
-<title>Kumoricon Registration</title>
-<!-- InstanceEndEditable -->
-<link href="../assets/css/kumoreg.css" rel="stylesheet" type="text/css" /> 
-<!-- InstanceBeginEditable name="head" -->
-<!-- InstanceEndEditable -->
-</head>
-<body>
-<div id="header"></div>
-<?php require "../includes/leftmenu.php" ?>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="favicon.ico">
 
-<div id="content"><!-- InstanceBeginEditable name="Content" -->
-  <? if (isset($_POST["checkin"]) && $_POST["checkin"] == true) { ?>
-    <br><br>
-    <form action="/reg_pages/badgeprint.php" method="post" target="_blank">
-      <input type="hidden" name="print" value="<?php echo $_POST['id'] ?>" />
-      <div class='centerbutton'>
-        <input name='printbutton' type='submit' value='Print Badge' class='submit_button' />
-      </div>
-    </form>
+  <title>Pre-Reg Checkin</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="../assets/css/navbar-fixed-top.css" rel="stylesheet">
+
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+  <script src="../assets/dist/js/html5shiv-3.7.2.min.js"></script>
+  <script src="../assets/dist/js/respond-1.4.2.min.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+
+<?php require '../includes/template/navigationBar.php'; ?>
+
+<div class="container">
+
+  <!-- Main component for a primary marketing message or call to action -->
+  <div class="jumbotron">
+    <h2>Pre-Reg Checkin</h2>
+
+    <? if (isset($_POST["checkin"]) && $_POST["checkin"] == true) { ?>
+      <br><br>
+      <form action="/reg_pages/badgeprint.php" method="post" target="_blank" class="form-horizontal">
+        <input type="hidden" name="print" value="<?php echo $_POST['id'] ?>" />
+        <input name='printbutton' type='submit' value='Print Badge' class='btn btn-primary' />
+      </form>
+
+      <form action="/prereg_pages/prereg_checkin.php" method="post" class="form-horizontal">
+        <input name="oid" type="hidden" value="<?php echo $_POST["oid"]?>" />
+        <input name='Done' type='submit' value='Done' class='btn btn-primary' />
+      </form>
+
+    <? } else { ?>
+
 
     <form action="/prereg_pages/prereg_checkin.php" method="post">
-        <div class='centerbutton'>
-          <input name="oid" type="hidden" value="<?php echo $_POST["oid"]?>" />
-          <input name='Done' type='submit' value='Done' class='submit_button' />
-        </div>
-        
-      </form>
-  
-  <? } else { ?>
+      <fieldset id="personalinfo">
+        <legend>Attendee Info</legend>
+        <label>First Name: </label>
+        <span class="input-xlarge uneditable-input"><?php echo $attendee->first_name; ?></span>
 
-  
-  <form action="/prereg_pages/prereg_checkin.php" method="post">
-<fieldset id="personalinfo">
-<legend>Attendee Info</legend>
-<label>First Name: </label>
-<span class="display_text"><?php echo $attendee->first_name; ?></span>
-<label>Last Name: </label>
-<span class="display_text"><?php echo $attendee->last_name; ?></span>
-<br />
-<label>Badge Name: </label>
-<span class="display_text"><?php echo $attendee->badge_name; ?></span>
-<label>Badge Number: </label>
-<span class="display_text"><?php echo $attendee->badge_number; ?></span>
-<br />
-<label>Zip : </label>
-<span class="display_text"><?php echo $attendee->zip; ?></span>
-<label>Country : </label>
-<span class="display_text"><?php echo $attendee->country; ?></span>
-<br />
-<label>E-Mail : </label>
-<span class="display_text"><?php echo $attendee->email; ?></span>
-<br />
-<label>Phone Number: </label>
-<span class="display_text"><?php echo $attendee->phone; ?></span>
-<label>Birth Date: </label>
-<span class="display_text"><?php echo $attendee->getBirthDate(); ?></span>
-</fieldset>
-<fieldset id="emergencyinfo">
-<legend>Emergency Contact Info</legend>
-<label>Full Name: </label>
-<span class="display_text"><?php echo $attendee->ec_fullname; ?></span>
-<br />
-<label>Phone Number: </label>
-<span class="display_text"><?php echo $attendee->ec_phone; ?></span>
-<br />
-</fieldset>
-  
-<?php if ($attendee->isMinor()) { ?>
-<fieldset id="parentinfo">
-<legend>Parent Contact Info</legend>
-<label>Full Name: </label>
-<span class="display_text"><?php echo $attendee->parent_fullname; ?></span>
-<br />
-<label>Phone Number: </label>
-<span class="display_text"><?php echo $attendee->parent_phone; ?></span>
-<br /><br />
-<input name="PCFormVer" type="checkbox" <?php if ($attendee->parent_form == "Yes") { echo "checked"; } ?> id="Parent Contact Form Verification" class="checkbox" /><span class="display_text"> PARENTAL CONSENT FORM RECEIVED</span>
-</fieldset>
-<?php } ?>
+        <label>Last Name: </label>
+        <span class="input-xlarge uneditable-input"><?php echo $attendee->last_name; ?></span>
+        <br />
+        <label>Badge Name: </label>
+        <span class="input-xlarge uneditable-input"><?php echo $attendee->badge_name; ?></span>
+        <label>Badge Number: </label>
+        <span class="input-xlarge uneditable-input"><?php echo $attendee->badge_number; ?></span>
+        <br />
+        <label>Zip : </label>
+        <span class="input-xlarge uneditable-input"><?php echo $attendee->zip; ?></span>
+        <label>Country : </label>
+        <span class="input-xlarge uneditable-input"><?php echo $attendee->country; ?></span>
+        <br />
+        <label>E-Mail : </label>
+        <span class="input-xlarge uneditable-input"><?php echo $attendee->email; ?></span>
+        <br />
+        <label>Phone Number: </label>
+        <span class="input-xlarge uneditable-input"><?php echo $attendee->phone; ?></span>
+        <label>Birth Date: </label>
+        <span class="input-xlarge uneditable-input"><?php echo $attendee->getBirthDate(); ?></span>
+      </fieldset>
+      <fieldset id="emergencyinfo">
+        <legend>Emergency Contact Info</legend>
+        <label>Full Name: </label>
+        <span class="input-xlarge uneditable-input"><?php echo $attendee->ec_fullname; ?></span>
+        <br />
+        <label>Phone Number: </label>
+        <span class="input-xlarge uneditable-input"><?php echo $attendee->ec_phone; ?></span>
+        <br />
+      </fieldset>
 
-  <fieldset id="paymentinfo">
-<legend>PASS TYPE</legend>
-<p>
-  <label>Pass Type: <?echo $attendee->pass_type; ?> -
-    $<?echo $attendee->paid_amount; ?>
-  </label>
-</fieldset>
-<fieldset id="notes">
-<legend>Notes</legend>
-<span class="display_text"><?php echo $attendee->notes; ?></span>
-</fieldset>
-<fieldset id="checkin">
-<legend>CHECK IN</legend>
-<?php if ($attendee->checked_in == "Yes") { ?>
-  <span class='display_text'>CHECKED IN</span>
-<? } else { ?>
-  <input name='checkin' type='checkbox' id='Information Verification' class='checkbox' />
-  <span class='display_text'>VERIFIED INFO</span><br />
-  <input name="id" type="hidden" value="<?php echo $attendee->id ?>" />
-  <input name="oid" type="hidden" value="<?php echo $attendee->order_id ?>" />
-  <input name="Minor" type="hidden" value="<?php echo $attendee->isMinor(); ?>" />
-  <div class='centerbutton'>
-    <input name='Update' type='submit' value='update' class='submit_button' />
+      <?php if ($attendee->isMinor()) { ?>
+        <fieldset id="parentinfo">
+          <legend>Parent Contact Info</legend>
+          <label>Full Name: </label>
+          <span class="input-xlarge uneditable-input"><?php echo $attendee->parent_fullname; ?></span>
+          <br />
+          <label>Phone Number: </label>
+          <span class="input-xlarge uneditable-input"><?php echo $attendee->parent_phone; ?></span>
+          <br /><br />
+          <input name="PCFormVer" type="checkbox" <?php if ($attendee->parent_form == "Yes") { echo "checked"; } ?> id="Parent Contact Form Verification" class="checkbox" /><span class="input-xlarge uneditable-input"> PARENTAL CONSENT FORM RECEIVED</span>
+        </fieldset>
+      <?php } ?>
+
+      <fieldset id="paymentinfo">
+        <legend>PASS TYPE</legend>
+        <p>
+          <label>Pass Type: <?echo $attendee->pass_type; ?> -
+            $<?echo $attendee->paid_amount; ?>
+          </label>
+      </fieldset>
+      <fieldset id="notes">
+        <legend>Notes</legend>
+        <span class="input-xlarge uneditable-input"><?php echo $attendee->notes; ?></span>
+      </fieldset>
+      <fieldset id="checkin">
+        <legend>CHECK IN</legend>
+        <?php if ($attendee->checked_in == "Yes") { ?>
+          <span class='input-xlarge uneditable-input'>CHECKED IN</span>
+        <? } else { ?>
+          <input name='checkin' type='checkbox' id='Information Verification' class='checkbox' />
+          <span class='display_text'>VERIFIED INFO</span><br />
+          <input name="id" type="hidden" value="<?php echo $attendee->id ?>" />
+          <input name="oid" type="hidden" value="<?php echo $attendee->order_id ?>" />
+          <input name="Minor" type="hidden" value="<?php echo $attendee->isMinor(); ?>" />
+          <div class='centerbutton'>
+            <input name='Update' type='submit' value='update' class='submit_button' />
+          </div>
+        <? } ?>
+
+    </form>
+    </fieldset>
+
+    <? } ?>
   </div>
-<? } ?>
 
-</form>
-</fieldset>
-<!-- InstanceEndEditable --></div>
-<? } ?>
-<div id="footer">&copy; Tim Zuidema</div> 
-<!-- InstanceBeginEditable name="Javascript" --><!-- InstanceEndEditable -->
+  <?php require '../includes/template/footer.php' ?>
+
+</div> <!-- /container -->
+
+<?php require '../includes/template/scripts.php' ?>
+
 </body>
-<!-- InstanceEnd --></html>
+</html>

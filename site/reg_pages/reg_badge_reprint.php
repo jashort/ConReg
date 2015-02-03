@@ -10,57 +10,79 @@ if (isset($_GET['lname'])) {
   $attendees = array();
 }
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/main.dwt.php" codeOutsideHTMLIsLocked="false" -->
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<!-- InstanceBeginEditable name="doctitle" -->
-<title>Kumoricon Registration</title>
-<!-- InstanceEndEditable -->
-<link href="../assets/css/kumoreg.css" rel="stylesheet" type="text/css" /> 
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="favicon.ico">
 
-<!-- InstanceBeginEditable name="head" -->
-<!-- InstanceEndEditable -->
+  <title>Reprint Badge</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="../assets/css/navbar-fixed-top.css" rel="stylesheet">
+
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+  <script src="../assets/dist/js/html5shiv-3.7.2.min.js"></script>
+  <script src="../assets/dist/js/respond-1.4.2.min.js"></script>
+  <![endif]-->
 </head>
+
 <body>
-<div id="header"></div>
-<?php require "../includes/leftmenu.php" ?>
 
-<div id="content"><!-- InstanceBeginEditable name="Content" -->
-<?php if (!isset($_GET["lname"])) { // Show if no search term ?>
-  <form name="ln" action="/reg_pages/reg_badge_reprint.php" method="get" target="_self">
-    <fieldset id="list_table_search">
-      <label>Last Name : <input name="lname" type="text" class="input_20_200" /></label><br />
-      <input name="Submit" type="submit" class="submit_button" value="Search" />
-      </fieldset>
-  </form>
-<?php } elseif (isset($_GET["lname"])) { // Show if search term ?>
-<table id="list_table">
-  <tr>
-    <th scope="col">Name</th>
-    <th scope="col">Birth Date</th>
-    <th scope="col">Checked In</th>
-    <th></th>
-  </tr>
-  <?php while ($attendee = $attendees->fetch(PDO::FETCH_CLASS)) { ?>
-    <tr>
-      <td><?php echo $attendee->first_name . " " . $attendee->last_name ?></td>
-      <td><?php echo $attendee->getBirthDate(); ?></td>
-      <td><?php echo $attendee->checked_in; ?></td>
-      <td><?php if ($attendee->checked_in == "Yes") { ?>
-        <form action="badgereprint.php" method="post" target="_blank">
-          <input type="hidden" name="print" value="<?php echo $attendee->id?>" />
-          <input type="submit" id="print<?php echo $attendee->id?>" value="Reprint Badge">
-        </form>
-        <? } ?>
-      </td>
-    </tr>
-  <?php } ?>
-</table>
-<?php } // Show if search term ?>
-<!-- InstanceEndEditable --></div>
-<div id="footer">&copy; Tim Zuidema</div> 
-<!-- InstanceBeginEditable name="Javascript" --><!-- InstanceEndEditable -->
+<?php require '../includes/template/navigationBar.php'; ?>
+
+<div class="container">
+
+  <!-- Main component for a primary marketing message or call to action -->
+  <div class="jumbotron">
+    <h2>Reprint Badge</h2>
+
+    <?php if (!isset($_GET["lname"])) { // Show if no search term ?>
+      <form name="ln" action="/reg_pages/reg_badge_reprint.php" method="get" target="_self" class="form-inline">
+        <fieldset id="list_table_search">
+          <label for="id" class="control-label">Last Name</label>
+          <input name="lname" type="text" class="form-control" required maxlength="60" autofocus autocomplete="off"/>
+          <input name="Submit" type="submit" class="btn btn-primary" value="Search" />
+        </fieldset>
+      </form>
+    <?php } elseif (isset($_GET["lname"])) { // Show if search term ?>
+      <table id="list_table" class="table">
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Birth Date</th>
+          <th scope="col">Checked In</th>
+          <th></th>
+        </tr>
+        <?php while ($attendee = $attendees->fetch(PDO::FETCH_CLASS)) { ?>
+          <tr>
+            <td><?php echo $attendee->first_name . " " . $attendee->last_name ?></td>
+            <td><?php echo $attendee->getBirthDate(); ?></td>
+            <td><?php echo $attendee->checked_in; ?></td>
+            <td><?php if ($attendee->checked_in == "Yes") { ?>
+                <form action="badgereprint.php" method="post" target="_blank">
+                  <input type="hidden" name="print" value="<?php echo $attendee->id?>" />
+                  <input type="submit" id="print<?php echo $attendee->id?>" value="Reprint Badge" class="btn btn-sm">
+                </form>
+              <? } ?>
+            </td>
+          </tr>
+        <?php } ?>
+      </table>
+    <?php } // Show if search term ?>
+
+  </div>
+
+  <?php require '../includes/template/footer.php' ?>
+
+</div> <!-- /container -->
+
+<?php require '../includes/template/scripts.php' ?>
+
 </body>
-<!-- InstanceEnd --></html>
-
+</html>

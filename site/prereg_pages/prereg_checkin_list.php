@@ -9,73 +9,88 @@ if (isset($_GET['id']) && isset($_GET['field'])) {
   $attendees = preRegSearch($_GET['id'], $_GET['field']);
 }
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/main.dwt.php" codeOutsideHTMLIsLocked="false" -->
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <!-- InstanceBeginEditable name="doctitle" -->
-  <title>Kumoricon Registration</title>
-  <!-- InstanceEndEditable -->
-  <link href="../assets/css/kumoreg.css" rel="stylesheet" type="text/css" />
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="favicon.ico">
 
-  <!-- InstanceBeginEditable name="head" -->
-  <!-- InstanceEndEditable -->
+  <title>Pre-Reg Checkin</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="../assets/css/navbar-fixed-top.css" rel="stylesheet">
+
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+  <script src="../assets/dist/js/html5shiv-3.7.2.min.js"></script>
+  <script src="../assets/dist/js/respond-1.4.2.min.js"></script>
+  <![endif]-->
 </head>
-<body>
-<div id="header"></div>
-<?php require "../includes/leftmenu.php" ?>
 
-<div id="content"><!-- InstanceBeginEditable name="Content" -->
-  <?php if (!isset($_GET["id"])) { // Show if no search term ?>
-    <form name="ln" action="/prereg_pages/prereg_checkin_list.php" method="get" target="_self">
-      <fieldset id="list_table_search">
-        <label>Last Name : <input name="id" type="text" class="input_20_200" /></label><br />
-        <input name="Submit" type="submit" class="submit_button" value="Search" />
-        <input name="field" type="hidden" value="ln" />
-      </fieldset>
-    </form>
-    <form name="fn" action="/prereg_pages/prereg_checkin_list.php" method="get" target="_self">
-      <fieldset id="list_table_search">
-        <label>First Name : </label>
-        <input name="id" type="text" class="input_20_200" /><br />
-        <input name="Submit" type="submit" class="submit_button" value="Search" />
-        <input name="field" type="hidden" value="fn" />
-      </fieldset>
-    </form>
-  <?php } else {  // There is a search term, display results ?>
-    <table id="list_table">
-      <tr>
-        <th scope="col">Name</th>
-        <th scope="col">Badge Name</th>
-        <th scope="col">Order</th>
-        <th scope="col">Checked In</th>
-      </tr>
-      <?php
+<body>
+
+<?php require '../includes/template/navigationBar.php'; ?>
+
+<div class="container">
+
+  <!-- Main component for a primary marketing message or call to action -->
+  <div class="jumbotron">
+    <h2>Pre-Reg Checkin</h2>
+    <?php if (!isset($_GET["id"])) { // Show if no search term ?>
+      <form name="ln" action="/prereg_pages/prereg_checkin_list.php" method="get" target="_self" class="form-inline">
+        <fieldset id="list_table_search">
+          <label for="id" class="control-label">Last Name</label>
+          <input name="id" type="text" class="form-control" autocomplete="off" maxlength="60" placeholder="Last Name" autofocus />
+          <input name="Submit" type="submit" class="btn btn-primary" value="Search" />
+          <input name="field" type="hidden" value="ln" />
+        </fieldset>
+      </form>
+    <?php } else {  // There is a search term, display results ?>
+      <table id="list_table" class="table">
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Badge Name</th>
+          <th scope="col">Order</th>
+          <th scope="col">Checked In</th>
+        </tr>
+        <?php
         $lastOrder = -1;
-        foreach ($attendees as $attendee) { 
+        foreach ($attendees as $attendee) {
           if ($attendee->order_id == $lastOrder) {
             $rowClass = '';
           } else {
             $rowClass = 'spacer_row';
             $lastOrder = $attendee->order_id;
           }
-      ?>
-        <tr>
-          <td class="<?php echo $rowClass ?>">
-            <a href="/prereg_pages/prereg_checkin.php?id=<?php echo $attendee->id; ?>">
-              <?php echo $attendee->first_name . " " . $attendee->last_name; ?></a>
-          </td>
-          <td class="<?php echo $rowClass ?>"><?php echo $attendee->badge_name; ?></td>
-          <td class="<?php echo $rowClass ?>"><?php echo $attendee->order_id; ?></td>
-          <td class="<?php echo $rowClass ?>"><?php echo $attendee->checked_in; ?></td>
-        </tr>
-      <?php 
-        } 
-      ?>
-    </table>
-  <?php } ?>
-  <!-- InstanceEndEditable --></div>
-<div id="footer">&copy; Tim Zuidema</div>
-<!-- InstanceBeginEditable name="Javascript" --><!-- InstanceEndEditable -->
+          ?>
+          <tr>
+            <td class="<?php echo $rowClass ?>">
+              <a href="/prereg_pages/prereg_checkin.php?id=<?php echo $attendee->id; ?>">
+                <?php echo $attendee->first_name . " " . $attendee->last_name; ?></a>
+            </td>
+            <td class="<?php echo $rowClass ?>"><?php echo $attendee->badge_name; ?></td>
+            <td class="<?php echo $rowClass ?>"><?php echo $attendee->order_id; ?></td>
+            <td class="<?php echo $rowClass ?>"><?php echo $attendee->checked_in; ?></td>
+          </tr>
+        <?php
+        }
+        ?>
+      </table>
+    <?php } ?>
+
+  </div>
+
+  <?php require '../includes/template/footer.php' ?>
+
+</div> <!-- /container -->
+
+<?php require '../includes/template/scripts.php' ?>
+
 </body>
-<!-- InstanceEnd --></html>
+</html>
