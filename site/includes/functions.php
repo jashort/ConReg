@@ -531,15 +531,26 @@ function getStaff($id) {
 
 
 /**
- * @param int $number
+ * Return entries from the history table
+ *
+ * @param int $number Number of items to return
+ * @param string $type Return only type (from history_types table), defaults to all types
  * @return PDOStatement
  */
-function historyList($number=50){
+function historyList($number=50, $type=''){
 	global $conn;
 
-	$stmt = $conn->prepare("SELECT history.changed_at, history_types.type,  history.username, history.description
+	if ($type == '') {
+		$stmt = $conn->prepare("SELECT history.changed_at, history_types.type, history.username, history.description
 							FROM history, history_types
 							WHERE history.type_id = history_types.id ORDER BY history.id DESC LIMIT :number");
+	} else {
+		$stmt = $conn->prepare("SELECT history.changed_at, history_types.type, history.username, history.description
+							FROM history, history_types
+							WHERE history.type_id = history_types.id AND history_types.type = :type
+							ORDER BY history.id DESC LIMIT :number");
+		$stmt->bindValue('type', $type);
+	}
 	$stmt->bindValue('number', (int)$number, PDO::PARAM_INT);
 	$stmt->execute();
 	$stmt->setFetchMode(PDO::FETCH_ASSOC);

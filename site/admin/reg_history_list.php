@@ -4,7 +4,11 @@ require_once('../includes/functions.php');
 require_once('../includes/authcheck.php');
 requireRight('super-admin');
 
-$history = historyList(50);
+if (array_key_exists('type', $_GET)) {
+  $history = historyList(50, $_GET['type']);
+} else {
+  $history = historyList(50);
+}
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
