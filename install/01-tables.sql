@@ -6,7 +6,7 @@ DROP TABLE IF EXISTS reg_staff, orders, attendees, history;
 CREATE TABLE reg_staff
 (
     staff_id        INT(10) PRIMARY KEY UNIQUE NOT NULL AUTO_INCREMENT,
-    username        VARCHAR(60) NOT NULL,
+    username        VARCHAR(60) NOT NULL UNIQUE,
     password        CHAR(98) NOT NULL,
     enabled         BOOLEAN DEFAULT TRUE NOT NULL,
     first_name      VARCHAR(60) NOT NULL,
