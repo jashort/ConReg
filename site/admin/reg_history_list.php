@@ -26,6 +26,10 @@ if (array_key_exists('type', $_GET)) {
 <div id="header"></div>
 <?php require "../includes/leftmenu.php" ?>
 <div id="content"><!-- InstanceBeginEditable name="Content" -->
+  <a href="reg_history_list.php?type=login">Logins</a> -
+  <a href="reg_history_list.php?type=prereg%20checkin">PreReg Checkin</a> -
+  <a href="reg_history_list.php?type=atcon%20checkin">At Con Checkin</a> -
+  <a href="reg_history_list.php">All</a>
 <table id="list_table">
   <tr>
     <th>Time</th>
