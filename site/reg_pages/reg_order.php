@@ -20,39 +20,28 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Paid")) {
 }
 
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/main.dwt.php" codeOutsideHTMLIsLocked="false" -->
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <!-- InstanceBeginEditable name="doctitle" -->
-    <title>Complete Order</title>
-    <!-- InstanceEndEditable -->
-    <link href="../assets/css/kumoreg.css" rel="stylesheet" type="text/css" />
-    <script src="/assets/javascript/jquery-1.8.0.js" type="text/javascript"></script>
-    <script src="/assets/javascript/jquery.maskedinput-1.3.min.js" type="text/javascript"></script>
-    <!-- InstanceBeginEditable name="head" -->
-    <script type="text/javascript">
-        function MM_validateForm() { //v4.0
-            if (document.getElementById){
-                var i,p,q,nm,test,num,min,max,errors='',args=MM_validateForm.arguments;
-                for (i=0; i<(args.length-2); i+=3) { test=args[i+2]; val=document.getElementById(args[i]);
-                    if (val) { nm=val.id; if ((val=val.value)!="") {
-                        if (test.indexOf('isEmail')!=-1) { p=val.indexOf('@');
-                            if (p<1 || p==(val.length-1)) errors+='- '+nm+' must contain an e-mail address.\n';
-                        } else if (test.indexOf('isDate')!=-1) { var nulldate=new RegExp("(MM|DD|YYYY)"); p=nulldate.test(val);
-                            if (p==true) errors+='- '+nm+' is required.\n';
-                        } else if (test.indexOf('isState')!=-1) { p=val.indexOf('State');
-                            if (p>1 || p==(val.length-1)) errors+='- '+nm+' is required.\n';
-                        } else if (test!='R') { num = parseFloat(val);
-                            if (isNaN(val)) errors+='- '+nm+' must contain a number.\n';
-                            if (test.indexOf('inRange') != -1) { p=test.indexOf(':');
-                                min=test.substring(8,p); max=test.substring(p+1);
-                                if (num<min || max<num) errors+='- '+nm+' must contain a number between '+min+' and '+max+'.\n';
-                            } } } else if (test.charAt(0) == 'R') errors += '- '+nm+' is required.\n'; }
-                } if (errors) alert('The following error(s) occurred:\n'+errors);
-                document.MM_returnValue = (errors == '');
-            } }
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="favicon.ico">
 
+    <title>Complete Order</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../assets/css/navbar-fixed-top.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="../assets/dist/js/html5shiv-3.7.2.min.js"></script>
+    <script src="../assets/dist/js/respond-1.4.2.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
         function creditAuth() {
             do {
                 var number=prompt("Please enter the authorization number","ex 123456");
@@ -67,104 +56,105 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Paid")) {
             document.getElementById("AuthDisplay").value = number;
         }
     </script>
-    <!-- InstanceEndEditable -->
+
 </head>
+
 <body>
-<div id="header"></div>
-<?php require "../includes/leftmenu.php" ?>
 
-<div id="content"><!-- InstanceBeginEditable name="Content" -->
-    <? if (array_key_exists('action', $_POST) && $_POST["action"] == "Paid") { ?>
-    <fieldset id="paymentinfo">
-        <legend>PRINT BADGES</legend>
-    <p>
-        <div class="centerbutton">
-            <form action="/reg_pages/badgeprint.php" method="post" target="_blank">
-                <input name="order" type="hidden" value="<?php echo $orderId?>" />
-                <input name="action" type="submit" class="badge_button" value="Print Badges" />
-                
+<?php require '../includes/template/navigationBar.php'; ?>
+
+<div class="container">
+
+    <!-- Main component for a primary marketing message or call to action -->
+    <div class="jumbotron">
+        <h2>Complete Order</h2>
+
+        <? if (array_key_exists('action', $_POST) && $_POST["action"] == "Paid") { ?>
+            <fieldset id="paymentinfo">
+                <legend>Print Badges</legend>
+                <p>
+                <div class="centerbutton">
+                    <form action="/reg_pages/badgeprint.php" method="post" target="_blank">
+                        <input name="order" type="hidden" value="<?php echo $orderId?>" />
+                        <input name="action" type="submit" class="btn btn-primary" value="Print Badges" />
+
+                    </form>
+                </div>
+                <div class="centerbutton">
+                    <form name="Finish" action="reg_order.php" method="post">
+                        <input type="hidden" name="action" value="Finish" />
+                        <input name="Submit" type="submit" class="btn btn-primary" value="Finish" />
+                    </form>
+                </div><br />
+                </p>
+            </fieldset>
+
+        <?php } else { ?>
+            <fieldset id="attendees">
+                <legend>Attendees</legend>
+                <a href="/reg_pages/reg_add.php">Add Another</a><br>
+                <table id="attendee_table" class="table report">
+                    <tr>
+                        <th>Name</th>
+                        <th>Pass Type</th>
+                        <th>Cost</th>
+                    </tr>
+                    <?php
+                    $total = 0;
+                    foreach ($_SESSION['currentOrder'] as $attendee) {
+                        $total += $attendee->paid_amount; ?>
+                        <tr>
+                            <td><? echo $attendee->first_name . ' ' . $attendee->last_name ?></td>
+                            <td><? echo $attendee->pass_type ?></td>
+                            <td>$<? echo $attendee->paid_amount ?></td>
+                        </tr>
+                    <?php } ?>
+                    <tr>
+                        <td colspan="2" style="text-align: right;">Total:</td>
+                        <td>$<?php echo $total?></td></tr>
+                </table>
+
+            </fieldset>
+            <form action="reg_order.php" method="post">
+                <input type="hidden" name="total" value="<?php echo $total?>" />
+                <input type="hidden" name="action" value="Paid" />
+
+                <fieldset id="paymentinfo">
+                    <legend>Payment Type</legend>
+                    <input type="radio" name="PayType" value="Cash" id="PayType_1"  />
+                    <label for="PayType_1" class="control-label">Cash</label>
+                    <br />
+                            <input type="radio" name="PayType" value="Check" id="PayType_2" />
+                    <label for="PayType_2" class="control-label">Check</label>
+                    <br />
+                    <input type="radio" name="PayType" value="Money Order" id="PayType_3" />
+                    <label for="PayType_3" class="control-label">Money Order</label>
+                    <br />
+                    <input type="radio" name="PayType" value="Credit/Debit" id="PayType_4" onclick="creditAuth()" />
+                    <label for="PayType_4" class="control-label">Credit Card</label>
+                    <input name="AuthDisplay" type="text" class="input_20_150" id="AuthDisplay" disabled="disabled"/>
+                    <br />
+                    <?php if ($total == 0) { ?>
+                        <input name='PayType' type='radio' id='PayType_5' checked='checked' value='Free' />
+                        <label for="PayType_5" class="control-label">Free</label>
+                    <?php } ?>
+                </fieldset>
+                <fieldset id="notes">
+                    <label for="Notes" class="control-label">Notes</label><br>
+                    <textarea name="Notes" id="Notes" rows="5" cols="80"></textarea>
+                </fieldset>
+                <br>
+                <input name="Paid" type="submit" class="btn btn-primary" value="Take Money" />
             </form>
-        </div>
-        <div class="centerbutton">
-            <form name="Finish" action="reg_order.php" method="post">
-                <input type="hidden" name="action" value="Finish" />
-                <input name="Submit" type="submit" class="next_button" value="Finish" />
-            </form>
-        </div><br />
-    </p>
-    </fieldset>
+        <?php } ?>
+        
+    </div>
 
-    <?php } else { ?>
-    <fieldset id="attendees">
-        <legend>ATTENDEES</legend>
-        <a href="/reg_pages/reg_add.php">Add Another</a><br>
-        <table id="attendee_table">
-            <tr>
-                <th>Name</th>
-                <th>Pass Type</th>
-                <th>Cost</th>
-            </tr>
-            <?php
-            $total = 0;
-            foreach ($_SESSION['currentOrder'] as $attendee) {
-                $total += $attendee->paid_amount;
-                ?>
-                <tr>
-                    <td><? echo $attendee->first_name . ' ' . $attendee->last_name ?></td>
-                    <td><? echo $attendee->pass_type ?></td>
-                    <td>$<? echo $attendee->paid_amount ?></td>
-                </tr>
-            <?php } ?>
-            <tr>
-                <td colspan="2" style="text-align: right;">Total:</td>
-                <td>$<?php echo $total?></td></tr>
-        </table>
+    <?php require '../includes/template/footer.php' ?>
 
-    </fieldset>
-    <form action="reg_order.php" method="post">
-        <input type="hidden" name="total" value="<?php echo $total?>" />
-        <input type="hidden" name="action" value="Paid" />
+</div> <!-- /container -->
 
-    <fieldset id="paymentinfo">
-        <legend>PAYMENT TYPE</legend>
-        <p>
-            <label>
-                <input type="radio" name="PayType" value="Cash" id="PayType_1"  />
-                Cash</label>
-            <br />
-            <label>
-                <input type="radio" name="PayType" value="Check" id="PayType_2" />
-                Check</label>
-            <br />
-            <label>
-                <input type="radio" name="PayType" value="Money Order" id="PayType_3" />
-                Money Order</label>
-            <br />
-            <label>
-                <input type="radio" name="PayType" value="Credit/Debit" id="PayType_3" onclick="creditAuth()" />
-                Credit Card</label>
-            <input name="AuthDisplay" type="text" class="input_20_150" id="AuthDisplay" disabled="disabled"/>
-            </span>
-            <br />
+<?php require '../includes/template/scripts.php' ?>
 
-            <?php if ($total == 0) { ?>
-                <label><input name='PayType' type='radio' id='PayType_4' checked='checked' value='Free' /> Free</label>
-            <?php } ?>
-        </p>
-    </fieldset>
-        <fieldset id="notes">
-            <label>Notes : </label>
-            <textarea name="Notes" id="Notes" rows="5"></textarea>
-        </fieldset>
-
-        <div class="centerbutton">
-            <input name="Paid" type="submit" class="badge_button" value="Take Money" />
-        </div>
-    </form>
-    <?php } ?>
-    
-    <!-- InstanceEndEditable --></div>
-<div id="footer">&copy; Tim Zuidema</div>
-<!-- InstanceBeginEditable name="Javascript" --><!-- InstanceEndEditable -->
 </body>
-<!-- InstanceEnd --></html>
+</html>

@@ -1,0 +1,29 @@
+body {
+  padding-top: 70px;
+  background-image: url('/assets/images/clouds.jpg');
+  background-color: #9cc9fd;
+}
+
+.jumbotron {
+  background-image: url('/assets/images/mascot-header.png');
+  background-position: right bottom;
+  background-repeat: no-repeat;
+  min-height: 600px;
+}
+
+.report {
+  width: 80%;
+}
+
+.four-character {
+  width: 6em !important;
+}
+
+.two-character {
+  width: 5em !important;
+}
+
+h2 {
+  margin-top: 0px !important;
+  margin-bottom: 20px !important;
+}

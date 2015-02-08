@@ -18,40 +18,65 @@ if ($_FILES && $_FILES['csv']['size'] > 0) {
 }
 
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/main.dwt.php" codeOutsideHTMLIsLocked="false" -->
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<!-- InstanceBeginEditable name="doctitle" -->
-<title>Kumoricon Registration</title>
-<!-- InstanceEndEditable -->
-<link href="../assets/css/kumoreg.css" rel="stylesheet" type="text/css" />
-<!-- InstanceBeginEditable name="head" -->
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" href="favicon.ico">
 
-<!-- InstanceEndEditable -->
+	<title>PreReg CSV Import</title>
+
+	<!-- Bootstrap core CSS -->
+	<link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- Custom styles for this template -->
+	<link href="../assets/css/navbar-fixed-top.css" rel="stylesheet">
+
+
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+	<script src="../assets/dist/js/html5shiv-3.7.2.min.js"></script>
+	<script src="../assets/dist/js/respond-1.4.2.min.js"></script>
+	<![endif]-->
 </head>
+
 <body>
-<div id="header"></div>
-<?php require "../includes/leftmenu.php" ?>
 
-<div id="content"><!-- InstanceBeginEditable name="Content" -->
-<div>
-<?php if (!empty($_GET['complete'])) { ?>
+<?php require '../includes/template/navigationBar.php'; ?>
 
-	<? echo $_GET['count'] ?> lines imported. <a href="/">Continue</a><br>
+<div class="container">
 
-<? } else { ?>
-	<form action="" method="post" enctype="multipart/form-data" name="form1" id="form1">
-		<p>Import Pre-registered Attendees. Note: Importing the same file multiple times may create duplicates.</p>
-		Choose CSV file: <br />
-		<input name="csv" type="file" id="csv" />
-		<input type="submit" name="Submit" value="Submit" />
-	</form>
+	<!-- Main component for a primary marketing message or call to action -->
+	<div class="jumbotron">
+		<h2>PreReg CSV Import</h2>
 
-<? }  ?>
-</div>
-<!-- InstanceEndEditable --></div>
-<div id="footer">&copy; Tim Zuidema</div> 
-<!-- InstanceBeginEditable name="Javascript" --><!-- InstanceEndEditable -->
+		<?php if (!empty($_GET['complete'])) { ?>
+
+			<? echo $_GET['count'] ?> lines imported. <a href="/">Continue</a><br>
+
+		<? } else { ?>
+			<form action="" method="post" enctype="multipart/form-data" name="form1" id="form1" class="form-inline">
+				<p>Import Pre-registered Attendees. Note: Importing the same file multiple times may create duplicates.</p>
+
+				<fieldset id="list_table_search">
+					<div class="col-sm-3">
+						<input name="csv" type="file" id="csv">
+					</div>
+					<input type="submit" name="Submit" value="Submit" class="btn btn-primary" />
+				</fieldset>
+			</form>
+
+		<? }  ?>
+
+	</div>
+
+	<?php require '../includes/template/footer.php' ?>
+
+</div> <!-- /container -->
+
+<?php require '../includes/template/scripts.php' ?>
+
 </body>
-<!-- InstanceEnd --></html>
+</html>

@@ -10,74 +10,101 @@ if (isset($_GET['id'])) {
   $attendee = getAttendee($_GET['id']);
 }
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>Kumoricon Registration</title>
-  <link href="../assets/css/kumoreg.css" rel="stylesheet" type="text/css" />
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="favicon.ico">
 
+  <title>Attendee Search</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="../assets/css/navbar-fixed-top.css" rel="stylesheet">
+
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+  <script src="../assets/dist/js/html5shiv-3.7.2.min.js"></script>
+  <script src="../assets/dist/js/respond-1.4.2.min.js"></script>
+  <![endif]-->
 </head>
-<body>
-<div id="header"></div>
-<?php require '../includes/leftmenu.php' ?>
-<div id="content">
 
-  <fieldset id="personalinfo">
-    <legend>Attendee Info</legend>
-    <label>First Name: </label>
-    <span class="display_text"><?php echo $attendee->first_name; ?></span>
-    <label>Last Name: </label>
-    <span class="display_text"><?php echo $attendee->last_name; ?></span>
-    <br />
-    <label>Badge Name: </label>
-    <span class="display_text"><?php echo $attendee->badge_name; ?></span>
-    <label>Badge Number: </label>
-    <span class="display_text"><?php echo $attendee->badge_number; ?></span>
-    <br />
-    <label>E-Mail : </label>
-    <span class="display_text"><?php echo $attendee->email; ?></span>
-    <br />
-    <label>Phone Number: </label>
-    <span class="display_text"><?php echo $attendee->phone; ?></span>
-    <label>Birth Date: </label>
-    <span class="display_text"><?php echo $attendee->getBirthDate(); ?></span>
-  </fieldset>
-  <fieldset id="emergencyinfo">
-    <legend>Emergency Contact Info</legend>
-    <label>Full Name: </label>
-    <span class="display_text"><?php echo $attendee->ec_fullname; ?></span>
-    <br />
-    <label>Phone Number: </label>
-    <span class="display_text"><?php echo $attendee->ec_phone; ?></span>
-    <br />
-  </fieldset>
-  <?php if ($attendee->isMinor()) { ?>
-    <fieldset id="parentinfo">
-      <legend>Parent Contact Info</legend>
-      <label>Full Name: </label>
-      <span class="display_text"><?php echo $attendee->parent_fullname; ?></span>
+<body>
+
+<?php require '../includes/template/navigationBar.php'; ?>
+
+<div class="container">
+
+  <!-- Main component for a primary marketing message or call to action -->
+  <div class="jumbotron">
+    <h2>View Attendee</h2>
+
+    <fieldset id="personalinfo">
+      <label>First Name: </label>
+      <span class="display_text"><?php echo $attendee->first_name; ?></span>
+      <label>Last Name: </label>
+      <span class="display_text"><?php echo $attendee->last_name; ?></span>
+      <br />
+      <label>Badge Name: </label>
+      <span class="display_text"><?php echo $attendee->badge_name; ?></span>
+      <label>Badge Number: </label>
+      <span class="display_text"><?php echo $attendee->badge_number; ?></span>
+      <br />
+      <label>E-Mail : </label>
+      <span class="display_text"><?php echo $attendee->email; ?></span>
       <br />
       <label>Phone Number: </label>
-      <span class="display_text"><?php echo $attendee->parent_phone; ?></span>
-      <br />
-      <label>Parental Permission Form Submitted: </label>
-      <span class="display_text"><?php echo $attendee->parent_form; ?> </span>
+      <span class="display_text"><?php echo $attendee->phone; ?></span>
+      <label>Birth Date: </label>
+      <span class="display_text"><?php echo $attendee->getBirthDate(); ?></span>
     </fieldset>
-  <?php } ?>
-  <fieldset id="passtype">
-    <legend>PASS TYPE</legend>
-    <span class="display_text"><?php echo $attendee->pass_type; ?> - $<?php echo $attendee->paid_amount; ?></span>
-  </fieldset>
-  <fieldset id="paymentinfo">
-    <legend>PAID</legend>
+    <fieldset id="emergencyinfo">
+      <legend>Emergency Contact Info</legend>
+      <label>Full Name: </label>
+      <span class="display_text"><?php echo $attendee->ec_fullname; ?></span>
+      <br />
+      <label>Phone Number: </label>
+      <span class="display_text"><?php echo $attendee->ec_phone; ?></span>
+      <br />
+    </fieldset>
+    <?php if ($attendee->isMinor()) { ?>
+      <fieldset id="parentinfo">
+        <legend>Parent Contact Info</legend>
+        <label>Full Name: </label>
+        <span class="display_text"><?php echo $attendee->parent_fullname; ?></span>
+        <br />
+        <label>Phone Number: </label>
+        <span class="display_text"><?php echo $attendee->parent_phone; ?></span>
+        <br />
+        <label>Parental Permission Form Submitted: </label>
+        <span class="display_text"><?php echo $attendee->parent_form; ?> </span>
+      </fieldset>
+    <?php } ?>
+    <fieldset id="passtype">
+      <label>Pass Type</label>
+      <span class="display_text"><?php echo $attendee->pass_type; ?> - $<?php echo $attendee->paid_amount; ?></span>
+    </fieldset>
+    <fieldset id="paymentinfo">
+      <label>Paid</label>
     <span class="display_text"><?php echo $attendee->paid; ?>
-  </fieldset>
-  <fieldset id="checkedin">
-    <legend>CHECKED IN</legend>
+    </fieldset>
+    <fieldset id="checkedin">
+      <label>Checked In</label>
     <span class="display_text"><?php echo $attendee->checked_in; ?>
-  </fieldset>
-</div>
-<div id="footer">&copy; Tim Zuidema</div>
+    </fieldset>
+
+    
+  </div>
+
+  <?php require '../includes/template/footer.php' ?>
+
+</div> <!-- /container -->
+
+<?php require '../includes/template/scripts.php' ?>
+
 </body>
 </html>
