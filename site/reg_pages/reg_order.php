@@ -76,14 +76,14 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Paid")) {
                 <div class="centerbutton">
                     <form action="/reg_pages/badgeprint.php" method="post" target="_blank">
                         <input name="order" type="hidden" value="<?php echo $orderId?>" />
-                        <input name="action" type="submit" class="btn btn-primary" value="Print Badges" />
+                        <input name="print" id="Print Badges" type="submit" class="btn btn-primary" value="Print Badges" />
 
                     </form>
                 </div>
                 <div class="centerbutton">
                     <form name="Finish" action="reg_order.php" method="post">
                         <input type="hidden" name="action" value="Finish" />
-                        <input name="Submit" type="submit" class="btn btn-primary" value="Finish" />
+                        <input name="finish" type="submit" class="btn btn-primary" value="Finish" />
                     </form>
                 </div><br />
                 </p>
@@ -121,27 +121,27 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Paid")) {
 
                 <fieldset id="paymentinfo">
                     <legend>Payment Type</legend>
-                    <input type="radio" name="PayType" value="Cash" id="PayType_1"  />
-                    <label for="PayType_1" class="control-label">Cash</label>
+                    <input type="radio" name="PayType" value="Cash" id="Cash"  />
+                    <label for="Cash" class="control-label">Cash</label>
                     <br />
-                            <input type="radio" name="PayType" value="Check" id="PayType_2" />
-                    <label for="PayType_2" class="control-label">Check</label>
+                            <input type="radio" name="PayType" value="Check" id="Check" />
+                    <label for="Check" class="control-label">Check</label>
                     <br />
-                    <input type="radio" name="PayType" value="Money Order" id="PayType_3" />
-                    <label for="PayType_3" class="control-label">Money Order</label>
+                    <input type="radio" name="PayType" value="Money Order" id="Money Order" />
+                    <label for="Money Order" class="control-label">Money Order</label>
                     <br />
-                    <input type="radio" name="PayType" value="Credit/Debit" id="PayType_4" onclick="creditAuth()" />
-                    <label for="PayType_4" class="control-label">Credit Card</label>
+                    <input type="radio" name="PayType" value="Credit/Debit" id="Credit" onclick="creditAuth()" />
+                    <label for="Credit" class="control-label">Credit Card</label>
                     <input name="AuthDisplay" type="text" class="input_20_150" id="AuthDisplay" disabled="disabled"/>
                     <br />
                     <?php if ($total == 0) { ?>
-                        <input name='PayType' type='radio' id='PayType_5' checked='checked' value='Free' />
-                        <label for="PayType_5" class="control-label">Free</label>
+                        <input name='PayType' type='radio' id='Manual' checked='checked' value='Free' />
+                        <label for="Manual" class="control-label">Free</label>
                     <?php } ?>
                 </fieldset>
-                <fieldset id="notes">
+                <fieldset>
                     <label for="Notes" class="control-label">Notes</label><br>
-                    <textarea name="Notes" id="Notes" rows="5" cols="80"></textarea>
+                    <textarea name="notes" id="Notes" rows="5" cols="80"></textarea>
                 </fieldset>
                 <br>
                 <input name="Paid" type="submit" class="btn btn-primary" value="Take Money" />
