@@ -17,8 +17,6 @@ if (isset($_POST['print'])) {
 	die("No parameters");
 }
 
-
-
 // Buffer the following html with PHP so we can store it to a variable later
 ob_start();
 

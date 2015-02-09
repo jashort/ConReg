@@ -16,7 +16,10 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Paid")) {
     logMessage($_SESSION['username'], 120, "At-Con Registration order ID ". $orderId);
 
     orderCheckIn($orderId);
-    orderPaid($orderId, $_POST["PayType"], $_POST["total"], $_POST['Notes']);
+    orderPaid($orderId, $_POST["PayType"], $_POST["total"], $_POST['notes']);
+    foreach ($_SESSION["currentOrder"] as $attendee) {
+        logMessage($_SESSION['username'], 30, "At-Con Check in " . $attendee->first_name . ' '. $attendee->last_name);
+    }
 }
 
 ?>
@@ -72,15 +75,16 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Paid")) {
         <? if (array_key_exists('action', $_POST) && $_POST["action"] == "Paid") { ?>
             <fieldset id="paymentinfo">
                 <legend>Print Badges</legend>
-                <p>
-                <div class="centerbutton">
+
+                <div class="container col-lg-2">
                     <form action="/reg_pages/badgeprint.php" method="post" target="_blank">
                         <input name="order" type="hidden" value="<?php echo $orderId?>" />
-                        <input name="print" id="Print Badges" type="submit" class="btn btn-primary" value="Print Badges" />
+                        <input name="submit" id="Print Badges" type="submit" class="btn btn-primary" value="Print Badges" />
 
                     </form>
                 </div>
-                <div class="centerbutton">
+
+                <div class="container col-lg-2">
                     <form name="Finish" action="reg_order.php" method="post">
                         <input type="hidden" name="action" value="Finish" />
                         <input name="finish" type="submit" class="btn btn-primary" value="Finish" />

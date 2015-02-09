@@ -122,8 +122,6 @@ if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) ||
       document.getElementById('Notes').value = reason;
     }
   </script>
-
-
 </head>
 
 <body>

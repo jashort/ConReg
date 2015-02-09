@@ -16,7 +16,8 @@ if (isset($_POST["Update"])) {
   // Make sure information was verified
   if (isset($_POST["checkin"]) && $_POST["checkin"] == true) {
     regCheckIn($_POST["id"]);
-    logMessage($_SESSION['username'], 20, "PreReg checkin attendee ID ". $_POST['id']);
+    $attendee = getAttendee($_POST["id"]);
+    logMessage($_SESSION['username'], 20, "PreReg check in " . $attendee->first_name . ' ' . $attendee->last_name);
 
     if (isset($_POST["Minor"]) && $_POST["Minor"] == true && $_POST["PCFormVer"] == "on") {
       regCheckInParentFormReceived($_POST["id"]);
@@ -76,20 +77,25 @@ if (isset($_GET['id'])) {
 
     <? if (isset($_POST["checkin"]) && $_POST["checkin"] == true) { ?>
       <br><br>
-      <form action="/reg_pages/badgeprint.php" method="post" target="_blank" class="form-horizontal">
-        <input type="hidden" name="print" value="<?php echo $_POST['id'] ?>" />
-        <input name='printbutton' type='submit' value='Print Badge' class='btn btn-primary' />
-      </form>
+      <div class="container col-lg-2">
+        <form action="/reg_pages/badgeprint.php" method="post" target="_blank" class="form-inline">
+          <input type="hidden" name="print" value="<?php echo $_POST['id'] ?>" />
+          <input name='printbutton' type='submit' value='Print Badge' class='btn btn-primary' />
+        </form>
+      </div>
 
-      <form action="/prereg_pages/prereg_checkin.php" method="post" class="form-horizontal">
-        <input name="oid" type="hidden" value="<?php echo $_POST["oid"]?>" />
-        <input name='Done' type='submit' value='Done' class='btn btn-primary' />
-      </form>
+      <div class="container col-lg-2">
+        <form action="/prereg_pages/prereg_checkin.php" method="post" class="form-inline">
+          <input name="oid" type="hidden" value="<?php echo $_POST["oid"]?>" />
+          <input name='Done' type='submit' value='Done' class='btn btn-primary' />
+        </form>
+
+      </div>
 
     <? } else { ?>
 
 
-    <form action="/prereg_pages/prereg_checkin.php" method="post">
+    <form action="/prereg_pages/prereg_checkin.php" method="post" class="form-inline">
       <fieldset id="personalinfo">
         <legend>Attendee Info</legend>
         <label>First Name: </label>
@@ -135,34 +141,33 @@ if (isset($_GET['id'])) {
           <label>Phone Number: </label>
           <span class="input-xlarge uneditable-input"><?php echo $attendee->parent_phone; ?></span>
           <br /><br />
-          <input name="PCFormVer" type="checkbox" <?php if ($attendee->parent_form == "Yes") { echo "checked"; } ?> id="Parent Contact Form Verification" class="checkbox" /><span class="input-xlarge uneditable-input"> PARENTAL CONSENT FORM RECEIVED</span>
+          <input name="PCFormVer" type="checkbox" <?php if ($attendee->parent_form == "Yes") { echo "checked disabled"; } ?> id="Parent Contact Form Verification" class="form-control" />
+          <label for="Parent Contact Form Verification" class="control-label">Parental Consent Form Received</label>
         </fieldset>
       <?php } ?>
 
       <fieldset id="paymentinfo">
-        <legend>PASS TYPE</legend>
-        <p>
-          <label>Pass Type: <?echo $attendee->pass_type; ?> -
-            $<?echo $attendee->paid_amount; ?>
-          </label>
+        <legend>Pass Type</legend>
+          <label>Pass Type:</label>
+           <?echo $attendee->pass_type; ?> - $<?echo $attendee->paid_amount; ?><br>
       </fieldset>
       <fieldset id="notes">
         <legend>Notes</legend>
         <span class="input-xlarge uneditable-input"><?php echo $attendee->notes; ?></span>
       </fieldset>
       <fieldset id="checkin">
-        <legend>CHECK IN</legend>
+        <legend>Check In</legend>
         <?php if ($attendee->checked_in == "Yes") { ?>
           <span class='input-xlarge uneditable-input'>CHECKED IN</span>
         <? } else { ?>
-          <input name='checkin' type='checkbox' id='Information Verification' class='checkbox' />
-          <span class='display_text'>VERIFIED INFO</span><br />
+          <input name='checkin' type='checkbox' id='Information Verification' class='form-control' />
+          <label for="Information Verification" class="control-label">Verified Information</label><br>
           <input name="id" type="hidden" value="<?php echo $attendee->id ?>" />
           <input name="oid" type="hidden" value="<?php echo $attendee->order_id ?>" />
           <input name="Minor" type="hidden" value="<?php echo $attendee->isMinor(); ?>" />
-          <div class='centerbutton'>
-            <input name='Update' type='submit' value='update' class='submit_button' />
-          </div>
+
+          <input name='Update' type='submit' value='Check In' class='btn btn-primary' />
+
         <? } ?>
 
     </form>
