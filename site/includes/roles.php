@@ -32,6 +32,8 @@ $ROLES = array(
             'registration_modify' => true,
             'registration_manual_price' => true,
             'badge_print' => true,
+            'attendee_search' => true,
+            'badge_reprint' => true,
         )),
     3 => array('name' => 'Manager',
         'rights' => Array(

@@ -14,7 +14,9 @@ roles numerically lower on the list. (Permission names are in parenthesis)
     + Can modify attendees (registration_modify)
     + Can set price manually for a attendee (registration_manual_price)
     + Can check in preregistered attendees (prereg_add)
-    + Can only print badges when adding an attendee. (badge_print)
+    + Can print badges (badge_print)
+    + Can reprint badges (badge_reprint)
+    + Can search attendee list (attendee_search)
   
 - 3: Manager
     + Can add attendees (registration_add)
