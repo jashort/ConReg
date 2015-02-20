@@ -58,6 +58,16 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Paid")) {
 
             document.getElementById("AuthDisplay").value = number;
         }
+        
+        function requireCreditField() {
+            if (document.getElementById("Credit").checked) {
+                document.getElementById("AuthDisplay").required = true;
+            } else {
+                document.getElementById("AuthDisplay").required = false;
+                
+            }
+            
+        }
     </script>
 
 </head>
@@ -125,21 +135,21 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Paid")) {
 
                 <fieldset id="paymentinfo">
                     <legend>Payment Type</legend>
-                    <input type="radio" name="PayType" value="Cash" id="Cash"  />
+                    <input type="radio" name="PayType" value="Cash" id="Cash" onchange="requireCreditField();" />
                     <label for="Cash" class="control-label">Cash</label>
                     <br />
-                            <input type="radio" name="PayType" value="Check" id="Check" />
+                    <input type="radio" name="PayType" value="Check" id="Check" onchange="requireCreditField();" />
                     <label for="Check" class="control-label">Check</label>
                     <br />
-                    <input type="radio" name="PayType" value="Money Order" id="Money Order" />
+                    <input type="radio" name="PayType" value="Money Order" id="Money Order" onchange="requireCreditField();" />
                     <label for="Money Order" class="control-label">Money Order</label>
                     <br />
-                    <input type="radio" name="PayType" value="Credit/Debit" id="Credit" onclick="creditAuth()" />
+                    <input type="radio" name="PayType" value="Credit/Debit" id="Credit" onchange="requireCreditField();" onclick="creditAuth()" />
                     <label for="Credit" class="control-label">Credit Card</label>
-                    <input name="AuthDisplay" type="text" class="input_20_150" id="AuthDisplay" disabled="disabled"/>
+                    <input name="AuthDisplay" type="text" id="AuthDisplay" pattern="\d{6}" />
                     <br />
                     <?php if ($total == 0) { ?>
-                        <input name='PayType' type='radio' id='Manual' checked='checked' value='Free' />
+                        <input name='PayType' type='radio' id='Manual' checked='checked' value='Free' onchange="requireCreditField();" />
                         <label for="Manual" class="control-label">Free</label>
                     <?php } ?>
                 </fieldset>
