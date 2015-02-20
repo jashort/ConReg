@@ -202,8 +202,9 @@ if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) ||
                    value="<?php echo $_SESSION["current"]->ec_fullname; ?>" required autocomplete="off" autofocus />
           <br />
           <label for="ECPhoneNumber" class="control-label">Phone Number</label>
-            <input name="ec_phone" id="ECPhoneNumber" type="text" class="form-control" maxlength="60"
-                   value="<?php echo $_SESSION['current']->ec_phone ?>" required autocomplete="off"/>
+            <input name="ec_phone" id="ECPhoneNumber" type="text" class="form-control" maxlength="10"
+                   value="<?php echo $_SESSION['current']->ec_phone ?>" required autocomplete="off"
+                   pattern="\d{10}" title="Requires 10 digits" />
           <br />
         </fieldset>
         <?php if ($_SESSION['current']->isMinor()) { ?>
@@ -218,14 +219,15 @@ if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) ||
                    value="<?php echo $_SESSION['current']->ec_fullname; ?>" required />
             <br />
             <label for="PCPhoneNumber" class="control-label">Phone Number:</label>
-              <input name="parent_phone" id="PCPhoneNumber" type="tel" class="form-control" maxlength="60"
-                     value="<?php echo $_SESSION['current']->ec_phone; ?>" autocomplete="off" required />
+              <input name="parent_phone" id="PCPhoneNumber" type="tel" class="form-control" maxlength="10"
+                     value="<?php echo $_SESSION['current']->ec_phone; ?>" autocomplete="off" required
+                     pattern="\d{10}" title="Requires 10 digits" />
             <br /><br />
             <input name="parent_form" type="checkbox" value="Y"
                 <?php if ($_SESSION['current']->parent_form == "Y") { echo "checked"; } ?> 
                    id="PCFormVer" class="checkbox" />
-            <label for="PCFormVer" class="form-control">Parental Consent Form Received</label>
-
+            <label for="PCFormVer" class="control-label">Parental Consent Form Received</label>
+ 
           </fieldset>
         <?php } else { ?>
           <input name="same" value="N" type="hidden" />
