@@ -86,10 +86,8 @@ if (isset($_GET['id'])) {
         <label for="Badge Name" class="control-label">Badge Name</label>
           <input name="badge_name" type="text" maxlength="15" class="form-control" id="Badge Name" 
                  value="<?php echo $attendee->badge_name ?>" />
-        <br />
 
-        <label for="Badge Number">Badge Number</label>
-          <input name="badge_number" type="text" maxlength="10" class="form-control" id="Badge Number" 
+          <input name="badge_number" type="hidden" maxlength="10" id="Badge Number"
                  value="<?php echo $attendee->badge_number ?>" />
         <br />
 
@@ -157,11 +155,11 @@ if (isset($_GET['id'])) {
       <? } ?>
       <fieldset id="paymentinfo">
         <legend>PASS TYPE</legend>
+        <? $amount = calculatePassCost($attendee->getAge(), 'Weekend') ?>
         <input type="radio" name="pass_type" value="Weekend" id="PassType_0" class="form-control"
                onchange="setAmount(<?php echo $amount?>);" 
                <?php if ($attendee->pass_type == "Weekend") echo "checked=\"checked\""; ?> />
         <label for="PassType_0" class="control-label">
-          <? $amount = calculatePassCost($attendee->getAge(), 'Weekend') ?>
           All Weekend - $<?php echo $amount ?></label>
         <br />
 
@@ -218,8 +216,17 @@ if (isset($_GET['id'])) {
         <label for="notes" class="control-label">Notes</label>
           <textarea name="notes" rows="5" class="form-control" id="notes"><?php echo $attendee->notes ?></textarea>
       </fieldset>
+
+      <br>
+      <fieldset id="checkedin">
+        <label for="checked_in" class="control-label">Checked In</label>
+        <select name="checked_in" class="form-control">
+          <option value="Yes" <?php if ($attendee->checked_in == "Yes") { echo "selected"; }?>>Yes</option>
+          <option value="No" <?php if ($attendee->checked_in == "No") { echo "selected"; }?>>No</option>
+        </select>
+      </fieldset>
+
       <input type="hidden" name="reg_type" value="<?php echo $attendee->reg_type?>" />
-      <input type="hidden" name="checked_in" value="<?php echo $attendee->checked_in ?>" />
       <input type="hidden" name="paid" value="<?php echo $attendee->paid ?>" />
       <input type="hidden" name="id" value="<?php echo $attendee->id ?>" />
       <input type="hidden" name="country" value="<?php echo $attendee->country ?>" />

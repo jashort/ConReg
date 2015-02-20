@@ -59,12 +59,12 @@ if (isset($_GET['id'])) {
       <table id="list_table" class="table">
         <tr>
           <th scope="col">Name</th>
-          <th scope="col">Badge Number</th>
+          <th scope="col">Checked In?</th>
         </tr>
         <?php while ($attendee = $attendees->fetch(PDO::FETCH_CLASS)) { ?>
           <tr>
             <td><a href="/reg_pages/reg_update.php?id=<?php echo $attendee->id ?>"><?php echo $attendee->first_name . " " . $attendee->last_name; ?></a></td>
-            <td><?php echo $attendee->badge_number; ?></td>
+            <td><?php echo $attendee->checked_in; ?></td>
           </tr>
         <?php } ?>
 

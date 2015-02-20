@@ -156,9 +156,6 @@ if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) ||
             <label for="Zip" class="control-label">Zip</label>
               <input name="zip" type="text" class="form-control" maxlength="10" id="Zip"
                      value="<?php echo $_SESSION['current']->zip; ?>" autocomplete="off" />
-            <br />
-
-            <label>Badge Number</label> <?php echo $_SESSION["current"]->badge_number ?>
             <br /><br />
             <label for="Birth Month" class="control-label">Birth Date:</label>
             <? // If a birthdate has been set, display it. Otherwise, display blank fields
@@ -320,9 +317,6 @@ if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) ||
         <br />
         <label>Zip: </label>
         <?php echo $_SESSION['current']->zip; ?>
-        <br />
-        <label>Badge Number: </label>
-        <?php echo $_SESSION['current']->badge_number; ?>
         <br />
         <label>Birth Date: </label>
         <?php echo $_SESSION['current']->getBirthDate() ?>

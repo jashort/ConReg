@@ -339,7 +339,7 @@ function regUpdate($attendee) {
 	global $conn;
 
 	try {
-		$stmt = $conn->prepare("UPDATE attendees SET first_name=:firstname, last_name=:lastname, badge_number=:badgenumber, zip=:zip, phone=:phone, email=:email, birthdate=:bdate, ec_fullname=:ecname, ec_phone=:ecphone, ec_same=:same, parent_fullname=:pcname, parent_phone=:pcphone, parent_form=:pform, paid_amount=:amount, pass_type=:passtype, order_id=:orderid, notes=:notes WHERE id=:id");
+		$stmt = $conn->prepare("UPDATE attendees SET first_name=:firstname, last_name=:lastname, badge_number=:badgenumber, zip=:zip, phone=:phone, email=:email, birthdate=:bdate, ec_fullname=:ecname, ec_phone=:ecphone, ec_same=:same, parent_fullname=:pcname, parent_phone=:pcphone, parent_form=:pform, paid_amount=:amount, pass_type=:passtype, order_id=:orderid, notes=:notes, checked_in=:checkedin WHERE id=:id");
 		$stmt->execute(array('firstname' => $attendee->first_name,
 			'lastname' => $attendee->last_name,
 			'badgenumber' => $attendee->badge_number,
@@ -357,6 +357,7 @@ function regUpdate($attendee) {
 			'passtype' => $attendee->pass_type,
 			'orderid' => $attendee->order_id,
 			'notes' => $attendee->notes,
+			'checkedin' => $attendee->checked_in,
 			'id' => $attendee->id));
 	} catch(PDOException $e) {
 		echo 'ERROR: ' . $e->getMessage();

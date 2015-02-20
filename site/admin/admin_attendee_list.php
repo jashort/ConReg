@@ -63,6 +63,7 @@ if (isset($_GET['id'])) {
         <h2>Attendee Search</h2>
 
         <?php if (!isset($_GET["id"])) { // Show if no search term ?>
+            <!--
             <form name="bid" action="/admin/admin_attendee_list.php" method="get" target="_self" class="form-inline">
                 <input name="field" type="hidden" value="bid" /><br />
                 <fieldset id="list_table_search">
@@ -73,6 +74,7 @@ if (isset($_GET['id'])) {
                     </div>
                 </fieldset>
             </form>
+            -->
 
             <form name="ln" action="/admin/admin_attendee_list.php" method="get" target="_self" class="form-inline">
                 <input name="field" type="hidden" value="ln" />
@@ -88,15 +90,15 @@ if (isset($_GET['id'])) {
             <table id="list_table" class="table">
                 <tr>
                     <th scope="col">Name</th>
-                    <th scope="col">Badge Number</th>
                     <th scope="col">Badge Name</th>
+                    <th scope="col">Checked In?</th>
                 </tr>
 
                 <?php while ($attendee = $attendees->fetch(PDO::FETCH_CLASS)) { ?>
                     <tr>
                         <td><a href="/admin/admin_attendee_display.php?id=<?php echo $attendee->id ?>" ><?php echo $attendee->first_name . " " . $attendee->last_name ?></a></td>
-                        <td><?php echo $attendee->badge_number; ?></td>
                         <td><?php echo $attendee->badge_name; ?></td>
+                        <td><?php echo $attendee->checked_in; ?></td>
                     </tr>
                 <?php } ?>
             </table>
