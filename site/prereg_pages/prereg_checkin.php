@@ -139,7 +139,8 @@ if (isset($_GET['id'])) {
           <label>Phone Number: </label>
           <span class="input-xlarge uneditable-input"><?php echo $attendee->parent_phone; ?></span>
           <br /><br />
-          <input name="PCFormVer" type="checkbox" <?php if ($attendee->parent_form == "Yes") { echo "checked disabled"; } ?> id="Parent Contact Form Verification" class="form-control" />
+          <input name="PCFormVer" type="checkbox" <?php if ($attendee->parent_form == "Yes") { echo "checked disabled"; } ?> 
+                 id="Parent Contact Form Verification" class="form-control" required />
           <label for="Parent Contact Form Verification" class="control-label">Parental Consent Form Received</label>
         </fieldset>
       <?php } ?>
@@ -158,7 +159,7 @@ if (isset($_GET['id'])) {
         <?php if ($attendee->checked_in == "Yes") { ?>
           <span class='input-xlarge uneditable-input'>CHECKED IN</span>
         <? } else { ?>
-          <input name='checkin' type='checkbox' id='Information Verification' class='form-control' />
+          <input name='checkin' type='checkbox' id='Information Verification' class='form-control' required />
           <label for="Information Verification" class="control-label">Verified Information</label><br>
           <input name="id" type="hidden" value="<?php echo $attendee->id ?>" />
           <input name="oid" type="hidden" value="<?php echo $attendee->order_id ?>" />

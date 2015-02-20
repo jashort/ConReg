@@ -225,9 +225,9 @@ if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) ||
             <br /><br />
             <input name="parent_form" type="checkbox" value="Y"
                 <?php if ($_SESSION['current']->parent_form == "Y") { echo "checked"; } ?> 
-                   id="PCFormVer" class="checkbox" />
+                   id="PCFormVer" class="checkbox" required />
             <label for="PCFormVer" class="control-label">Parental Consent Form Received</label>
- 
+
           </fieldset>
         <?php } else { ?>
           <input name="same" value="N" type="hidden" />
