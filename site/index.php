@@ -35,18 +35,7 @@ require_once('includes/authcheck.php');
     <!-- Main component for a primary marketing message or call to action -->
     <div class="jumbotron">
         <h2>Registration Prices and Options</h2>
-        <br />
-        <p>Registration options for Kumoricon 2015:</p>
-        <br />
         <ul>
-            <li>Pre-register online, by mail, or at one of our promotional events. All pre-registrations cover the entire weekend:
-                <ul>
-                    <li>$45 – through Jan. 5, 2015</li>
-                    <li>$50 – through Apr. 3, 2015</li>
-                    <li>$55 – through July 10, 2015</li>
-                    <li>$57 – through Aug. 14, 2015</li>
-                </ul>
-            </li>
             <li>Register at the door:
                 <ul>
                     <li>Prices for age 13 and up:
@@ -67,9 +56,13 @@ require_once('includes/authcheck.php');
                             <li>$20 – Monday only</li>
                         </ul>
                     </li>
+                    <li>Prices for age 5 and under:
+                        <ul>
+                            <li>Free</li>
+                        </ul>
+                    </li>
                 </ul>
             </li>
-            <li>Free – Children age 5 and under</li>
         </ul>
     </div>
 
