@@ -69,7 +69,7 @@ if (isset($_GET['id'])) {
 
   <!-- Main component for a primary marketing message or call to action -->
   <div class="jumbotron">
-    <h2>Complete Order</h2>
+    <h2>Update Attendee</h2>
 
     <form name="reg_update" action="reg_update.php" method="post" class="form-inline">
       <input name="id" type="hidden" value="<?php echo $attendee->id ?>" />
@@ -104,13 +104,13 @@ if (isset($_GET['id'])) {
                  value="<?php echo $attendee->phone ?>" />
         <br />
         <label class="control-label">Birth Date</label>
-          <input type="number" class="form-control" maxlength="2" name="birth_month" id="Birth Month"
+          <input type="number" class="form-control two-character" maxlength="2" name="birth_month" id="Birth Month"
                  value="<?php echo $attendee->getBirthMonth() ?>" min="1" max="12" placeholder="MM">
           <span class="bold_text">/</span>
-          <input type="number" class="form-control" maxlength="2" name="birth_day" id="Birth Day"
+          <input type="number" class="form-control two-character" maxlength="2" name="birth_day" id="Birth Day"
                  value="<?php echo $attendee->getBirthDay() ?>" min="1" max="31" placeholder="DD">
           <span class="bold_text">/</span>
-          <input type="number" class="form-control" maxlength="4" name="birth_year" id="Birth Year" 
+          <input type="number" class="form-control four-character" maxlength="4" name="birth_year" id="Birth Year"
                  value="<?php echo $attendee->getBirthYear() ?>" min="1900" max="2015" placeholder="YYYY">
         (Month / Day / Year)
       </fieldset>
