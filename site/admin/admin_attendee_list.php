@@ -34,22 +34,6 @@ if (isset($_GET['id'])) {
     <script src="../assets/dist/js/html5shiv-3.7.2.min.js"></script>
     <script src="../assets/dist/js/respond-1.4.2.min.js"></script>
     <![endif]-->
-    <script type="text/javascript">
-        function validateBID(){
-            if(document.bid.id.value == "")
-            {
-                alert("A search value is needed!");
-                return false;
-            }
-        }
-        function validateLN(){
-            if(document.ln.id.value == "")
-            {
-                alert("A search value is needed!");
-                return false;
-            }
-        }
-    </script>
 </head>
 
 <body>
@@ -78,13 +62,11 @@ if (isset($_GET['id'])) {
 
             <form name="ln" action="/admin/admin_attendee_list.php" method="get" target="_self" class="form-inline">
                 <input name="field" type="hidden" value="ln" />
-                <fieldset id="list_table_search">
-                    <label for="id" class="col-sm-2 control-label">Last Name</label>
-                    <div class="col-sm-4">
-                        <input name="id" id="lname" type="text" class="form-control" />
-                        <input name="Submit" type="submit" class="btn btn-primary" value="Search" onmousedown="validateLN();" />
-                    </div>
-                </fieldset>
+                    <fieldset id="list_table_search">
+                        <label for="id" class="control-label">Last Name</label>
+                        <input name="id" type="text" maxlength="60" autocomplete="off" autofocus required class="form-control" />
+                        <input name="Submit" type="submit" class="btn btn-primary" value="Search" />
+                    </fieldset>
             </form>
         <?php } else { // Show if search term ?>
             <table id="list_table" class="table">
