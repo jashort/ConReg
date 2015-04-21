@@ -44,15 +44,15 @@ if (isset($_GET['id'])) {
     <h2>View Attendee</h2>
 
     <fieldset id="personalinfo">
-      <label>First Name: </label>
-      <span class="display_text"><?php echo $attendee->first_name; ?></span>
-      <label>Last Name: </label>
-      <span class="display_text"><?php echo $attendee->last_name; ?></span>
+      <label>Name: </label>
+      <span class="display_text">
+        <?php echo $attendee->first_name; ?> <?php echo $attendee->last_name; ?></span>
       <br />
       <label>Badge Name: </label>
       <span class="display_text"><?php echo $attendee->badge_name; ?></span>
+      <!--
       <label>Badge Number: </label>
-      <span class="display_text"><?php echo $attendee->badge_number; ?></span>
+      <span class="display_text"><?php echo $attendee->badge_number; ?></span>-->
       <br />
       <label>E-Mail : </label>
       <span class="display_text"><?php echo $attendee->email; ?></span>
@@ -61,7 +61,7 @@ if (isset($_GET['id'])) {
       <span class="display_text"><?php echo $attendee->phone; ?></span>
       <label>Birth Date: </label>
       <span class="display_text"><?php echo $attendee->getBirthDate(); ?></span>
-    </fieldset>
+    </fieldset><br />
     <fieldset id="emergencyinfo">
       <legend>Emergency Contact Info</legend>
       <label>Full Name: </label>

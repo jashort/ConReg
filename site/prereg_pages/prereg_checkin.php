@@ -98,11 +98,10 @@ if (isset($_GET['id'])) {
     <form action="/prereg_pages/prereg_checkin.php" method="post" class="form-inline">
       <fieldset id="personalinfo">
         <legend>Attendee Info</legend>
-        <label>First Name: </label>
-        <span class="input-xlarge uneditable-input"><?php echo $attendee->first_name; ?></span>
-
-        <label>Last Name: </label>
-        <span class="input-xlarge uneditable-input"><?php echo $attendee->last_name; ?></span>
+        <label>Name: </label>
+        <span class="input-xlarge uneditable-input">
+          <?php echo $attendee->first_name; ?> <?php echo $attendee->last_name; ?>
+        </span>
         <br />
         <label>Badge Name: </label>
         <span class="input-xlarge uneditable-input"><?php echo $attendee->badge_name; ?></span>
@@ -117,9 +116,11 @@ if (isset($_GET['id'])) {
         <br />
         <label>Phone Number: </label>
         <span class="input-xlarge uneditable-input"><?php echo $attendee->phone; ?></span>
+        <br />
         <label>Birth Date: </label>
         <span class="input-xlarge uneditable-input"><?php echo $attendee->getBirthDate(); ?></span>
       </fieldset>
+      <br />
       <fieldset id="emergencyinfo">
         <legend>Emergency Contact Info</legend>
         <label>Full Name: </label>
@@ -131,6 +132,7 @@ if (isset($_GET['id'])) {
       </fieldset>
 
       <?php if ($attendee->isMinor()) { ?>
+        <br />
         <fieldset id="parentinfo">
           <legend>Parent Contact Info</legend>
           <label>Full Name: </label>
@@ -145,6 +147,7 @@ if (isset($_GET['id'])) {
         </fieldset>
       <?php } ?>
 
+      <br />
       <fieldset id="paymentinfo">
         <legend>Pass Type</legend>
           <label>Pass Type:</label>
@@ -159,8 +162,9 @@ if (isset($_GET['id'])) {
         <?php if ($attendee->checked_in == "Yes") { ?>
           <span class='input-xlarge uneditable-input'>CHECKED IN</span>
         <? } else { ?>
+          <label for="Information Verification" class="control-label">Information Verified</label>
           <input name='checkin' type='checkbox' id='Information Verification' class='form-control' required />
-          <label for="Information Verification" class="control-label">Verified Information</label><br>
+          <br />
           <input name="id" type="hidden" value="<?php echo $attendee->id ?>" />
           <input name="oid" type="hidden" value="<?php echo $attendee->order_id ?>" />
           <input name="Minor" type="hidden" value="<?php echo $attendee->isMinor(); ?>" />

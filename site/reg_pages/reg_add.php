@@ -130,59 +130,83 @@ if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) ||
 
 <div class="container">
 
-  <!-- Main component for a primary marketing message or call to action -->
   <div class="jumbotron">
     <h2>Registration</h2>
     <?php if (array_key_exists('part', $_GET) && $_GET["part"]=="1"){ ?>
-      <form name="reg_add1" action="reg_add.php" method="post" class="form-inline">
+      <form name="reg_add1" action="reg_add.php" method="post" class="form-horizontal">
         <input name="part" type="hidden" value="1" />
         <fieldset id="personalinfo">
           <legend>Attendee Info</legend>
-            <label for="First Name" class="control-label">First Name</label>
+          <div class="form-group">
+            <label for="First Name" class="control-label col-sm-2">First Name</label>
+            <div class="col-sm-4">
               <input name="first_name" type="text" maxlength="60" class="form-control" id="First Name"
                      value="<?php echo $_SESSION['current']->first_name; ?>" autocomplete="off" autofocus required />
-            <label for="Last Name" class="control-label">Last Name</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="Last Name" class="control-label col-sm-2">Last Name</label>
+            <div class="col-sm-4">
               <input name="last_name" type="text" maxlength="60" class="form-control" id="Last Name"
                      value="<?php echo $_SESSION['current']->last_name; ?>" autocomplete="off" required />
-            <br />
-            <label for="PhoneNumber" class="control-label">Phone Number</label>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="PhoneNumber" class="control-label col-sm-2">Phone Number</label>
+            <div class="col-sm-3">
               <input name="phone" type="text" maxlength="60" class="form-control" id="PhoneNumber"
                      value="<?php echo $_SESSION['current']->phone; ?>" />
-            <br />
-            <label for="EMail" class="control-label">EMail</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="EMail" class="control-label col-sm-2">EMail</label>
+            <div class="col-sm-4">
               <input name="email" type="text" class="form-control" maxlength="250" id="EMail"
                      value="<?php echo $_SESSION['current']->email; ?>" autocomplete="off" />
-            <br />
-            <label for="Zip" class="control-label">Zip</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="Zip" class="control-label col-sm-2">Zip</label>
+            <div class="col-sm-2">
               <input name="zip" type="text" class="form-control" maxlength="10" id="Zip"
                      value="<?php echo $_SESSION['current']->zip; ?>" autocomplete="off" />
-            <br /><br />
-            <label for="Birth Month" class="control-label">Birth Date:</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="Birth Month" class="control-label col-sm-2">Birth Date:</label>
+            <div class="col-sm-6 form-inline">
             <? // If a birthdate has been set, display it. Otherwise, display blank fields
-              if ($_SESSION['current']->getAge() == -1) { ?>
-                <input type="number" class="form-control two-character" maxlength="2" name="birth_month" id="Birth Month"
-                       value="<?php echo $_SESSION['current']->getBirthMonth() ?>" min="1" max="12" placeholder="MM"
-                       required autocomplete="off">
-                /
-                <input type="number" class="form-control two-character" maxlength="2" name="birth_day" id="Birth Day"
-                       value="<?php echo $_SESSION['current']->getBirthDay() ?>" min="1" max="31" placeholder="DD" 
-                       required autocomplete="off">
-                /
-                <input type="number" class="form-control four-character" maxlength="4" name="birth_year" id="Birth Year"
-                       value="<?php echo $_SESSION['current']->getBirthYear()?>" min="1900" max="2015" placeholder="YYYY"
-                       required autocomplete="off">
-                (Month / Day / Year)
+            if ($_SESSION['current']->getAge() == -1) { ?>
+              <input type="number" class="form-control two-character" maxlength="2" name="birth_month" id="Birth Month"
+                     value="<?php echo $_SESSION['current']->getBirthMonth() ?>" min="1" max="12" placeholder="MM"
+                     required autocomplete="off">
+              /
+              <input type="number" class="form-control two-character" maxlength="2" name="birth_day" id="Birth Day"
+                     value="<?php echo $_SESSION['current']->getBirthDay() ?>" min="1" max="31" placeholder="DD"
+                     required autocomplete="off">
+              /
+              <input type="number" class="form-control four-character" maxlength="4" name="birth_year" id="Birth Year"
+                     value="<?php echo $_SESSION['current']->getBirthYear()?>" min="1900" max="2015" placeholder="YYYY"
+                     required autocomplete="off">
+              (Month / Day / Year)
             <? } else { ?>
-                <input type="number" class="form-control two-character" maxlength="2" name="birth_month" id="Birth Month"
-                       min="1" max="12" placeholder="MM" required autocomplete="off">
-                /
-                <input type="number" class="form-control two-character" maxlength="2" name="birth_day" id="Birth Day"
-                       min="1" max="31" placeholder="DD" required autocomplete="off">
-                /
-                <input type="number" class="form-control four-character" maxlength="4" name="birth_year" id="Birth Year"
-                       min="1900" max="2015" placeholder="YYYY" required autocomplete="off">
-                (Month / Day / Year)
-      <? } ?>
+              <input type="number" class="form-control two-character" maxlength="2" name="birth_month" id="Birth Month"
+                     min="1" max="12" placeholder="MM" required autocomplete="off">
+              /
+              <input type="number" class="form-control two-character" maxlength="2" name="birth_day" id="Birth Day"
+                     min="1" max="31" placeholder="DD" required autocomplete="off">
+              /
+              <input type="number" class="form-control four-character" maxlength="4" name="birth_year" id="Birth Year"
+                     min="1900" max="2015" placeholder="YYYY" required autocomplete="off">
+              (Month / Day / Year)
+            <? } ?>
+            </div>
+          </div>
 
         </fieldset><br>
         <input name="Next" type="submit" class="btn btn-primary" value="Next" />
@@ -191,42 +215,66 @@ if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) ||
     <?php } elseif (array_key_exists('part', $_GET) && $_GET["part"]=="2") { ?>
 
       <fieldset id="currentage">
-        <label class="control-label">Current Age:</label> <?php echo $_SESSION['current']->getAge() ?>
+        <label class="control-label col-sm-2">Current Age:</label> <?php echo $_SESSION['current']->getAge() ?>
       </fieldset>
-      <form name="reg_add2" action="reg_add.php" method="post" class="form-inline">
+      <form name="reg_add2" action="reg_add.php" method="post" class="form-horizontal">
         <input name="part" type="hidden" value="2" />
         <fieldset id="emergencyinfo">
           <legend>Emergency Contact Info</legend>
-          <label for="ECFullName" class="control-label">Full Name</label>
-            <input name="ec_fullname" id="ECFullName" type="text" class="form-control" maxlength="250"
-                   value="<?php echo $_SESSION["current"]->ec_fullname; ?>" required autocomplete="off" autofocus />
-          <br />
-          <label for="ECPhoneNumber" class="control-label">Phone Number</label>
-            <input name="ec_phone" id="ECPhoneNumber" type="text" class="form-control" maxlength="10"
-                   value="<?php echo $_SESSION['current']->ec_phone ?>" required autocomplete="off"
-                   pattern="\d{10}" title="Requires 10 digits" />
+          <div class="form-group">
+            <label for="ECFullName" class="control-label col-sm-2">Full Name</label>
+            <div class="col-sm-4">
+              <input name="ec_fullname" id="ECFullName" type="text" class="form-control col-sm-4" maxlength="250"
+                     value="<?php echo $_SESSION["current"]->ec_fullname; ?>" required autocomplete="off" autofocus />
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="ECPhoneNumber" class="control-label col-sm-2">Phone Number</label>
+            <div class="col-sm-4">
+              <input name="ec_phone" id="ECPhoneNumber" type="text" class="form-control" maxlength="10"
+                     value="<?php echo $_SESSION['current']->ec_phone ?>" required autocomplete="off"
+                     pattern="\d{10}" title="Requires 10 digits" />
+              
+            </div>
+          </div>
           <br />
         </fieldset>
         <?php if ($_SESSION['current']->isMinor()) { ?>
           <fieldset id="parentinfo">
             <legend>Parent Contact Info</legend>
-            <input name="same" id="Same" type="checkbox" class="checkbox" value="Y" onClick="sameInfo();"
-                <?php if ($_SESSION['current']->ec_same == "Y") { echo "checked"; } ?> />
-            <label for="Same" class="control-label">Same as Emergency Contact Info</label>
-            <br /><br />
-            <label for="PCFullName" class="control-label">Full Name</label>
-            <input name="parent_fullname" id="PCFullName" type="text" class="form-control" maxlength="250"
-                   value="<?php echo $_SESSION['current']->ec_fullname; ?>" required />
-            <br />
-            <label for="PCPhoneNumber" class="control-label">Phone Number:</label>
-              <input name="parent_phone" id="PCPhoneNumber" type="tel" class="form-control" maxlength="10"
-                     value="<?php echo $_SESSION['current']->ec_phone; ?>" autocomplete="off" required
-                     pattern="\d{10}" title="Requires 10 digits" />
-            <br /><br />
-            <input name="parent_form" type="checkbox" value="Y"
-                <?php if ($_SESSION['current']->parent_form == "Y") { echo "checked"; } ?> 
-                   id="PCFormVer" class="checkbox" required />
-            <label for="PCFormVer" class="control-label">Parental Consent Form Received</label>
+            <div class="form-group">
+              <label for="Same" class="control-label col-sm-3">Same as Emergency Contact Info</label>
+                <input name="same" id="Same" type="checkbox" class="checkbox-inline" value="Y" onClick="sameInfo();"
+                    <?php if ($_SESSION['current']->ec_same == "Y") { echo "checked"; } ?> />
+            </div>
+
+            <div class="form-group">
+              <label for="PCFullName" class="control-label col-sm-2">Full Name</label>
+              <div class="col-sm-4">
+                <input name="parent_fullname" id="PCFullName" type="text" class="form-control" maxlength="250"
+                       value="<?php echo $_SESSION['current']->ec_fullname; ?>" required />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="PCPhoneNumber" class="control-label col-sm-2">Phone Number:</label>
+              <div class="col-sm-4">
+                <input name="parent_phone" id="PCPhoneNumber" type="tel" class="form-control" maxlength="10"
+                       value="<?php echo $_SESSION['current']->ec_phone; ?>" autocomplete="off" required
+                       pattern="\d{10}" title="Requires 10 digits" />
+                
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="PCFormVer" class="control-label col-sm-2">Parental Consent Form Received</label>
+              <div class="col-sm-2">
+                <input name="parent_form" type="checkbox" value="Y"
+                    <?php if ($_SESSION['current']->parent_form == "Y") { echo "checked"; } ?>
+                       id="PCFormVer" class="checkbox" required />
+              </div>              
+            </div>
 
           </fieldset>
         <?php } else { ?>
@@ -256,38 +304,38 @@ if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) ||
           <legend>Pass Type</legend>
             <input type="radio" name="pass_type" value="Weekend" id="Weekend" class="form-control" required
                 <?php if ($_SESSION['current']->pass_type == "Weekend") echo "checked=\"checked\""; ?> />
-            <label for="PassType_0" class="control-label">
+            <label for="PassType_0" class="control-label col-sm-2">
               All Weekend - $<?php echo $weekendCost ?></label>
             <br>
             <input type="radio" name="pass_type" value="VIP" id="VIP" class="form-control" required
                 <?php if ($_SESSION['current']->pass_type == "VIP") echo "checked=\"checked\""; ?> />
-            <label for="PassType_1" class="control-label">
+            <label for="PassType_1" class="control-label col-sm-2">
               VIP - $<?php echo $vipCost ?></label>
             <br>
             <input name="pass_type" type="radio" id="Friday" value="Friday" class="form-control" required
                 <?php if ($_SESSION['current']->pass_type == "Friday") echo "checked=\"checked\""; ?> />
-            <label for="PassType_2" class="control-label">
+            <label for="PassType_2" class="control-label col-sm-2">
               Friday Only - $<?php echo $fridayCost ?></label>
             <br />
             <input name="pass_type" type="radio" id="Saturday" value="Saturday" class="form-control" required
                 <?php if ($_SESSION['current']->pass_type == "Saturday") echo "checked=\"checked\""; ?> />
-            <label for="PassType_3" class="control-label">
+            <label for="PassType_3" class="control-label col-sm-2">
               Saturday Only - $<?php echo $saturdayCost ?></label>
             <br />
             <input type="radio" name="pass_type" value="Sunday" id="Sunday" class="form-control" required
                 <?php if ($_SESSION['current']->pass_type == "Sunday") echo "checked=\"checked\""; ?> />
-            <label for="PassType_4" class="control-label">
+            <label for="PassType_4" class="control-label col-sm-2">
               Sunday Only - $<?php echo $sundayCost ?></label>
             <br />
             <input name="pass_type" type="radio" id="Monday" value="Monday" class="form-control" required
                 <?php if ($_SESSION['current']->pass_type == "Monday") echo "checked=\"checked\""; ?> />
-            <label for="PassType_5" class="control-label">
+            <label for="PassType_5" class="control-label col-sm-2">
               Monday Only - $<?php echo $mondayCost ?></label>
             <br />
             <?php if (hasRight('registration_manual_price')) { ?>
               <input name="pass_type" type="radio" id="Manual" onclick="manualPrice()" value="Manual Price" required
                 <?php if ($_SESSION['current']->pass_type == "Manual Price") echo "checked=\"checked\""; ?> />
-              <label for="PassType_6" class="control-label">
+              <label for="PassType_6" class="control-label col-sm-2">
                 Manual Price - $</label>
               <input name="paid_amount" type="text" class="form-control" id="paid_amount"
                      value="<?php echo $_SESSION['current']->paid_amount ?>" />
@@ -295,7 +343,7 @@ if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) ||
           <br />
         </fieldset>
         <fieldset id="notes">
-          <label for="Notes" class="control-label">Notes</label><br>
+          <label for="Notes" class="control-label col-sm-2">Notes</label><br>
           <textarea name="notes" id="Notes" rows="5" cols="80"><?php echo $_SESSION['current']->notes; ?></textarea>
         </fieldset>
         <br>
@@ -306,9 +354,8 @@ if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) ||
     <?php } elseif (array_key_exists('part', $_GET) && $_GET["part"]=="4") { ?>
       <fieldset id="personalinfo">
         <legend>Attendee Info</legend>
-        <label>First Name: </label>
-        <?php echo $_SESSION['current']->first_name; ?>
-        <label>Last Name: </label>
+        <label>Name: </label>
+        <?php echo $_SESSION['current']->first_name; ?> 
         <?php echo $_SESSION['current']->last_name; ?>
         <br />
         <label>Phone Number: </label>
@@ -323,6 +370,7 @@ if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) ||
         <label>Birth Date: </label>
         <?php echo $_SESSION['current']->getBirthDate() ?>
       </fieldset>
+      <br />
       <fieldset id="emergencyinfo">
         <legend>Emergency Contact Info</legend>
         <label>Full Name: </label>
@@ -333,6 +381,7 @@ if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) ||
         <br />
       </fieldset>
       <?php if ($_SESSION['current']->isMinor()) { ?>
+        <br />
         <fieldset id="parentinfo">
           <legend>Parent Contact Info</legend>
           <label>Full Name: </label>
@@ -345,12 +394,14 @@ if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) ||
           <?php echo $_SESSION['current']->parent_form; ?>
         </fieldset>
       <?php } ?>
+      <br />
       <fieldset id="paymentinfo">
         <legend>PASS TYPE</legend>
         <?php echo $_SESSION['current']->pass_type ?> - $<?php echo $_SESSION['current']->paid_amount ?>
       </fieldset>
 
-      <fieldset id="paymentinfo">
+      <br />
+      <fieldset id="notes">
         <legend>NOTES</legend>
         <?php echo $_SESSION['current']->notes; ?>
       </fieldset>
