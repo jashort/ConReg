@@ -21,7 +21,7 @@ CREATE TABLE reg_staff
 CREATE TABLE orders
 (
     order_id        CHAR(32) PRIMARY KEY NOT NULL UNIQUE,
-    total_amount    DECIMAL(10, 0) NOT NULL,
+    total_amount    DECIMAL(9, 2) NOT NULL,
     paid            CHAR(3) NOT NULL COMMENT 'yes or no',
     paytype         VARCHAR(60) NOT NULL,
     notes           TEXT
@@ -47,7 +47,7 @@ CREATE TABLE attendees
     parent_phone    VARCHAR(60),
     parent_form     CHAR(3) COMMENT 'Values: yes or no',
     paid            CHAR(3) COMMENT 'Values: yes or no',
-    paid_amount     DECIMAL(5, 2) NOT NULL,
+    paid_amount     DECIMAL(7, 2) NOT NULL,
     pass_type       VARCHAR(50),
     reg_type        VARCHAR(50) COMMENT 'Values: Reg or PreReg',
     order_id        CHAR(32) REFERENCES orders(order_id),
@@ -104,20 +104,20 @@ CREATE TABLE pass_types
     visible             CHAR(1) COMMENT 'Y or N',
     min_age             TINYINT UNSIGNED NOT NULL COMMENT 'Minimum age in years',
     max_age             TINYINT UNSIGNED NOT NULL COMMENT 'Max age in years',
-    cost                DECIMAL(5,2) NOT NULL
+    cost                DECIMAL(7,2) NOT NULL
 );
 
 INSERT INTO pass_types (name, visible, min_age, max_age, cost)
     VALUES
-        ('Full Weekend - Adult', 'Y', 13, 254, 55),
-        ('Friday Only - Adult', 'Y', 13, 254, 30),
-        ('Saturday Only - Adult', 'Y', 13, 254, 40),
-        ('Sunday Only - Adult', 'Y', 13, 254, 40),
-        ('Monday Only - Adult', 'Y', 13, 254, 30),
+        ('Full Weekend - Adult', 'Y', 13, 255, 55),
+        ('Friday Only - Adult', 'Y', 13, 255, 30),
+        ('Saturday Only - Adult', 'Y', 13, 255, 40),
+        ('Sunday Only - Adult', 'Y', 13, 255, 40),
+        ('Monday Only - Adult', 'Y', 13, 255, 30),
         ('Full Weekend - Child', 'Y', 6, 12, 45),
         ('Friday - Child', 'Y', 6, 12, 20),
         ('Saturday - Child', 'Y', 6, 12, 30),
         ('Sunday - Child', 'Y', 6, 12, 30),
         ('Monday - Child', 'Y', 6, 12, 20),
         ('Child Under 5', 'Y', 0, 5, 0),
-        ('VIP', 'Y', 0, 254, 300);
+        ('VIP', 'Y', 0, 255, 300);
