@@ -39,12 +39,15 @@
                 </li>
                 <? } ?>
                 
-                <?php if (hasRight('report_view')) { ?>
+                <?php if (hasRight('report_view') || hasRight("manage_pass_types")) { ?>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Administration <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         <?php if (hasRight('report_view')) { ?>
                             <li><a href="/admin/admin_report.php">Reports</a></li>
+                        <?php } ?>
+                        <?php if (hasRight('manage_pass_types')) { ?>
+                            <li><a href="/admin/pass_type_list.php">Pass Types</a></li>
                         <?php } ?>
                         <?php if (hasRight('super_admin')) { ?>
                             <li class="divider"></li>
