@@ -782,7 +782,7 @@ function passTypeUpdate($passType) {
 }
 
 /**
- * List pass types database
+ * List pass types in database
  *
  * @return PDOStatement
  */
@@ -790,6 +790,21 @@ function passTypeList(){
 	global $conn;
 
 	$stmt = $conn->prepare("SELECT * FROM pass_types ORDER BY min_age DESC");
+	$stmt->execute();
+	$stmt->setFetchMode(PDO::FETCH_CLASS, "PassType");
+	return $stmt;
+}
+
+
+/**
+ * Returns visible pass types in database
+ *
+ * @return PDOStatement
+ */
+function passTypeVisibleList(){
+	global $conn;
+
+	$stmt = $conn->prepare("SELECT * FROM pass_types WHERE visible = 'Y' ORDER BY min_age DESC");
 	$stmt->execute();
 	$stmt->setFetchMode(PDO::FETCH_CLASS, "PassType");
 	return $stmt;
@@ -823,6 +838,7 @@ function passTypeDelete($id) {
 	$stmt = $conn->prepare("DELETE FROM pass_types WHERE id = :id LIMIT 1");
 	$stmt->execute(array('id'=>$id));
 }
+
 
 /**
  * Redirect to the given URL and stop running the current page
