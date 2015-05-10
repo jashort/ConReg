@@ -734,6 +734,96 @@ function importPreRegCsvFile(&$handle, $staffId) {
 }
 
 
+
+/**
+ * Insert the given staff member in to the database
+ *
+ * @param PassType $passType
+ */
+function passTypeAdd($passType) {
+	global $conn;
+
+	try {
+		$stmt = $conn->prepare("INSERT INTO pass_types
+							(name, visible, min_age, max_age, cost)
+							VALUES
+							(:name, :visible, :min_age, :max_age, :cost)");
+		$stmt->execute(array('name' => $passType->name,
+			'visible' => $passType->visible,
+			'min_age' => $passType->min_age,
+			'max_age' => $passType->max_age,
+			'cost' => $passType->cost));
+	} catch(PDOException $e) {
+		die('ERROR: ' . $e->getMessage());
+	}
+}
+
+/**
+ * Update the given pass type in the database
+ *
+ * @param PassType $passType
+ */
+function passTypeUpdate($passType) {
+	global $conn;
+
+	try {
+		$stmt = $conn->prepare("UPDATE pass_types SET name = :name, visible = :visible,
+								min_age = :min_age, max_age = :max_age, cost = :cost
+								WHERE id=:id");
+		$stmt->execute(array('name' => $passType->name,
+			'visible' => $passType->visible,
+			'min_age' => $passType->min_age,
+			'max_age' => $passType->max_age,
+			'cost' => $passType->cost,
+			'id' => $passType->id));
+	} catch(PDOException $e) {
+		die('ERROR: ' . $e->getMessage());
+	}
+}
+
+/**
+ * List pass types database
+ *
+ * @return PDOStatement
+ */
+function passTypeList(){
+	global $conn;
+
+	$stmt = $conn->prepare("SELECT * FROM pass_types ORDER BY min_age DESC");
+	$stmt->execute();
+	$stmt->setFetchMode(PDO::FETCH_CLASS, "PassType");
+	return $stmt;
+}
+
+
+/**
+ * Get pass type record from database
+ *
+ * @param int $id pass type ID number
+ * @return PassType
+ */
+function getPassType($id) {
+	global $conn;
+
+	$stmt = $conn->prepare("SELECT * FROM pass_types WHERE id = :id LIMIT 1");
+	$stmt->execute(array('id'=>$id));
+	$stmt->setFetchMode(PDO::FETCH_CLASS, "PassType");
+	return $stmt->fetch();
+}
+
+
+/**
+ * Remove pass type record from database
+ *
+ * @param int $id pass type ID number
+ */
+function passTypeDelete($id) {
+	global $conn;
+
+	$stmt = $conn->prepare("DELETE FROM pass_types WHERE id = :id LIMIT 1");
+	$stmt->execute(array('id'=>$id));
+}
+
 /**
  * Redirect to the given URL and stop running the current page
  * @param string $location Location to redirect to
@@ -743,4 +833,5 @@ function redirect($location, $statusCode=303) {
 	header(sprintf("Location: %s", $location, intval($statusCode)));
 	die();
 }
+
 

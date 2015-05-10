@@ -174,3 +174,23 @@ class Staff {
         $this->access_level = $array['access_level'];
     }
 }
+
+class PassType {
+    public $id;
+    public $name;
+    public $visible;
+    public $min_age;  // Minimum age >= years for this pass type.
+    public $max_age; // Maximum age <= years for this pass type.
+    public $cost;
+
+    public function fromArray($array) {
+        if (isset($array['id'])) {
+            $this->id = $array['id'];
+        }
+        $this->name = $array['name'];
+        $this->visible = $array['visible'];
+        $this->min_age = $array['min_age'];
+        $this->max_age = $array['max_age'];
+        $this->cost = $array['cost'];
+    }
+}
