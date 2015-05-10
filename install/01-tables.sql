@@ -91,4 +91,33 @@ INSERT INTO history_types (id, type)
         (90, 'Set Own Password'),
         (100, 'Reset Password'),
         (110, 'Imported PreReg Data'),
-        (120, 'Added Order');
+        (120, 'Added Order'),
+        (130, 'Added Pass Type'),
+        (140, 'Modified Pass Type'),
+        (150, 'Deleted Pass Type');
+
+
+CREATE TABLE pass_types
+(
+    id                  INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    name                VARCHAR(250) NOT NULL,
+    visible             CHAR(1) COMMENT 'Y or N',
+    min_age             TINYINT UNSIGNED NOT NULL COMMENT 'Minimum age in years',
+    max_age             TINYINT UNSIGNED NOT NULL COMMENT 'Max age in years',
+    cost                DECIMAL(5,2) NOT NULL
+);
+
+INSERT INTO pass_types (name, visible, min_age, max_age, cost)
+    VALUES
+        ('Full Weekend - Adult', 'Y', 13, 254, 55),
+        ('Friday Only - Adult', 'Y', 13, 254, 30),
+        ('Saturday Only - Adult', 'Y', 13, 254, 40),
+        ('Sunday Only - Adult', 'Y', 13, 254, 40),
+        ('Monday Only - Adult', 'Y', 13, 254, 30),
+        ('Full Weekend - Child', 'Y', 6, 12, 45),
+        ('Friday - Child', 'Y', 6, 12, 20),
+        ('Saturday - Child', 'Y', 6, 12, 30),
+        ('Sunday - Child', 'Y', 6, 12, 30),
+        ('Monday - Child', 'Y', 6, 12, 20),
+        ('Child Under 5', 'Y', 0, 5, 0),
+        ('VIP', 'Y', 0, 254, 300);
