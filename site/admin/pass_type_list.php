@@ -52,7 +52,7 @@ $passTypeList = passTypeList();
         <th class="text-center">Name</th>
         <th class="text-center">Age Range (Years)</th>
         <th class="text-center">Cost</th>
-        <th></th>
+        <th class="text-center"><a href="pass_type_update.php">Add New</a></th>
       </tr>
       </thead>
       <?php while ($passType = $passTypeList->fetch()) { ?>

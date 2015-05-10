@@ -10,13 +10,22 @@ if (isset($_GET['id'])) {
 } elseif (isset($_POST["create"])) {
     $passType = new PassType();
     $passType->fromArray($_POST);
-    passTypeUpdate($passType);
-    logMessage($_SESSION['username'], 140, "Updated pass type " . $_POST['name']);
+    if ($passType->id != '') {
+        // Id is not blank, update an existing record
+        passTypeUpdate($passType);
+        logMessage($_SESSION['username'], 140, "Updated pass type " . $_POST['name']);
+    } else {
+        // add new record
+        passTypeAdd($passType);
+        logMessage($_SESSION['username'], 130, "Added pass type " . $_POST['name']);
+    }
     redirect("/admin/pass_type_list.php");
 } elseif (isset($_POST["action"]) && $_POST["action"] == "delete") {
-    passTypeDelete($_GET['id']);
+    passTypeDelete($_POST['id']);
     logMessage($_SESSION['username'], 150, "Deleted pass type " . $_POST['name']);
     redirect("/admin/pass_type_list.php");
+} else {
+    $passType = new PassType();
 }
 ?>
 <!DOCTYPE html>
@@ -56,14 +65,16 @@ if (isset($_GET['id'])) {
         <div class="col-sm-6 text-right">
 
         </div>
+        <?php if ($passType->id != '') { ?>
         <form action="/admin/pass_type_update.php" method="post" class="form-horizontal">
             <input name="id" type="hidden" value="<?php echo $passType->id; ?>" />
             <input name="name" type="hidden" value="<?php echo $passType->name; ?>" />
             <input name="action" type="hidden" value="delete" />
             <input type="submit" class="btn btn-danger" value="Delete This Pass Type" />
         </form><br>
-
+        <?php } ?>
         <div class="col-sm-10"> </div>
+
         <form action="/admin/pass_type_update.php" method="post" class="form-horizontal">
             <input name="id" type="hidden" value="<?php echo $passType->id; ?>" />
             <div class="form-group">
