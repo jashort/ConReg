@@ -39,7 +39,7 @@ $passTypeList = passTypeVisibleList();
     <div class="jumbotron">
         <h2>Registration Prices and Options</h2>
 
-        <table class="table-bordered table-striped">
+        <table class="table-bordered table-striped col-sm-7">
             <tr>
                 <th class="text-center">Name</th>
                 <th class="text-center">Age Range (Years)</th>
