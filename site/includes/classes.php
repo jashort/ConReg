@@ -183,6 +183,11 @@ class PassType {
     public $max_age; // Maximum age <= years for this pass type.
     public $cost;
 
+    /**
+     * Loads data in to this object from the given array. Usually used with a $_POST object.
+     *
+     * @param Array $array
+     */
     public function fromArray($array) {
         if (isset($array['id'])) {
             $this->id = $array['id'];
@@ -193,4 +198,22 @@ class PassType {
         $this->max_age = $array['max_age'];
         $this->cost = $array['cost'];
     }
+
+    /**
+     * Returns a more friendly age range string. For example, "13+" instead of "13 - 255". Treats
+     * 255 as the max age for "+" substitutions.
+     *
+     * @return String ageRange
+     */
+    public function getAgeRange() {
+        $ageRange = $this->min_age;
+
+        if ($this->max_age == 255 && $this->max_age > 0) {
+          $ageRange .= "+";
+        } else {
+          $ageRange .= " - " . $this->max_age;
+        }
+        return $ageRange;
+    }
+    
 }

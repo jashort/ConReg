@@ -55,14 +55,7 @@ $passTypeList = passTypeVisibleList();
                         <? } ?>
                     </td>
                     <td class="text-center">
-                        <?php
-                        if ($passType)
-                            echo $passType->min_age;
-                        if ($passType->max_age == 255 && $passType->max_age > 0) {
-                            echo ("+");
-                        } else {
-                            echo (" - " . $passType->max_age);
-                        } ?>
+                        <?php echo $passType->getAgeRange(); ?>
                     </td>
                     <td class="text-right">$<?php echo $passType->cost ?></td>
                 </tr>
