@@ -50,8 +50,7 @@ $passTypeList = passTypeList();
       <thead>
       <tr>
         <th class="text-center">Name</th>
-        <th class="text-center">Minimum Age<br>(Years)</th>
-        <th class="text-center">Maximum Age<br>(Years)</th>
+        <th class="text-center">Age Range (Years)</th>
         <th class="text-center">Cost</th>
         <th></th>
       </tr>
@@ -65,8 +64,16 @@ $passTypeList = passTypeList();
               <?php echo $passType->name ?>
             <? } ?>
             </td>
-            <td class="text-right"><?php echo $passType->min_age ?></td>
-            <td class="text-right"><?php echo $passType->max_age ?></td>
+            <td class="text-center">
+              <?php 
+              if ($passType)
+              echo $passType->min_age;
+              if ($passType->max_age == 255 && $passType->max_age > 0) {
+                echo ("+");
+              } else {
+                echo (" - " . $passType->max_age);
+              } ?>
+            </td>
             <td class="text-right">$<?php echo $passType->cost ?></td>
             <td class="text-center"><a href="/admin/pass_type_update.php?id=<?php echo $passType->id ?>">Update</td>
           </tr>

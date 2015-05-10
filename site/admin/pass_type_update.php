@@ -61,7 +61,7 @@ if (isset($_GET['id'])) {
             <input name="name" type="hidden" value="<?php echo $passType->name; ?>" />
             <input name="action" type="hidden" value="delete" />
             <input type="submit" class="btn btn-danger" value="Delete This Pass Type" />
-        </form>
+        </form><br>
 
         <div class="col-sm-10"> </div>
         <form action="/admin/pass_type_update.php" method="post" class="form-horizontal">
@@ -76,7 +76,7 @@ if (isset($_GET['id'])) {
             </div>
             <div class="form-group">
                 <label for="visible" class="col-sm-3 control-label">Visible</label>
-                <div class="col-sm-4">
+                <div class="col-sm-2">
                     <select name="visible" class="form-control">
                         <option value="Y" <?php if ($passType->visible == "Y") { echo " SELECTED"; } ?>>Yes</option>
                         <option value="N" <?php if ($passType->visible == "N") { echo " SELECTED"; } ?>>No</option>
@@ -85,7 +85,7 @@ if (isset($_GET['id'])) {
             </div>
             <div class="form-group">
                 <label for="min_age" class="col-sm-3 control-label">Minimum Age (Years)</label>
-                <div class="col-sm-4">
+                <div class="col-sm-1">
                     <input type="text" class="form-control" name="min_age" id="min_age"
                            placeholder="minimum age" maxlength="3" required="required"
                            value="<?php echo $passType->min_age; ?>">
@@ -93,15 +93,16 @@ if (isset($_GET['id'])) {
             </div>
             <div class="form-group">
                 <label for="max_age" class="col-sm-3 control-label">Maximum Age (Years)</label>
-                <div class="col-sm-4">
+                <div class="col-sm-1">
                     <input type="text" class="form-control" name="max_age" id="max_age"
                            placeholder="maximum age" maxlength="3" required="required"
                            value="<?php echo $passType->max_age; ?>">
                 </div>
+                (255 for "minimum age+")
             </div>
             <div class="form-group">
                 <label for="cost" class="col-sm-3 control-label">Cost</label>
-                <div class="col-sm-4">
+                <div class="col-sm-2">
                     <input type="text" class="form-control" name="cost" id="cost"
                            placeholder="0.00" maxlength="8" required="required"
                            min="0" max="99999"
