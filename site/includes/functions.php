@@ -253,7 +253,7 @@ function regAddOrder($attendees) {
 		$orderId = generateOrderId();
 		$stmt = $conn->prepare("INSERT INTO orders (order_id, paid) VALUES (:id, :paid)");
 		$stmt->execute(array('id' => $orderId, 'paid' => 'no'));
-		$stmt = $conn->prepare("INSERT INTO attendees (first_name, last_name, badge_number, phone, email, zip, birthdate, ec_fullname, ec_phone, ec_same, parent_fullname, parent_phone, parent_form, paid, paid_amount, pass_type, reg_type, order_id, checked_in, notes, added_by) VALUES (:firstname, :lastname, :bnumber, :phone, :email, :zip, :bdate, :ecname, :ecphone, :same, :pcname, :pcphone, :pform, :paid, :amount, :passtype, :regtype, :orderId, :checked, :notes, :addedBy)");
+		$stmt = $conn->prepare("INSERT INTO attendees (first_name, last_name, badge_number, phone, email, zip, birthdate, ec_fullname, ec_phone, ec_same, parent_fullname, parent_phone, parent_form, paid, paid_amount, pass_type, pass_type_id, reg_type, order_id, checked_in, notes, added_by) VALUES (:firstname, :lastname, :bnumber, :phone, :email, :zip, :bdate, :ecname, :ecphone, :same, :pcname, :pcphone, :pform, :paid, :amount, :passtype, :passtypeid, :regtype, :orderId, :checked, :notes, :addedBy)");
 		foreach ($attendees as $attendee) {
 			$stmt->execute(array('firstname' => $attendee->first_name,
 				'lastname' => $attendee->last_name,
@@ -271,6 +271,7 @@ function regAddOrder($attendees) {
 				'paid' => $attendee->paid,
 				'amount' => $attendee->paid_amount,
 				'passtype' => $attendee->pass_type,
+				'passtypeid' => $attendee->pass_type_id,
 				'orderId' => $orderId,
 				'regtype' => $attendee->reg_type,
 				'checked' => $attendee->checked_in,
@@ -339,7 +340,7 @@ function regUpdate($attendee) {
 	global $conn;
 
 	try {
-		$stmt = $conn->prepare("UPDATE attendees SET first_name=:firstname, last_name=:lastname, badge_number=:badgenumber, zip=:zip, phone=:phone, email=:email, birthdate=:bdate, ec_fullname=:ecname, ec_phone=:ecphone, ec_same=:same, parent_fullname=:pcname, parent_phone=:pcphone, parent_form=:pform, paid_amount=:amount, pass_type=:passtype, order_id=:orderid, notes=:notes, checked_in=:checkedin WHERE id=:id");
+		$stmt = $conn->prepare("UPDATE attendees SET first_name=:firstname, last_name=:lastname, badge_number=:badgenumber, zip=:zip, phone=:phone, email=:email, birthdate=:bdate, ec_fullname=:ecname, ec_phone=:ecphone, ec_same=:same, parent_fullname=:pcname, parent_phone=:pcphone, parent_form=:pform, paid_amount=:amount, pass_type=:passtype, pass_type_id=:passtypeid, order_id=:orderid, notes=:notes, checked_in=:checkedin WHERE id=:id");
 		$stmt->execute(array('firstname' => $attendee->first_name,
 			'lastname' => $attendee->last_name,
 			'badgenumber' => $attendee->badge_number,
@@ -355,6 +356,7 @@ function regUpdate($attendee) {
 			'pform' => $attendee->parent_form,
 			'amount' => $attendee->paid_amount,
 			'passtype' => $attendee->pass_type,
+			'passtypeid' =>$attendee->pass_type_id,
 			'orderid' => $attendee->order_id,
 			'notes' => $attendee->notes,
 			'checkedin' => $attendee->checked_in,
@@ -745,10 +747,11 @@ function passTypeAdd($passType) {
 
 	try {
 		$stmt = $conn->prepare("INSERT INTO pass_types
-							(name, visible, min_age, max_age, cost)
+							(name, category, visible, min_age, max_age, cost)
 							VALUES
-							(:name, :visible, :min_age, :max_age, :cost)");
+							(:name, :category, :visible, :min_age, :max_age, :cost)");
 		$stmt->execute(array('name' => $passType->name,
+			'category' => $passType->category,
 			'visible' => $passType->visible,
 			'min_age' => $passType->min_age,
 			'max_age' => $passType->max_age,
@@ -767,10 +770,11 @@ function passTypeUpdate($passType) {
 	global $conn;
 
 	try {
-		$stmt = $conn->prepare("UPDATE pass_types SET name = :name, visible = :visible,
-								min_age = :min_age, max_age = :max_age, cost = :cost
+		$stmt = $conn->prepare("UPDATE pass_types SET name = :name, category = :category, 
+								visible = :visible, min_age = :min_age, max_age = :max_age, cost = :cost
 								WHERE id=:id");
 		$stmt->execute(array('name' => $passType->name,
+			'category' => $passType->category,
 			'visible' => $passType->visible,
 			'min_age' => $passType->min_age,
 			'max_age' => $passType->max_age,
@@ -806,6 +810,21 @@ function passTypeVisibleList(){
 
 	$stmt = $conn->prepare("SELECT * FROM pass_types WHERE visible = 'Y' ORDER BY min_age DESC");
 	$stmt->execute();
+	$stmt->setFetchMode(PDO::FETCH_CLASS, "PassType");
+	return $stmt;
+}
+
+/**
+ * Returns visible pass types for a given birthdate (based on age)
+ *
+ * @param int $age_in_years
+ * @return PDOStatement
+ */
+function passTypeForAgeList($age_in_years){
+	global $conn;
+
+	$stmt = $conn->prepare("SELECT * from pass_types WHERE visible='Y' and min_age <= :age_in_years and :age_in_years <= max_age;");
+	$stmt->execute(array('age_in_years'=>$age_in_years));
 	$stmt->setFetchMode(PDO::FETCH_CLASS, "PassType");
 	return $stmt;
 }

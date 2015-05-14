@@ -86,6 +86,14 @@ if (isset($_GET['id'])) {
                 </div>
             </div>
             <div class="form-group">
+                <label for="Category" class="col-sm-3 control-label">Category</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" name="category" id="category"
+                           placeholder="Name" maxlength="10" required="required"
+                           value="<?php echo $passType->category; ?>">
+                </div>
+            </div>
+            <div class="form-group">
                 <label for="visible" class="col-sm-3 control-label">Visible</label>
                 <div class="col-sm-2">
                     <select name="visible" class="form-control">
