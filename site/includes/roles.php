@@ -46,6 +46,7 @@ $ROLES = array(
             'attendee_search' => true,
             'manage_staff' => true,
             'report_view' => true,
+            'manage_pass_types' => true
         )),
     4 => array('name' => 'Operations',
         'rights' => Array(

@@ -45,15 +45,18 @@ if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) ||
     $_SESSION['current']->parent_form = $_POST["parent_form"];
     redirect('/reg_pages/reg_add.php?part=3');
   } elseif ($_POST['part'] == 3) {
-    $_SESSION['current']->pass_type = $_POST["pass_type"];
-    if ($_POST['pass_type'] == "Manual Price") {
-      if(preg_match('^(([0-9]\.[0-9][0-9])|([0-9][0-9]\.[0-9][0-9]))$', $_POST["paid_amount"])) {
+    
+    $pass = getPassType($_POST["pass_type_id"]);
+    $_SESSION['current']->pass_type = $pass->category;
+    $_SESSION['current']->pass_type_id = $_POST["pass_type_id"];
+    if (trim($_POST["paid_amount"]) == '') {
+      $_SESSION['current']->paid_amount = $pass->cost;
+    } else {
+      if(preg_match('/^\d{1,4}\.\d{0,2}$/', trim($_POST["paid_amount"]))) {
         $_SESSION['current']->paid_amount = $_POST["paid_amount"];
       } else {
         die('Manual price amount must contain numbers only. Ex: 19.99');
       }
-    } else {
-      $_SESSION['current']->paid_amount = calculatePassCost($_SESSION['current']->getAge(), $_POST['pass_type']);
     }
     $_SESSION['current']->notes = $_POST["notes"];
     redirect('/reg_pages/reg_add.php?part=4');
@@ -288,57 +291,36 @@ if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) ||
         <input name="Clear" type="button" class="btn btn-danger col-xs-offset-5" onclick="clearVerify()" value="Clear" />
       </form>
     <?php } elseif (array_key_exists('part', $_GET) && $_GET["part"]=="3") { ?>
-      <?
-      // Get pass costs based on age
-      $weekendCost = calculatePassCost($_SESSION['current']->getAge(), "Weekend");
-      $vipCost = calculatePassCost($_SESSION['current']->getAge(), "VIP");
-      $fridayCost = calculatePassCost($_SESSION['current']->getAge(), "Friday");
-      $saturdayCost = calculatePassCost($_SESSION['current']->getAge(), "Saturday");
-      $sundayCost = calculatePassCost($_SESSION['current']->getAge(), "Sunday");
-      $mondayCost = calculatePassCost($_SESSION['current']->getAge(), "Monday");
-      ?>
 
       <form name="reg_add3" action="reg_add.php" method="post" class="form-inline">
         <input name="part" type="hidden" value="3" />
         <fieldset id="paymentinfo">
           <legend>Pass Type</legend>
-            <input type="radio" name="pass_type" value="Weekend" id="Weekend" class="form-control" required
-                <?php if ($_SESSION['current']->pass_type == "Weekend") echo "checked=\"checked\""; ?> />
-            <label for="PassType_0" class="control-label col-sm-2">
-              All Weekend - $<?php echo $weekendCost ?></label>
-            <br>
-            <input type="radio" name="pass_type" value="VIP" id="VIP" class="form-control" required
-                <?php if ($_SESSION['current']->pass_type == "VIP") echo "checked=\"checked\""; ?> />
-            <label for="PassType_1" class="control-label col-sm-2">
-              VIP - $<?php echo $vipCost ?></label>
-            <br>
-            <input name="pass_type" type="radio" id="Friday" value="Friday" class="form-control" required
-                <?php if ($_SESSION['current']->pass_type == "Friday") echo "checked=\"checked\""; ?> />
-            <label for="PassType_2" class="control-label col-sm-2">
-              Friday Only - $<?php echo $fridayCost ?></label>
-            <br />
-            <input name="pass_type" type="radio" id="Saturday" value="Saturday" class="form-control" required
-                <?php if ($_SESSION['current']->pass_type == "Saturday") echo "checked=\"checked\""; ?> />
-            <label for="PassType_3" class="control-label col-sm-2">
-              Saturday Only - $<?php echo $saturdayCost ?></label>
-            <br />
-            <input type="radio" name="pass_type" value="Sunday" id="Sunday" class="form-control" required
-                <?php if ($_SESSION['current']->pass_type == "Sunday") echo "checked=\"checked\""; ?> />
-            <label for="PassType_4" class="control-label col-sm-2">
-              Sunday Only - $<?php echo $sundayCost ?></label>
-            <br />
-            <input name="pass_type" type="radio" id="Monday" value="Monday" class="form-control" required
-                <?php if ($_SESSION['current']->pass_type == "Monday") echo "checked=\"checked\""; ?> />
-            <label for="PassType_5" class="control-label col-sm-2">
-              Monday Only - $<?php echo $mondayCost ?></label>
-            <br />
+
+          <div class="form-group">
+            <label for="pass_type_id" class="control-label col-sm-5">Select Pass Type:</label>
+            <div class="col-sm-2">
+              <select name="pass_type_id" required class="form-control">
+                <?php
+                $passTypeList = passTypeForAgeList($_SESSION['current']->getAge());
+                while ($passType = $passTypeList->fetch()) { ?>
+                  <option value="<?php echo $passType->id?>"
+                      <?php if ($_SESSION['current']->pass_type_id == $passType->id) echo " selected";?>>
+                    <?php echo $passType->name?> - $<?php echo $passType->cost?></option>
+                <?php } ?>
+              </select>
+            </div>
+          </div>
+        </fieldset>
+        <fieldset>
             <?php if (hasRight('registration_manual_price')) { ?>
-              <input name="pass_type" type="radio" id="Manual" onclick="manualPrice()" value="Manual Price" required
-                <?php if ($_SESSION['current']->pass_type == "Manual Price") echo "checked=\"checked\""; ?> />
-              <label for="PassType_6" class="control-label col-sm-2">
-                Manual Price - $</label>
-              <input name="paid_amount" type="text" class="form-control" id="paid_amount"
-                     value="<?php echo $_SESSION['current']->paid_amount ?>" />
+              <div class="form-group">
+                <label for="pass_type" class="control-label col-sm-5">Set Manual Price:<br/> <small>(blank for default price)</small></label>
+                <div class="col-sm-2">
+                  <input name="paid_amount" type="text" class="form-control" id="paid_amount"
+                         value="<?php echo $_SESSION['current']->paid_amount ?>" />
+                </div>
+              </div>
             <?php } ?>
           <br />
         </fieldset>

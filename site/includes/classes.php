@@ -19,7 +19,8 @@ class Attendee {
     public $parent_form;
     public $paid;
     public $paid_amount;
-    public $pass_type;
+    public $pass_type;      // weekend, friday, saturday, vip, etc
+    public $pass_type_id;   // References pass_types table
     public $reg_type;      // Registration type. Reg or PreReg
     public $order_id;
     public $checked_in;
@@ -133,7 +134,10 @@ class Attendee {
         $this->parent_form = $array['parent_form'];
         $this->paid = $array['paid'];
         $this->paid_amount = $array['paid_amount'];
-        $this->pass_type = $array['pass_type'];
+        if (array_key_exists('pass_type', $array)) {
+            $this->pass_type = $array['pass_type'];
+        }
+        $this->pass_type_id = $array['pass_type_id'];
         $this->reg_type = $array['reg_type'];
         $this->order_id = $array['order_id'];
         $this->checked_in = $array['checked_in'];
@@ -173,4 +177,49 @@ class Staff {
         $this->phone_number = $array['phone_number'];
         $this->access_level = $array['access_level'];
     }
+}
+
+class PassType {
+    public $id;
+    public $name;
+    public $category; // weekend, friday, saturday, vip, etc. Lower case. Used when printing badges
+    public $visible;
+    public $min_age;  // Minimum age >= years for this pass type.
+    public $max_age; // Maximum age <= years for this pass type.
+    public $cost;
+
+    /**
+     * Loads data in to this object from the given array. Usually used with a $_POST object.
+     *
+     * @param Array $array
+     */
+    public function fromArray($array) {
+        if (isset($array['id'])) {
+            $this->id = $array['id'];
+        }
+        $this->name = $array['name'];
+        $this->category = $array['category'];
+        $this->visible = $array['visible'];
+        $this->min_age = $array['min_age'];
+        $this->max_age = $array['max_age'];
+        $this->cost = $array['cost'];
+    }
+
+    /**
+     * Returns a more friendly age range string. For example, "13+" instead of "13 - 255". Treats
+     * 255 as the max age for "+" substitutions.
+     *
+     * @return String ageRange
+     */
+    public function getAgeRange() {
+        $ageRange = $this->min_age;
+
+        if ($this->max_age == 255 && $this->max_age > 0) {
+          $ageRange .= "+";
+        } else {
+          $ageRange .= " - " . $this->max_age;
+        }
+        return $ageRange;
+    }
+    
 }

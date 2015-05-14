@@ -29,6 +29,7 @@ roles numerically lower on the list. (Permission names are in parenthesis)
     + Can view staff phone list (manage_staff)
     + Can search attendee list (attendee_search)
     + Can view reports (report_view)
+    + Can edit/hide pass types (manage_pass_types)
   
 - 4: Operations
     + Can search for attendees and view limited information (attendee_search)

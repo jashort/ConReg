@@ -1,6 +1,9 @@
 <?php
 require_once('includes/classes.php');
 require_once('includes/authcheck.php');
+require_once('includes/functions.php');
+
+$passTypeList = passTypeVisibleList();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -35,35 +38,30 @@ require_once('includes/authcheck.php');
     <!-- Main component for a primary marketing message or call to action -->
     <div class="jumbotron">
         <h2>Registration Prices and Options</h2>
-        <ul>
-            <li>Register at the door:
-                <ul>
-                    <li>Prices for age 13 and up:
-                        <ul>
-                            <li>$60 – Full weekend</li>
-                            <li>$30 – Friday only</li>
-                            <li>$40 – Saturday only</li>
-                            <li>$40 – Sunday only</li>
-                            <li>$30 – Monday only</li>
-                        </ul>
-                    </li>
-                    <li>Prices for age 6-12:
-                        <ul>
-                            <li>$45 - Full weekend (Same cost pre-registered or at the door)</li>
-                            <li>$20 – Friday only</li>
-                            <li>$30 – Saturday only</li>
-                            <li>$30 – Sunday only</li>
-                            <li>$20 – Monday only</li>
-                        </ul>
-                    </li>
-                    <li>Prices for age 5 and under:
-                        <ul>
-                            <li>Free</li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-        </ul>
+
+        <table class="table-bordered table-striped col-sm-7">
+            <tr>
+                <th class="text-center">Name</th>
+                <th class="text-center">Age Range (Years)</th>
+                <th class="text-center">Cost</th>
+            </tr>
+            <?php while ($passType = $passTypeList->fetch()) { ?>
+                <tr>
+                    <td>
+                        <? if ($passType->visible != "Y") { ?>
+                            <i><?php echo $passType->name ?> (hidden)</i>
+                        <? } else { ?>
+                            <?php echo $passType->name ?>
+                        <? } ?>
+                    </td>
+                    <td class="text-center">
+                        <?php echo $passType->getAgeRange(); ?>
+                    </td>
+                    <td class="text-right">$<?php echo $passType->cost ?></td>
+                </tr>
+            <?php } ?>
+        </table>
+
     </div>
 
     <?php require 'includes/template/footer.php' ?>

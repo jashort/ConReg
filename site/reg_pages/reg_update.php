@@ -10,6 +10,18 @@ if (isset($_GET['id'])) {
 } elseif (isset($_POST["Update"])) {
   $attendee = new Attendee();
   $attendee->fromArray($_POST);
+  $pass = getPassType($_POST["pass_type_id"]);
+  $attendee->pass_type = $pass->category;
+  if (trim($_POST["paid_amount"]) == '') {
+    $attendee->paid_amount = $pass->cost;
+  } else {
+    if(preg_match('/^\d{1,4}\.\d{0,2}$/', trim($_POST["paid_amount"]))) {
+      $attendee->paid_amount = $_POST["paid_amount"];
+    } else {
+      die('Manual price amount must contain numbers only. Ex: 19.99');
+    }
+  }
+
   regUpdate($attendee);
   logMessage($_SESSION['username'], 60, "Modified attendee " .
       $attendee->first_name . ' ' . $attendee->last_name . "(ID " . $attendee->id . ")");
@@ -208,68 +220,31 @@ if (isset($_GET['id'])) {
       <br />
       <fieldset id="paymentinfo">
         <legend>Pass Type</legend>
-        <?
-        // Get pass costs based on age
-        $weekendCost = calculatePassCost($attendee->getAge(), "Weekend");
-        $vipCost = calculatePassCost($attendee->getAge(), "VIP");
-        $fridayCost = calculatePassCost($attendee->getAge(), "Friday");
-        $saturdayCost = calculatePassCost($attendee->getAge(), "Saturday");
-        $sundayCost = calculatePassCost($attendee->getAge(), "Sunday");
-        $mondayCost = calculatePassCost($attendee->getAge(), "Monday");
-        ?>
         <div class="form-inline">
-          <input type="radio" name="pass_type" value="Weekend" id="Weekend" class="form-control" required
-            onchange="setAmount(<?php echo $weekendCost?>);"
-            <?php if ($_SESSION['current']->pass_type == "Weekend") echo "checked=\"checked\""; ?> />
-          <label for="PassType_0" class="control-label col-sm-2">
-            All Weekend - $<?php echo $weekendCost ?></label>
-          <br>
-          <input type="radio" name="pass_type" value="VIP" id="VIP" class="form-control" required
-            onchange="setAmount(<?php echo $vipCost?>);"
-            <?php if ($_SESSION['current']->pass_type == "VIP") echo "checked=\"checked\""; ?> />
-          <label for="PassType_1" class="control-label col-sm-2">
-            VIP - $<?php echo $vipCost ?></label>
-          <br>
-          <input name="pass_type" type="radio" id="Friday" value="Friday" class="form-control" required
-            onchange="setAmount(<?php echo $fridayCost?>);"
-            <?php if ($_SESSION['current']->pass_type == "Friday") echo "checked=\"checked\""; ?> />
-          <label for="PassType_2" class="control-label col-sm-2">
-            Friday Only - $<?php echo $fridayCost ?></label>
-          <br />
-          <input name="pass_type" type="radio" id="Saturday" value="Saturday" class="form-control" required
-            onchange="setAmount(<?php echo $saturdayCost?>);"
-            <?php if ($_SESSION['current']->pass_type == "Saturday") echo "checked=\"checked\""; ?> />
-          <label for="PassType_3" class="control-label col-sm-2">
-            Saturday Only - $<?php echo $saturdayCost ?></label>
-          <br />
-          <input type="radio" name="pass_type" value="Sunday" id="Sunday" class="form-control" required
-            onchange="setAmount(<?php echo $sundayCost?>);"
-            <?php if ($_SESSION['current']->pass_type == "Sunday") echo "checked=\"checked\""; ?> />
-          <label for="PassType_4" class="control-label col-sm-2">
-            Sunday Only - $<?php echo $sundayCost ?></label>
-          <br />
-          <input name="pass_type" type="radio" id="Monday" value="Monday" class="form-control" required
-            onchange="setAmount(<?php echo $mondayCost?>);"
-            <?php if ($_SESSION['current']->pass_type == "Monday") echo "checked=\"checked\""; ?> />
-          <label for="PassType_5" class="control-label col-sm-2">
-            Monday Only - $<?php echo $mondayCost ?></label>
-          <br />
-          <?php if (hasRight('registration_manual_price')) { ?>
-            <input name="pass_type" type="radio" id="Manual" onclick="setAmount('')" value="Manual Price" required
-                <?php if ($_SESSION['current']->pass_type == "Manual Price") echo "checked=\"checked\""; ?> />
-            <label for="PassType_6" class="control-label col-sm-2">
-              Manual Price</label>
-          <?php } ?>
-          
+          <div class="form-group">
+            <label for="pass_type_id" class="control-label col-sm-4">Select Pass Type:</label>
+            <div class="col-sm-2">
+              <select name="pass_type_id" required class="form-control"
+                      onchange="alert('Change the amount paid below if necessary');">
+                <?php
+                $passTypeList = passTypeForAgeList($attendee->getAge());
+                while ($passType = $passTypeList->fetch()) { ?>
+                  <option value="<?php echo $passType->id?>" 
+                    <?php if ($attendee->pass_type_id == $passType->id) echo " selected";?>>
+                    <?php echo $passType->name?> (Normal Price: $<?php echo $passType->cost?>)</option>
+                <?php } ?>
+              </select>
+            </div>
+          </div>
         </div>
       </fieldset>
-      
+
       <fieldset>
           <div class="form-group">
             <label for="paid_amount" class="control-label col-sm-2">Amount Paid $</label>
             <div class="col-sm-2">
               <input name="paid_amount" type="text" maxlength="8" class="form-control" id="paid_amount"
-                     <?php if (hasRight('registration_manual_price')) { ?> readonly <?php } ?>
+                     <?php if (!hasRight('registration_manual_price')) { ?> readonly <?php } ?>
                      value="<?php echo $attendee->paid_amount ?>" />
             </div>
           </div>

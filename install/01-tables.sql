@@ -21,7 +21,7 @@ CREATE TABLE reg_staff
 CREATE TABLE orders
 (
     order_id        CHAR(32) PRIMARY KEY NOT NULL UNIQUE,
-    total_amount    DECIMAL(10, 0) NOT NULL,
+    total_amount    DECIMAL(9, 2) NOT NULL,
     paid            CHAR(3) NOT NULL COMMENT 'yes or no',
     paytype         VARCHAR(60) NOT NULL,
     notes           TEXT
@@ -47,8 +47,10 @@ CREATE TABLE attendees
     parent_phone    VARCHAR(60),
     parent_form     CHAR(3) COMMENT 'Values: yes or no',
     paid            CHAR(3) COMMENT 'Values: yes or no',
-    paid_amount     DECIMAL(5, 2) NOT NULL,
+    paid_amount     DECIMAL(7, 2) NOT NULL,
     pass_type       VARCHAR(50),
+    pass_type_id    INT UNSIGNED,
+    FOREIGN KEY     (pass_type_id) REFERENCES pass_types(id),
     reg_type        VARCHAR(50) COMMENT 'Values: Reg or PreReg',
     order_id        CHAR(32) REFERENCES orders(order_id),
     checked_in      CHAR(3) NOT NULL COMMENT 'Values: yes or no',
@@ -64,7 +66,8 @@ CREATE TABLE history
 (
     id              INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     changed_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    type_id         SMALLINT UNSIGNED NOT NULL REFERENCES history_types(id),
+    type_id         SMALLINT UNSIGNED NOT NULL,
+    FOREIGN KEY     (type_id) REFERENCES history_types(id),
     username        VARCHAR(60) NOT NULL,
     description     TEXT NOT NULL,
     INDEX type_index (type_id),
@@ -91,4 +94,34 @@ INSERT INTO history_types (id, type)
         (90, 'Set Own Password'),
         (100, 'Reset Password'),
         (110, 'Imported PreReg Data'),
-        (120, 'Added Order');
+        (120, 'Added Order'),
+        (130, 'Added Pass Type'),
+        (140, 'Modified Pass Type'),
+        (150, 'Deleted Pass Type');
+
+
+CREATE TABLE pass_types
+(
+    id                  INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    name                VARCHAR(250) NOT NULL,
+    category            CHAR(10) NOT NULL COMMENT 'weekend, friday, saturday, vip, etc (lower case)',
+    visible             CHAR(1) COMMENT 'Y or N',
+    min_age             TINYINT UNSIGNED NOT NULL COMMENT 'Minimum age in years',
+    max_age             TINYINT UNSIGNED NOT NULL COMMENT 'Max age in years',
+    cost                DECIMAL(7,2) NOT NULL
+);
+
+INSERT INTO pass_types (name, category, visible, min_age, max_age, cost)
+    VALUES
+        ('Full Weekend - Adult', 'weekend', 'Y', 13, 255, 55),
+        ('Friday Only - Adult', 'friday', 'Y', 13, 255, 30),
+        ('Saturday Only - Adult', 'saturday', 'Y', 13, 255, 40),
+        ('Sunday Only - Adult', 'sunday', 'Y', 13, 255, 40),
+        ('Monday Only - Adult', 'monday', 'Y', 13, 255, 30),
+        ('Full Weekend - Child', 'weekend', 'Y', 6, 12, 45),
+        ('Friday - Child', 'friday', 'Y', 6, 12, 20),
+        ('Saturday - Child', 'saturday', 'Y', 6, 12, 30),
+        ('Sunday - Child', 'sunday', 'Y', 6, 12, 30),
+        ('Monday - Child', 'monday', 'Y', 6, 12, 20),
+        ('Child Under 5', 'weekend', 'Y', 0, 5, 0),
+        ('VIP', 'vip', 'Y', 0, 255, 300);

@@ -7,6 +7,7 @@ Convention attendee management software (registration/check in)
 - At-con registration and badge printing
 - Attendee search for operations
 - Reporting (checkins/revenue)
+- Configurable pass types and prices. Passes can be hidden temporarily.
 - User management (security roles/permissoins) see [docs/PermissionLevels.md](docs/PermissionLevels.md)
 - Change history tracking
 
