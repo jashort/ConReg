@@ -102,7 +102,7 @@ if (isset($_POST["create"])) {
       </div>
       <div class="form-group">
         <div class="col-sm-offset-2 col-sm-4">
-          <button name="create" type="submit" class="btn btn-primary" value="create">Create</button>
+          <button name="create" type="submit" class="btn btn-primary col-sm-offset-10" value="create">Create</button>
         </div>
       </div>
     </form>

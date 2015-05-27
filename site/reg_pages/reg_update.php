@@ -69,6 +69,13 @@ if (isset($_GET['id'])) {
       document.getElementById('paid_amount').value = amt;
     }
 
+    function cancelVerify() {
+      var answer=confirm("Are you sure you want to cancel?");
+      if (answer==true) {
+        window.location='/';
+      }
+    }
+
   </script>
 
 </head>
@@ -273,7 +280,8 @@ if (isset($_GET['id'])) {
       <input type="hidden" name="id" value="<?php echo $attendee->id ?>" />
       <input type="hidden" name="country" value="<?php echo $attendee->country ?>" />
 
-      <input name="Update" type="submit" value="Update" class="btn btn-primary" />
+      <input name="Cancel" type="button" class="btn btn-danger" onclick="cancelVerify()" value="Cancel" />
+      <input name="Update" type="submit" value="Update" class="btn btn-primary col-xs-offset-5" />
     </form>
 
   </div>

@@ -54,6 +54,11 @@ if (isset($_GET['staff_id'])) {
     <!-- Main component for a primary marketing message or call to action -->
     <div class="jumbotron">
         <h2>Update User</h2>
+        <form name="password" action="/staff/staff_update.php" method="post">
+            <input name="username" type="hidden" value="<?php echo $staff->username; ?>" />
+            <input name="password" type="hidden" value="password" />
+            <input name="passwordReset" type="submit" class="btn btn-danger col-sm-offset-6" value="Password Reset" /><br />
+        </form><br>
 
         <form action="/staff/staff_update.php" method="post" class="form-horizontal">
             <input name="staff_id" type="hidden" value="<?php echo $staff->staff_id; ?>" />
@@ -125,16 +130,11 @@ if (isset($_GET['staff_id'])) {
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-4">
+                <div class="col-sm-offset-5 col-sm-4">
                     <button name="create" type="submit" class="btn btn-primary" value="Update">Update</button>
                 </div>
             </div>
         </form>
-        </form>
-        <form name="password" action="/staff/staff_update.php" method="post">
-            <input name="username" type="hidden" value="<?php echo $staff->username; ?>" />
-            <input name="password" type="hidden" value="password" />
-            <input name="passwordReset" type="submit" class="btn btn-danger" value="Password Reset" /><br />
         </form>
 
     </div>

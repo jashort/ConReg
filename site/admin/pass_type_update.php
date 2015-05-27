@@ -130,7 +130,7 @@ if (isset($_GET['id'])) {
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-4">
-                    <button name="create" type="submit" class="btn btn-primary" value="Update">Update</button>
+                    <button name="create" type="submit" class="btn btn-primary col-sm-offset-12" value="Update">Update</button>
                 </div>
             </div>
         </form>

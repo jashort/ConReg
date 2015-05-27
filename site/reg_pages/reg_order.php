@@ -20,6 +20,10 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Paid")) {
     foreach ($_SESSION["currentOrder"] as $attendee) {
         logMessage($_SESSION['username'], 30, "At-Con Check in " . $attendee->first_name . ' '. $attendee->last_name);
     }
+} elseif (isset($_GET["action"]) && ($_GET["action"] == "clear")) {
+    $_SESSION["currentOrder"] = Array();
+    unset ($_SESSION["current"]);
+    redirect("/index.php");
 }
 
 ?>
@@ -66,8 +70,14 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Paid")) {
                 document.getElementById("AuthDisplay").required = false;
                 
             }
-            
         }
+        function clearVerify() {
+            var answer=confirm("Are you sure you want to cancel this order? All attendee records in this order will be lost.");
+            if (answer==true) {
+                window.location='/reg_pages/reg_order.php?action=clear';
+            }
+        }
+
     </script>
 
 </head>
@@ -158,7 +168,8 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Paid")) {
                     <textarea name="notes" id="Notes" rows="5" cols="80"></textarea>
                 </fieldset>
                 <br>
-                <input name="Paid" type="submit" class="btn btn-primary" value="Take Money" />
+                <input name="Clear" type="button" class="btn btn-danger" onclick="clearVerify()" value="Cancel Order" />
+                <input name="Paid" type="submit" class="btn btn-primary col-xs-offset-5" value="Take Money" />
             </form>
         <?php } ?>
         

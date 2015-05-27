@@ -169,7 +169,7 @@ if (isset($_GET['id'])) {
           <input name="oid" type="hidden" value="<?php echo $attendee->order_id ?>" />
           <input name="Minor" type="hidden" value="<?php echo $attendee->isMinor(); ?>" />
 
-          <input name='Update' type='submit' value='Check In' class='btn btn-primary' />
+          <input name='Update' type='submit' value='Check In' class='btn btn-primary col-sm-offset-5' />
 
         <? } ?>
 

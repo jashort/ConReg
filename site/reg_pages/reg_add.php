@@ -212,8 +212,8 @@ if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) ||
           </div>
 
         </fieldset><br>
-        <input name="Next" type="submit" class="btn btn-primary" value="Next" />
-        <input name="Clear" type="button" class="btn btn-danger col-xs-offset-5" onclick="clearVerify()" value="Clear" />
+        <input name="Clear" type="button" class="btn btn-danger" onclick="clearVerify()" value="Clear" />
+        <input name="Next" type="submit" class="btn btn-primary col-xs-offset-5" value="Next" />
       </form>
     <?php } elseif (array_key_exists('part', $_GET) && $_GET["part"]=="2") { ?>
 
@@ -287,8 +287,8 @@ if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) ||
           <input name="parent_form" value="N" type="hidden" />
         <? } ?>
         <br>
-        <input name="Next" type="submit" class="btn btn-primary" value="Next" />
-        <input name="Clear" type="button" class="btn btn-danger col-xs-offset-5" onclick="clearVerify()" value="Clear" />
+        <input name="Clear" type="button" class="btn btn-danger" onclick="clearVerify()" value="Clear" />
+        <input name="Next" type="submit" class="btn btn-primary col-xs-offset-5" value="Next" />
       </form>
     <?php } elseif (array_key_exists('part', $_GET) && $_GET["part"]=="3") { ?>
 
@@ -329,8 +329,8 @@ if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) ||
           <textarea name="notes" id="Notes" rows="5" cols="80"><?php echo $_SESSION['current']->notes; ?></textarea>
         </fieldset>
         <br>
-        <input name="Next" type="submit" class="btn btn-primary" value="Next" />
-        <input name="Clear" type="button" class="btn btn-danger col-xs-offset-5" onclick="clearVerify()" value="Clear" />
+        <input name="Clear" type="button" class="btn btn-danger" onclick="clearVerify()" value="Clear" />
+        <input name="Next" type="submit" class="btn btn-primary col-xs-offset-5" value="Next" />
 
       </form>
     <?php } elseif (array_key_exists('part', $_GET) && $_GET["part"]=="4") { ?>
@@ -393,8 +393,8 @@ if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) ||
         <input type="hidden" name="SubmitNow" value="Yes" />
         <input type="hidden" name="part" value="4" />
         <!--<input name="Previous" type="button" class="next_button" onclick="MM_goToURL('parent','/reg_pages/reg_add.php?part=3');return document.MM_returnValue" value="Previous" />-->
-        <input name="Done" type="submit" class="btn btn-primary" value="Done" />
-        <input name="Clear" type="button" class="btn btn-danger col-xs-offset-5" onclick="clearVerify()" value="Clear" />
+        <input name="Clear" type="button" class="btn btn-danger" onclick="clearVerify()" value="Clear" />
+        <input name="Done" type="submit" class="btn btn-primary col-xs-offset-5" value="Done" />
       </form>
     <?php } ?>
 
