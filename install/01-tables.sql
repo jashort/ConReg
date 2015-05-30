@@ -28,6 +28,32 @@ CREATE TABLE orders
 );
 
 
+CREATE TABLE pass_types
+(
+    id                  INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    name                VARCHAR(250) NOT NULL,
+    category            CHAR(10) NOT NULL COMMENT 'weekend, friday, saturday, vip, etc (lower case)',
+    visible             CHAR(1) COMMENT 'Y or N',
+    min_age             TINYINT UNSIGNED NOT NULL COMMENT 'Minimum age in years',
+    max_age             TINYINT UNSIGNED NOT NULL COMMENT 'Max age in years',
+    cost                DECIMAL(7,2) NOT NULL
+);
+
+INSERT INTO pass_types (name, category, visible, min_age, max_age, cost)
+VALUES
+    ('Full Weekend - Adult', 'weekend', 'Y', 13, 255, 55),
+    ('Friday Only - Adult', 'friday', 'Y', 13, 255, 30),
+    ('Saturday Only - Adult', 'saturday', 'Y', 13, 255, 40),
+    ('Sunday Only - Adult', 'sunday', 'Y', 13, 255, 40),
+    ('Monday Only - Adult', 'monday', 'Y', 13, 255, 30),
+    ('Full Weekend - Child', 'weekend', 'Y', 6, 12, 45),
+    ('Friday - Child', 'friday', 'Y', 6, 12, 20),
+    ('Saturday - Child', 'saturday', 'Y', 6, 12, 30),
+    ('Sunday - Child', 'sunday', 'Y', 6, 12, 30),
+    ('Monday - Child', 'monday', 'Y', 6, 12, 20),
+    ('Child Under 5', 'weekend', 'Y', 0, 5, 0),
+    ('VIP', 'vip', 'Y', 0, 255, 300);
+
 CREATE TABLE attendees
 (
     id              INT(10) PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -61,6 +87,31 @@ CREATE TABLE attendees
     INDEX order_id_index (order_id)
 );
 
+CREATE TABLE history_types
+(
+    id              SMALLINT UNSIGNED PRIMARY KEY NOT NULL,
+    type            VARCHAR(60)
+);
+
+INSERT INTO history_types (id, type)
+VALUES
+    (0, 'Login'),
+    (10, 'Logout'),
+    (20, 'PreReg CheckIn'),
+    (30, 'AtCon CheckIn'),
+    (40, 'Badge Print'),
+    (50, 'Badge RePrint'),
+    (60, 'Attendee Update'),
+    (70, 'Added User'),
+    (80, 'Changed User'),
+    (90, 'Set Own Password'),
+    (100, 'Reset Password'),
+    (110, 'Imported PreReg Data'),
+    (120, 'Added Order'),
+    (130, 'Added Pass Type'),
+    (140, 'Modified Pass Type'),
+    (150, 'Deleted Pass Type');
+
 
 CREATE TABLE history
 (
@@ -73,55 +124,3 @@ CREATE TABLE history
     INDEX type_index (type_id),
     INDEX username_index (username)
 );
-
-CREATE TABLE history_types
-(
-    id              SMALLINT UNSIGNED PRIMARY KEY NOT NULL,
-    type            VARCHAR(60)
-);
-
-INSERT INTO history_types (id, type)
-    VALUES
-        (0, 'Login'),
-        (10, 'Logout'),
-        (20, 'PreReg CheckIn'),
-        (30, 'AtCon CheckIn'),
-        (40, 'Badge Print'),
-        (50, 'Badge RePrint'),
-        (60, 'Attendee Update'),
-        (70, 'Added User'),
-        (80, 'Changed User'),
-        (90, 'Set Own Password'),
-        (100, 'Reset Password'),
-        (110, 'Imported PreReg Data'),
-        (120, 'Added Order'),
-        (130, 'Added Pass Type'),
-        (140, 'Modified Pass Type'),
-        (150, 'Deleted Pass Type');
-
-
-CREATE TABLE pass_types
-(
-    id                  INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    name                VARCHAR(250) NOT NULL,
-    category            CHAR(10) NOT NULL COMMENT 'weekend, friday, saturday, vip, etc (lower case)',
-    visible             CHAR(1) COMMENT 'Y or N',
-    min_age             TINYINT UNSIGNED NOT NULL COMMENT 'Minimum age in years',
-    max_age             TINYINT UNSIGNED NOT NULL COMMENT 'Max age in years',
-    cost                DECIMAL(7,2) NOT NULL
-);
-
-INSERT INTO pass_types (name, category, visible, min_age, max_age, cost)
-    VALUES
-        ('Full Weekend - Adult', 'weekend', 'Y', 13, 255, 55),
-        ('Friday Only - Adult', 'friday', 'Y', 13, 255, 30),
-        ('Saturday Only - Adult', 'saturday', 'Y', 13, 255, 40),
-        ('Sunday Only - Adult', 'sunday', 'Y', 13, 255, 40),
-        ('Monday Only - Adult', 'monday', 'Y', 13, 255, 30),
-        ('Full Weekend - Child', 'weekend', 'Y', 6, 12, 45),
-        ('Friday - Child', 'friday', 'Y', 6, 12, 20),
-        ('Saturday - Child', 'saturday', 'Y', 6, 12, 30),
-        ('Sunday - Child', 'sunday', 'Y', 6, 12, 30),
-        ('Monday - Child', 'monday', 'Y', 6, 12, 20),
-        ('Child Under 5', 'weekend', 'Y', 0, 5, 0),
-        ('VIP', 'vip', 'Y', 0, 255, 300);
