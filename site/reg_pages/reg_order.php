@@ -1,6 +1,5 @@
 <?php
 require_once('../includes/functions.php');
-require_once('../includes/passtypes.php');
 
 require_once('../includes/authcheck.php');
 requireRight('registration_add');
