@@ -83,7 +83,9 @@ CREATE TABLE attendees
     notes           TEXT,
     added_by        VARCHAR(80),
     created         TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    INDEX first_name_index (first_name),
     INDEX last_name_index (last_name),
+    INDEX badge_number_index (badge_number),
     INDEX order_id_index (order_id)
 );
 
