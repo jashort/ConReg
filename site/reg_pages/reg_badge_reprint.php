@@ -4,8 +4,8 @@ require_once('../includes/functions.php');
 require_once('../includes/authcheck.php');
 requireRight('badge_reprint');
 
-if (isset($_GET['lname'])) {
-  $attendees = attendeeSearchLastName($_GET['lname']);
+if (isset($_GET['search'])) {
+  $attendees = attendeeSearch($_GET['search']);
 } else {
   $attendees = array();
 }
@@ -43,15 +43,16 @@ if (isset($_GET['lname'])) {
   <div class="jumbotron">
     <h2>Reprint Badge</h2>
 
-    <?php if (!isset($_GET["lname"])) { // Show if no search term ?>
-      <form name="ln" action="/reg_pages/reg_badge_reprint.php" method="get" target="_self" class="form-inline">
+    <?php if (!isset($_GET["search"])) { // Show if no search term ?>
+      <form name="searchForm" action="/reg_pages/reg_badge_reprint.php" method="get" target="_self" class="form-inline">
         <fieldset id="list_table_search">
-          <label for="id" class="control-label">Last Name</label>
-          <input name="lname" type="text" class="form-control" required maxlength="60" autofocus autocomplete="off"/>
-          <input name="Submit" type="submit" class="btn btn-primary" value="Search" />
+          <label for="search" class="control-label">Search</label>
+          <input name="search" type="text" maxlength="60" autocomplete="off" autofocus required class="form-control" />
+          <input name="Submit" type="submit" class="btn btn-primary" value="Search" /><br>
+          <small>Searches for first name, last name, full name, or badge number.</small>
         </fieldset>
       </form>
-    <?php } elseif (isset($_GET["lname"])) { // Show if search term ?>
+    <?php } else { ?>
       <table id="list_table" class="table">
         <tr>
           <th scope="col">Name</th>
@@ -74,7 +75,7 @@ if (isset($_GET['lname'])) {
           </tr>
         <?php } ?>
       </table>
-    <?php } // Show if search term ?>
+    <?php } ?>
 
   </div>
 

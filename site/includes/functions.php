@@ -392,33 +392,35 @@ function regCheckInParentFormReceived($id) {
 
 
 /**
- * Search for attendees with the given last name (exact match, case insensitive),
- * whether or not they are checked in
- *
- * @param string $lastName
+ * Search for attendees. Handles searching by full name, last name, first name, or badge number
+ * Note that you can use "%" for partial matches. For example, "Bill%" would match "Bill" and "Billy"
+ * @param string $searchString
  * @return PDOStatement
  */
-function attendeeSearchLastName($lastName) {
-	global $conn;
-	$stmt = $conn->prepare("SELECT * FROM attendees WHERE last_name like :lname");
-	$stmt->execute(array('lname' => $lastName));
-	$stmt->setFetchMode(PDO::FETCH_CLASS, "Attendee");
-	return $stmt;
-}
-
-/**
- * Search for attendees with the given badge number (exact match, case insensitive)
- * whether or not they are checked in
- *
- * @param string $badgeNumber
- * @return PDOStatement
- */
-function attendeeSearchBadgeNumber($badgeNumber) {
-	global $conn;
-	$stmt = $conn->prepare("SELECT * FROM attendees WHERE badge_number like :badge");
-	$stmt->execute(array('badge' => $badgeNumber));
-	$stmt->setFetchMode(PDO::FETCH_CLASS, "Attendee");
-	return $stmt;
+function attendeeSearch($searchString) {
+    global $conn;
+    $searchString = trim($searchString);
+    if (count(explode(" ", $searchString)) > 1) {
+        // If more than one word was passed in, search for a full name as well as
+        // First and last names (to handle people with multiple names, like "Mary Jane Watson")
+        // The full name search is pretty slow because it's concatenating the names in the SQL
+        // query, but this should still be relatively fast with a normal number of attendees
+        $stmt = $conn->prepare("SELECT * FROM attendees WHERE
+                                CONCAT_WS(' ', first_name, last_name) = :search OR
+                                first_name LIKE :search OR
+                                last_name LIKE :search
+                                ORDER BY first_name, last_name");
+        $stmt->execute(array('search' => $searchString));
+    } else {
+        $stmt = $conn->prepare("SELECT * FROM attendees WHERE
+                                badge_number LIKE :search OR
+                                last_name LIKE :search OR
+                                first_name LIKE :search
+                                ORDER BY first_name, last_name");
+        $stmt->execute(array('search' => $searchString));
+    }
+    $stmt->setFetchMode(PDO::FETCH_CLASS, "Attendee");
+    return $stmt;
 }
 
 

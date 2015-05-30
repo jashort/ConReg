@@ -4,12 +4,8 @@ require_once('../includes/functions.php');
 require_once('../includes/authcheck.php');
 requireRight('attendee_search');
 
-if (isset($_GET['id'])) {
-    if ($_GET['field'] == "bid") {
-        $attendees = attendeeSearchBadgeNumber($_GET['id']);
-    } else {
-        $attendees = attendeeSearchLastName($_GET['id']);
-    }
+if (isset($_GET['search'])) {
+    $attendees = attendeeSearch($_GET['search']);
 }
 ?>
 <!DOCTYPE html>
@@ -46,27 +42,14 @@ if (isset($_GET['id'])) {
     <div class="jumbotron">
         <h2>Attendee Search</h2>
 
-        <?php if (!isset($_GET["id"])) { // Show if no search term ?>
-            <!--
-            <form name="bid" action="/admin/admin_attendee_list.php" method="get" target="_self" class="form-inline">
-                <input name="field" type="hidden" value="bid" /><br />
+        <?php if (!isset($_GET["search"])) { // Show if no search term ?>
+            <form name="searchForm" action="/admin/admin_attendee_list.php" method="get" target="_self" class="form-inline">
                 <fieldset id="list_table_search">
-                    <label for="id" class="col-sm-2 control-label">Badge Number</label>
-                    <div class="col-sm-4">
-                        <input name="id" type="text" class="form-control" />
-                        <input name="Submit" type="submit" class="btn btn-primary" value="Search" onmousedown="validateBID();" />
-                    </div>
+                    <label for="search" class="control-label">Search</label>
+                    <input name="search" type="text" maxlength="60" autocomplete="off" autofocus required class="form-control" />
+                    <input name="Submit" type="submit" class="btn btn-primary" value="Search" /><br>
+                    <small>Searches for first name, last name, full name, or badge number.</small>
                 </fieldset>
-            </form>
-            -->
-
-            <form name="ln" action="/admin/admin_attendee_list.php" method="get" target="_self" class="form-inline">
-                <input name="field" type="hidden" value="ln" />
-                    <fieldset id="list_table_search">
-                        <label for="id" class="control-label">Last Name</label>
-                        <input name="id" type="text" maxlength="60" autocomplete="off" autofocus required class="form-control" />
-                        <input name="Submit" type="submit" class="btn btn-primary" value="Search" />
-                    </fieldset>
             </form>
         <?php } else { // Show if search term ?>
             <table id="list_table" class="table">

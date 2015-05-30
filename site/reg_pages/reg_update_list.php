@@ -4,13 +4,10 @@ require_once('../includes/functions.php');
 require_once('../includes/authcheck.php');
 requireRight('registration_modify');
 
-
-if (isset($_GET['id'])) {
-  if ($_GET['field'] == "bid") {
-    $attendees = attendeeSearchBadgeNumber($_GET['id']);
-  } else {
-    $attendees = attendeeSearchLastName($_GET['id']);
-  }
+if (isset($_GET['search'])) {
+    $attendees = attendeeSearch($_GET['search']);
+} else {
+    $attendees = array();
 }
 ?>
 <!DOCTYPE html>
@@ -45,17 +42,16 @@ if (isset($_GET['id'])) {
   <!-- Main component for a primary marketing message or call to action -->
   <div class="jumbotron">
     <h2>Update Attendee</h2>
-    <?php if (!isset($_GET["id"])) { // Show if no search term ?>
-      <form name="ln" action="/reg_pages/reg_update_list.php" method="get" target="_self" class="form-inline">
-        <fieldset id="list_table_search">
-          <label for="id" class="control-label">Last Name</label>
-          <input name="id" type="text" maxlength="60" autocomplete="off" autofocus required class="form-control" />
-          <input name="Submit" type="submit" class="btn btn-primary" value="Search" />
-          <input name="field" type="hidden" value="ln" />
-        </fieldset>
-      </form>
-    <?php } // Show if no search term ?>
-    <?php if (isset($_GET["id"])) { // Show if no search term ?>
+    <?php if (!isset($_GET["search"])) { // Show if no search term ?>
+        <form name="searchForm" action="/reg_pages/reg_update_list.php" method="get" target="_self" class="form-inline">
+            <fieldset id="list_table_search">
+                <label for="search" class="control-label">Search</label>
+                <input name="search" type="text" maxlength="60" autocomplete="off" autofocus required class="form-control" />
+                <input name="Submit" type="submit" class="btn btn-primary" value="Search" /><br>
+                <small>Searches for first name, last name, full name, or badge number.</small>
+            </fieldset>
+        </form>
+    <?php } else {  ?>
       <table id="list_table" class="table">
         <tr>
           <th scope="col">Name</th>
@@ -69,7 +65,7 @@ if (isset($_GET['id'])) {
         <?php } ?>
 
       </table>
-    <?php } // Show if no search term ?>
+    <?php } ?>
   </div>
 
   <?php require '../includes/template/footer.php' ?>
