@@ -1,14 +1,31 @@
 body {
   padding-top: 70px;
-  background-image: url('/assets/images/clouds.jpg');
-  background-color: #9cc9fd;
+  /*background-image: url('/assets/images/clouds.jpg');*/
+  background-color: #F9F9FF;
+  color: #111;
+}
+
+.navbar {
+  background-color: #E1ECFF;
+  color: #111 !important;
+  border-bottom: 1px solid #666;
+}
+
+.navbar-brand {
+
 }
 
 .jumbotron {
+  color: #111;
   background-color: #FFFFFF;
-  background-position: right bottom;
-  background-repeat: no-repeat;
   min-height: 600px;
+  border: 1px solid #666;
+}
+
+.mascot {
+  background-image: url("/assets/images/mascot-header.png");
+  background-position: bottom right;
+  background-repeat: no-repeat;
 }
 
 .report {

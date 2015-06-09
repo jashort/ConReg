@@ -36,7 +36,7 @@ $passTypeList = passTypeVisibleList();
 <div class="container">
 
     <!-- Main component for a primary marketing message or call to action -->
-    <div class="jumbotron">
+    <div class="jumbotron mascot">
         <h2>Registration Prices and Options</h2>
 
         <table class="table-bordered table-striped col-sm-7">
