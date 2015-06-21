@@ -5,7 +5,7 @@ require_once('../includes/authcheck.php');
 requireRight('badge_reprint');
 
 include("../includes/pdf/mpdf.php");
-$mpdf=new mPDF('utf-8', array(215.9,279.4), 0, '', 0, 0, 0, 0, 0, 0, 'L');
+$mpdf=new mPDF('utf-8', array(215.9,139.7), 0, '', 0, 0, 0, 0, 0, 0, 'L');
 
 // Buffer the following html with PHP so we can store it to a variable later
 ob_start();
@@ -35,7 +35,7 @@ logMessage($_SESSION['username'], 50, "Reprinted badge for " .
 		<style>
 			#buffer {
 				width: 4in;
-				height: 2.68in;
+				height: 1in;
 				padding: 0;
 				margin-top: 0;
 				margin-right: auto;
@@ -46,12 +46,13 @@ logMessage($_SESSION['username'], 50, "Reprinted badge for " .
 				width: 4in;
 				height: 3.127in;
 				padding: 0;
-				background-color: <?php echo $stripeColor; ?>;
-				margin-top: 0;
+				margin-top: 0in;
 				margin-right: auto;
 				margin-left: auto;
+				white-space:nowrap;
 				/*border: 1px solid #000;*/
 			}
+
 
 			#name {
 				width: 3.32in;

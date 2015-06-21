@@ -5,7 +5,7 @@ require_once('../includes/authcheck.php');
 requireRight('badge_print');
 
 include("../includes/pdf/mpdf.php");
-$mpdf=new mPDF('utf-8', array(215.9,279.4), 0, '', 0, 0, 0, 0, 0, 0, 'L');
+$mpdf=new mPDF('utf-8', array(215.9,139.7), 0, '', 0, 0, 0, 0, 0, 0, 'P');
 
 
 $attendees = array();
@@ -38,7 +38,7 @@ ob_start();
 	width: 4in;
 	height: 3.127in;
 	padding: 0;
-	margin-top: 3in;
+	margin-top: 0in;
 	margin-right: auto;
 	margin-left: auto;
 		white-space:nowrap;
