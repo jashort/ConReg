@@ -75,7 +75,7 @@ if (isset($_GET['id'])) {
   <div class="jumbotron">
     <h2>Pre-Reg Checkin</h2>
 
-    <? if (isset($_POST["checkin"]) && $_POST["checkin"] == true) { ?>
+    <?php if (isset($_POST["checkin"]) && $_POST["checkin"] == true) { ?>
       <br><br>
       <div class="container col-lg-2">
         <form action="/reg_pages/badgeprint.php" method="post" target="_blank" class="form-inline">
@@ -92,7 +92,7 @@ if (isset($_GET['id'])) {
 
       </div>
 
-    <? } else { ?>
+    <?php } else { ?>
 
 
     <form action="/prereg_pages/prereg_checkin.php" method="post" class="form-inline">
@@ -161,7 +161,7 @@ if (isset($_GET['id'])) {
         <legend>Check In</legend>
         <?php if ($attendee->checked_in == "Yes") { ?>
           <span class='input-xlarge uneditable-input'>CHECKED IN</span>
-        <? } else { ?>
+        <?php } else { ?>
           <label for="Information Verification" class="control-label">Information Verified</label>
           <input name='checkin' type='checkbox' id='Information Verification' class='form-control' required />
           <br />
@@ -171,12 +171,12 @@ if (isset($_GET['id'])) {
 
           <input name='Update' type='submit' value='Check In' class='btn btn-primary col-sm-offset-5' />
 
-        <? } ?>
+        <?php } ?>
 
     </form>
     </fieldset>
 
-    <? } ?>
+    <?php } ?>
   </div>
 
   <?php require '../includes/template/footer.php' ?>

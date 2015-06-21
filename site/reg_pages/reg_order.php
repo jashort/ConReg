@@ -91,7 +91,7 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Paid")) {
     <div class="jumbotron">
         <h2>Complete Order</h2>
 
-        <? if (array_key_exists('action', $_POST) && $_POST["action"] == "Paid") { ?>
+        <?php if (array_key_exists('action', $_POST) && $_POST["action"] == "Paid") { ?>
             <fieldset id="paymentinfo">
                 <legend>Print Badges</legend>
 
@@ -127,9 +127,9 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Paid")) {
                     foreach ($_SESSION['currentOrder'] as $attendee) {
                         $total += $attendee->paid_amount; ?>
                         <tr>
-                            <td><? echo $attendee->first_name . ' ' . $attendee->last_name ?></td>
-                            <td><? echo $attendee->pass_type ?></td>
-                            <td>$<? echo $attendee->paid_amount ?></td>
+                            <td><?php echo $attendee->first_name . ' ' . $attendee->last_name ?></td>
+                            <td><?php echo $attendee->pass_type ?></td>
+                            <td>$<?php echo $attendee->paid_amount ?></td>
                         </tr>
                     <?php } ?>
                     <tr>

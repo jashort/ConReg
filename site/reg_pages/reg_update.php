@@ -222,7 +222,7 @@ if (isset($_GET['id'])) {
         <input type="hidden" name="parent_fullname" value="<?php echo $attendee->parent_fullname ?>" />
         <input type="hidden" name="parent_phone" value="<?php echo $attendee->parent_phone ?>" />
         <input type="hidden" name="parent_form" value="<?php echo $attendee->parent_form ?>" />
-      <? } ?>
+      <?php } ?>
       <br />
       <fieldset id="paymentinfo">
         <legend>Pass Type</legend>

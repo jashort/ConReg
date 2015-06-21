@@ -37,7 +37,7 @@
                         <?php } ?>
                     </ul>
                 </li>
-                <? } ?>
+                <?php } ?>
                 
                 <?php if (hasRight('report_view') || hasRight("manage_pass_types")) { ?>
                 <li class="dropdown">

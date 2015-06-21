@@ -182,7 +182,7 @@ if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) ||
           <div class="form-group">
             <label for="Birth Month" class="control-label col-sm-2">Birth Date:</label>
             <div class="col-sm-6 form-inline">
-            <? // If a birthdate has been set, display it. Otherwise, display blank fields
+            <?php // If a birthdate has been set, display it. Otherwise, display blank fields
             if ($_SESSION['current']->getAge() == -1) { ?>
               <input type="number" class="form-control two-character" maxlength="2" name="birth_month" id="Birth Month"
                      value="<?php echo $_SESSION['current']->getBirthMonth() ?>" min="1" max="12" placeholder="MM"
@@ -196,7 +196,7 @@ if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) ||
                      value="<?php echo $_SESSION['current']->getBirthYear()?>" min="1900" max="2015" placeholder="YYYY"
                      required autocomplete="off">
               (Month / Day / Year)
-            <? } else { ?>
+            <?php } else { ?>
               <input type="number" class="form-control two-character" maxlength="2" name="birth_month" id="Birth Month"
                      min="1" max="12" placeholder="MM" required autocomplete="off">
               /
@@ -206,7 +206,7 @@ if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) ||
               <input type="number" class="form-control four-character" maxlength="4" name="birth_year" id="Birth Year"
                      min="1900" max="2015" placeholder="YYYY" required autocomplete="off">
               (Month / Day / Year)
-            <? } ?>
+            <?php } ?>
             </div>
           </div>
 
@@ -284,7 +284,7 @@ if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) ||
           <input name="parent_fullname" value="" type="hidden" />
           <input name="parent_phone" value="" type="hidden" />
           <input name="parent_form" value="N" type="hidden" />
-        <? } ?>
+        <?php } ?>
         <br>
         <input name="Clear" type="button" class="btn btn-danger" onclick="clearVerify()" value="Clear" />
         <input name="Next" type="submit" class="btn btn-primary col-xs-offset-5" value="Next" />

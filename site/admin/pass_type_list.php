@@ -58,11 +58,11 @@ $passTypeList = passTypeList();
       <?php while ($passType = $passTypeList->fetch()) { ?>
           <tr>
             <td>
-            <? if ($passType->visible != "Y") { ?>
+            <?php if ($passType->visible != "Y") { ?>
               <i><?php echo $passType->name ?> (hidden)</i>
-            <? } else { ?>
+            <?php } else { ?>
               <?php echo $passType->name ?>
-            <? } ?>
+            <?php } ?>
             </td>
             <td class="text-center">
               <?php echo $passType->getAgeRange() ?>

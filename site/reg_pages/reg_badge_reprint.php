@@ -70,7 +70,7 @@ if (isset($_GET['search'])) {
                   <input type="hidden" name="print" value="<?php echo $attendee->id?>" />
                   <input type="submit" id="print<?php echo $attendee->id?>" value="Reprint Badge" class="btn btn-sm">
                 </form>
-              <? } ?>
+              <?php } ?>
             </td>
           </tr>
         <?php } ?>
