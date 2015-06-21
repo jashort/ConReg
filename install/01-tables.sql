@@ -1,5 +1,5 @@
 /* Drop tables if they exist */
-DROP TABLE IF EXISTS reg_staff, orders, attendees, history, history_types;
+DROP TABLE IF EXISTS reg_staff, orders, attendees, history, history_types, pass_types;
 
 /* Create database tables */
 
