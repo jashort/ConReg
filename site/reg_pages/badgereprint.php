@@ -5,7 +5,7 @@ require_once('../includes/authcheck.php');
 requireRight('badge_reprint');
 
 include("../includes/pdf/mpdf.php");
-$mpdf=new mPDF('utf-8', array(215.9,139.7), 0, '', 0, 0, 0, 0, 0, 0, 'L');
+$mpdf=new mPDF('utf-8', array(215.9,139.7), 0, '', 0, 0, 0, 0, 0, 0, 'P');
 
 // Buffer the following html with PHP so we can store it to a variable later
 ob_start();
@@ -29,10 +29,10 @@ logMessage($_SESSION['username'], 50, "Reprinted badge for " .
 
 
 ?>
-	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-	<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<style>
+		<style type="text/css">
 			#buffer {
 				width: 4in;
 				height: 1in;
@@ -53,6 +53,17 @@ logMessage($_SESSION['username'], 50, "Reprinted badge for " .
 				/*border: 1px solid #000;*/
 			}
 
+			.adult {
+				background-color: #323e99;
+			}
+
+			.minor {
+				background-color: #e39426;
+			}
+
+			.child {
+				background-color: #cc202a;
+			}
 
 			#name {
 				width: 3.32in;
@@ -69,16 +80,30 @@ logMessage($_SESSION['username'], 50, "Reprinted badge for " .
 		</style>
 	</head>
 	<body>
+	<?php
+	logMessage($_SESSION['username'], 40, "Printed badge for " .
+		$attendee->first_name . ' ' . $attendee->last_name . " (ID " . $attendee->id . ")");
+
+	$age = $attendee->getAge();
+	if ($age >= 18) {
+		$ageClass = "adult";
+	} elseif (($age > 12) && ($age <= 17)) {
+		$ageClass = "minor";
+	} else {
+		$ageClass = "child";
+	}?>
+
 	<div id="buffer"></div>
-	<div id="badge">
+	<div id="badge" class="<?php echo $ageClass;?>">
 		<!--<div id="stripe">
-        </div>-->
+		</div>-->
 		<div id="name">
 			<?php echo $attendee->first_name . " " . $attendee->last_name; ?>
 		</div>
 	</div>
+	<div id="buffer"></div>
 	</body>
-	</html>
+</html>
 <?php
 
 $html = ob_get_contents();
