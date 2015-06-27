@@ -50,7 +50,7 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Paid")) {
     <script type="text/javascript">
         function creditAuth() {
             do {
-                var number=prompt("Please enter the authorization number","ex 123456");
+                var number=prompt("Please enter the 6 digit authorization number","ex 123456");
             } while ((number=="") || (number=="ex 123456"));
 
             if (document.getElementById('Notes').value == "") {
@@ -155,7 +155,7 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Paid")) {
                     <br />
                     <input type="radio" name="PayType" value="Credit/Debit" id="Credit" onchange="requireCreditField();" onclick="creditAuth()" />
                     <label for="Credit" class="control-label">Credit Card</label>
-                    <input name="AuthDisplay" type="text" id="AuthDisplay" pattern="\d{6}" />
+                    <input name="AuthDisplay" type="text" id="AuthDisplay" pattern="\d{6}" /> (6 digit authorization number)
                     <br />
                     <?php if ($total == 0) { ?>
                         <input name='PayType' type='radio' id='Manual' checked='checked' value='Free' onchange="requireCreditField();" />
