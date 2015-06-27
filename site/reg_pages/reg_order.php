@@ -15,7 +15,15 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Paid")) {
     logMessage($_SESSION['username'], 120, "At-Con Registration order ID ". $orderId);
 
     orderCheckIn($orderId);
-    orderPaid($orderId, $_POST["PayType"], $_POST["total"], $_POST['notes']);
+    // If the auth number in the form isn't in the notes for some reason, add it.
+    $notes = $_POST["notes"];
+    if (isset($_POST["AuthDisplay"]) && $_POST["AuthDisplay"] != "") {
+        if (strpos($notes, (string)$_POST["AuthDisplay"]) === false) {
+            $notes .= "\n---" . "The Credit Card Authorization Number is: " . $_POST["AuthDisplay"];
+        }
+    }
+    orderPaid($orderId, $_POST["PayType"], $_POST["total"], $notes);
+
     foreach ($_SESSION["currentOrder"] as $attendee) {
         logMessage($_SESSION['username'], 30, "At-Con Check in " . $attendee->first_name . ' '. $attendee->last_name);
     }
@@ -51,7 +59,7 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Paid")) {
         function creditAuth() {
             do {
                 var number=prompt("Please enter the 6 digit authorization number","ex 123456");
-            } while ((number=="") || (number=="ex 123456"));
+            } while (number.match("^[0-9]{6}$") === null);
 
             if (document.getElementById('Notes').value == "") {
                 document.getElementById('Notes').value = "The Credit Card Authorization Number is: " + number;
