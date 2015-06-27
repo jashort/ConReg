@@ -51,7 +51,7 @@ if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) ||
     if (trim($_POST["paid_amount"]) == '') {
       $_SESSION['current']->paid_amount = $pass->cost;
     } else {
-      if(preg_match('/^\d{1,4}\.\d{0,2}$/', trim($_POST["paid_amount"]))) {
+      if(preg_match('/^\d{1,4}\.?\d{0,2}$/', trim($_POST["paid_amount"]))) {
         $_SESSION['current']->paid_amount = $_POST["paid_amount"];
       } else {
         die('Manual price amount must contain numbers only. Ex: 19.99');
