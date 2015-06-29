@@ -1,6 +1,5 @@
 <?php
 require_once('../includes/functions.php');
-
 require_once('../includes/authcheck.php');
 requireRight('registration_add');
 
@@ -8,9 +7,12 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Finish")) {
     $_SESSION["currentOrder"] = Array();
     unset ($_SESSION["current"]);
     redirect("/index.php");
-}
-
-if ((isset($_POST["action"])) && ($_POST["action"] == "Paid")) {
+} elseif (isset($_GET["action"]) && ($_GET["action"] == "clear")) {
+    // Clear the current order and redirect to add a new attendee page.
+    $_SESSION["currentOrder"] = Array();
+    unset ($_SESSION["current"]);
+    redirect("/reg_pages/reg_add.php");
+} elseif ((isset($_POST["action"])) && ($_POST["action"] == "Paid")) {
     $orderId = regAddOrder($_SESSION['currentOrder']);
     logMessage($_SESSION['username'], 120, "At-Con Registration order ID ". $orderId);
 
@@ -27,9 +29,10 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Paid")) {
     foreach ($_SESSION["currentOrder"] as $attendee) {
         logMessage($_SESSION['username'], 30, "At-Con Check in " . $attendee->first_name . ' '. $attendee->last_name);
     }
-} elseif (isset($_GET["action"]) && ($_GET["action"] == "clear")) {
+} elseif (isset($_GET["action"]) && $_GET["action"] == "cancel") {
+    // Cancel pending order and return to main screen
+    unset($_SESSION["current"]);
     $_SESSION["currentOrder"] = Array();
-    unset ($_SESSION["current"]);
     redirect("/index.php");
 }
 
@@ -91,7 +94,7 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Paid")) {
 
 <body>
 
-<?php require '../includes/template/navigationBar.php'; ?>
+<?php require '../includes/template/navigationBarNoLinks.php'; ?>
 
 <div class="container">
 

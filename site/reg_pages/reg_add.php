@@ -4,8 +4,7 @@ require_once('../includes/functions.php');
 require_once('../includes/authcheck.php');
 requireRight('registration_add');
 
-if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) || 
-    (array_key_exists('action', $_GET) && $_GET['action'] == "clear")) {
+if (array_key_exists('action', $_GET) && $_GET['action'] == "clear") {
   // Brand new attendee
   $_SESSION['current'] = new Attendee();
   if (!array_key_exists('currentOrder', $_SESSION)) { // Create order array if it doesn't exist
@@ -21,6 +20,10 @@ if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) ||
   $_SESSION['current']->parent_form = "N";
   $_SESSION['current']->ec_same = "N";
   redirect('/reg_pages/reg_add.php?part=1');
+} elseif (array_key_exists('action', $_GET) && $_GET['action'] == "cancel") {
+  // When canceling, return to the order screen
+  unset($_SESSION['current']);
+  redirect('reg_order.php');
 } elseif (array_key_exists('part', $_POST)) {
   // Handle posting form data and redirecting to the next section
   if ($_POST['part'] == 1) {
@@ -44,7 +47,7 @@ if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) ||
     $_SESSION['current']->parent_form = $_POST["parent_form"];
     redirect('/reg_pages/reg_add.php?part=3');
   } elseif ($_POST['part'] == 3) {
-    
+
     $pass = getPassType($_POST["pass_type_id"]);
     $_SESSION['current']->pass_type = $pass->category;
     $_SESSION['current']->pass_type_id = $_POST["pass_type_id"];
@@ -65,7 +68,9 @@ if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) ||
     unset($_SESSION['current']);
     redirect("/reg_pages/reg_order.php");
   }
-
+} elseif (!array_key_exists("part", $_GET)) {
+    // If a part of the form hasn't been specified, clear the form and then redirect to part 1
+    redirect("/reg_pages/reg_add.php?action=clear");
 }
 
 ?>
@@ -105,10 +110,10 @@ if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) ||
       }
     }
 
-    function clearVerify() {
-      var answer=confirm("Are you sure you want to clear?");
+    function cancelVerify() {
+      var answer=confirm("Are you sure you want to cancel?");
       if (answer==true) {
-        window.location='/reg_pages/reg_add.php?action=clear';
+        window.location='/reg_pages/reg_add.php?action=cancel';
       }
     }
     function manualPrice() {
@@ -128,7 +133,7 @@ if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) ||
 
 <body>
 
-<?php require '../includes/template/navigationBar.php'; ?>
+<?php require '../includes/template/navigationBarNoLinks.php'; ?>
 
 <div class="container">
 
@@ -211,7 +216,7 @@ if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) ||
           </div>
 
         </fieldset><br>
-        <input name="Clear" type="button" class="btn btn-danger" onclick="clearVerify()" value="Clear" />
+        <input name="Cancel" type="button" class="btn btn-danger" onclick="cancelVerify()" value="Cancel" />
         <input name="Next" type="submit" class="btn btn-primary col-xs-offset-5" value="Next" />
       </form>
     <?php } elseif (array_key_exists('part', $_GET) && $_GET["part"]=="2") { ?>
@@ -286,7 +291,7 @@ if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) ||
           <input name="parent_form" value="N" type="hidden" />
         <?php } ?>
         <br>
-        <input name="Clear" type="button" class="btn btn-danger" onclick="clearVerify()" value="Clear" />
+        <input name="Cancel" type="button" class="btn btn-danger" onclick="cancelVerify()" value="Cancel" />
         <input name="Next" type="submit" class="btn btn-primary col-xs-offset-5" value="Next" />
       </form>
     <?php } elseif (array_key_exists('part', $_GET) && $_GET["part"]=="3") { ?>
@@ -328,7 +333,7 @@ if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) ||
           <textarea name="notes" id="Notes" rows="5" cols="80"><?php echo $_SESSION['current']->notes; ?></textarea>
         </fieldset>
         <br>
-        <input name="Clear" type="button" class="btn btn-danger" onclick="clearVerify()" value="Clear" />
+        <input name="Cancel" type="button" class="btn btn-danger" onclick="cancelVerify()" value="Cancel" />
         <input name="Next" type="submit" class="btn btn-primary col-xs-offset-5" value="Next" />
 
       </form>
@@ -392,7 +397,7 @@ if ((!array_key_exists('part', $_POST) && !array_key_exists('part', $_GET)) ||
         <input type="hidden" name="SubmitNow" value="Yes" />
         <input type="hidden" name="part" value="4" />
         <!--<input name="Previous" type="button" class="next_button" onclick="MM_goToURL('parent','/reg_pages/reg_add.php?part=3');return document.MM_returnValue" value="Previous" />-->
-        <input name="Clear" type="button" class="btn btn-danger" onclick="clearVerify()" value="Clear" />
+        <input name="Cancel" type="button" class="btn btn-danger" onclick="cancelVerify()" value="Cancel" />
         <input name="Done" type="submit" class="btn btn-primary col-xs-offset-5" value="Done" />
       </form>
     <?php } ?>

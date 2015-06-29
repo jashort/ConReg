@@ -18,7 +18,7 @@
                 <?php } ?>
 
                 <?php if (hasRight('registration_add')) { ?>
-                    <li><a href="/reg_pages/reg_add.php">At-Con Registration</a></li>
+                    <li><a href="/reg_pages/reg_order.php?action=clear">At-Con Registration</a></li>
                 <?php } ?>
 
                 <?php if (hasRight('attendee_search') || hasRight('registration_modify') || hasRight('reprint_badge')) { ?>
