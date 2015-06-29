@@ -1,4 +1,5 @@
 <?php
+header('Content-Type: application/pdf');
 require_once('../includes/functions.php');
 
 require_once('../includes/authcheck.php');
@@ -46,7 +47,7 @@ logMessage($_SESSION['username'], 50, "Reprinted badge for " .
 				width: 4in;
 				height: 3.127in;
 				padding: 0;
-				margin-top: 0in;
+				margin-top: 0.09in;
 				margin-right: auto;
 				margin-left: auto;
 				white-space:nowrap;
