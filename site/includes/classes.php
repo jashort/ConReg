@@ -28,6 +28,20 @@ class Attendee {
     public $added_by;
     public $created;
 
+
+    /**
+     * Returns the badge name if set, or Firstname Lastname otherwise
+     *
+     * @return string Name
+     */
+    public function getNameForBadge() {
+        if (trim($this->badge_name) != '') {
+            return $this->badge_name;
+        } else {
+            return $this->first_name . ' ' . $this->last_name;
+        }
+    }
+
     /**
      * @return string Birthdate in MM/DD/YYYY format
      */

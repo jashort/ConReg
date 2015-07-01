@@ -99,7 +99,7 @@ logMessage($_SESSION['username'], 50, "Reprinted badge for " .
 		<!--<div id="stripe">
 		</div>-->
 		<div id="name">
-			<?php echo $attendee->first_name . " " . $attendee->last_name; ?>
+			<?php echo $attendee->getNameForBadge(); ?>
 		</div>
 	</div>
 	<div id="buffer"></div>
