@@ -84,7 +84,7 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Finish")) {
         function clearVerify() {
             var answer=confirm("Are you sure you want to cancel this order? All attendee records in this order will be lost.");
             if (answer==true) {
-                window.location='/reg_pages/reg_order.php?action=clear';
+                window.location='/reg_pages/reg_order.php?action=cancel';
             }
         }
 

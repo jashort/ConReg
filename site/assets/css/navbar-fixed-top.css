@@ -1,46 +1,55 @@
 body {
-  padding-top: 70px;
-  /*background-image: url('/assets/images/clouds.jpg');*/
-  background-color: #F9F9FF;
-  color: #111;
+    padding-top: 70px;
+    /*background-image: url('/assets/images/clouds.jpg');*/
+    background-color: #F9F9FF;
+    color: #111;
 }
 
 .navbar {
-  background-color: #E1ECFF;
-  color: #111 !important;
-  border-bottom: 1px solid #666;
+    background-color: #E1ECFF;
+    color: #111 !important;
+    border-bottom: 1px solid #666;
 }
 
 .navbar-brand {
 
 }
 
+.container {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+}
+
 .jumbotron {
-  color: #111;
-  background-color: #FFFFFF;
-  min-height: 600px;
-  border: 1px solid #666;
+    color: #111;
+    background-color: #FFFFFF;
+    min-height: 600px;
+    border: 1px solid #666;
 }
 
 .mascot {
-  background-image: url("/assets/images/mascot-header.png");
-  background-position: bottom right;
-  background-repeat: no-repeat;
+    background-image: url("/assets/images/mascot-header.png");
+    background-position: bottom right;
+    background-repeat: no-repeat;
 }
 
 .report {
-  width: 95%;
+    width: 95%;
 }
 
 .four-character {
-  width: 6em !important;
+    width: 6em !important;
 }
 
 .two-character {
-  width: 5em !important;
+    width: 5em !important;
 }
 
 h2 {
-  margin-top: 0px !important;
-  margin-bottom: 20px !important;
+    margin-top: 0px !important;
+    margin-bottom: 20px !important;
 }
+

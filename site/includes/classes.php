@@ -83,12 +83,14 @@ class Attendee {
     }
     
     /**
-     * Returns true if attendee is < 18 years old
+     * Returns true if attendee is < 18 years old or birthdate is not set
      *
      * @return bool
      */
     public function isMinor() {
-        if ($this->getAge() < 18) {
+        if ($this->getBirthDate() == '' or $this->getBirthMonth() == '' or $this->getBirthYear() == '') {
+            return true;
+        } elseif ($this->getAge() < 18) {
             return true;
         } else {
             return false;
