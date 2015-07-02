@@ -24,9 +24,9 @@ if (isset($_POST['print'])) {
 <?php
     while ($attendee = $attendees->fetch(PDO::FETCH_CLASS)) {
         if ($attendee->checked_in != "Yes") {
-            die("Error: attendee hasn't checked in yet.");
+            die("Error: attendee " . $attendee->first_name . " " . $attendee->last_name . " hasn't checked in yet.");
         }
-        logMessage($_SESSION['username'], 40, "Reprinted badge for " .
+        logMessage($_SESSION['username'], 50, "Reprinted badge for " .
             $attendee->first_name . ' ' . $attendee->last_name . " (ID " . $attendee->id . ")");
 
         $age = $attendee->getAge();
