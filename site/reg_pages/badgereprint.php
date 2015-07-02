@@ -1,118 +1,59 @@
 <?php
-header('Content-Type: application/pdf');
 require_once('../includes/functions.php');
-
 require_once('../includes/authcheck.php');
 requireRight('badge_reprint');
 
-include("../includes/pdf/mpdf.php");
-$mpdf=new mPDF('utf-8', array(215.9,139.7), 0, '', 0, 0, 0, 0, 0, 0, 'P');
-
-// Buffer the following html with PHP so we can store it to a variable later
-ob_start();
-
-$attendee = getAttendee($_POST['print']);
-$age = $attendee->getAge();
-if ($age >= 18) {
-	$stripeColor = "#323e99";
-} elseif (($age > 12) && ($age <= 17)) {
-	$stripeColor = "#e39426";
+$attendees = array();
+if (isset($_POST['print'])) {
+    $attendees = getAttendeePDO($_POST['print']);
 } else {
-	$stripeColor = "#cc202a";
+    die("No parameters");
 }
-
-if ($attendee->checked_in != "Yes") {
-	die("Error: attendee hasn't checked in yet.");
-}
-
-logMessage($_SESSION['username'], 50, "Reprinted badge for " .
-	$attendee->first_name . ' ' . $attendee->last_name . " (ID " . $attendee->id . ")");
-
-
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-	<head>
-		<style type="text/css">
-			#buffer {
-				width: 4in;
-				height: 1in;
-				padding: 0;
-				margin-top: 0;
-				margin-right: auto;
-				margin-left: auto;
-			}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" href="../favicon.ico">
+	<title></title>
+	<link href="../assets/css/badge.css" rel="stylesheet">
+</head>
+<body>
+<?php
+    while ($attendee = $attendees->fetch(PDO::FETCH_CLASS)) {
+        if ($attendee->checked_in != "Yes") {
+            die("Error: attendee hasn't checked in yet.");
+        }
+        logMessage($_SESSION['username'], 40, "Reprinted badge for " .
+            $attendee->first_name . ' ' . $attendee->last_name . " (ID " . $attendee->id . ")");
 
-			#badge {
-				width: 4in;
-				height: 3.127in;
-				padding: 0;
-				margin-top: 0.09in;
-				margin-right: auto;
-				margin-left: auto;
-				white-space:nowrap;
-				/*border: 1px solid #000;*/
-			}
+        $age = $attendee->getAge();
+        if ($age >= 18) {
+            $ageClass = "adult";
+        } elseif (($age > 12) && ($age <= 17)) {
+            $ageClass = "minor";
+        } else {
+            $ageClass = "child";
+        }?>
 
-			.adult {
-				background-color: #323e99;
-			}
-
-			.minor {
-				background-color: #e39426;
-			}
-
-			.child {
-				background-color: #cc202a;
-			}
-
-			#name {
-				width: 3.32in;
-				height: .627in;
-				margin-left: .59in;
-				padding-top: 1.25in;
-				padding-bottom: 1.25in;
-				padding-left: .25in;
-				font-family: "Copperplate Gothic Bold", serif;
-				font-size: 24px;
-				background-color: #FFF;
-			}
-
-		</style>
-	</head>
-	<body>
-	<?php
-	logMessage($_SESSION['username'], 40, "Printed badge for " .
-		$attendee->first_name . ' ' . $attendee->last_name . " (ID " . $attendee->id . ")");
-
-	$age = $attendee->getAge();
-	if ($age >= 18) {
-		$ageClass = "adult";
-	} elseif (($age > 12) && ($age <= 17)) {
-		$ageClass = "minor";
-	} else {
-		$ageClass = "child";
-	}?>
-
-	<div id="buffer"></div>
-	<div id="badge" class="<?php echo $ageClass;?>">
-		<!--<div id="stripe">
-		</div>-->
-		<div id="name">
-			<?php echo $attendee->getNameForBadge(); ?>
+	<div class="badge">
+		<div class="colorbar <?php echo $ageClass;?>"></div>
+		<div class="name"><?php echo $attendee->getNameForBadge(); ?>
 		</div>
 	</div>
-	<div id="buffer"></div>
-	</body>
+<?php } ?>
+
+<script src="/assets/dist/js/jquery-1.11.2.min.js"></script>
+<script>
+    // Automatically print and then close the window.
+    $(document).ready(function(){
+        setTimeout(function(){ window.close();},500);
+        $(window).bind("beforeunload",function(){
+            window.print();
+        });
+    });
+</script>
+</body>
 </html>
-<?php
-
-$html = ob_get_contents();
-ob_end_clean();
-
-// send the captured HTML from the output buffer to the mPDF class for processing
-$mpdf->WriteHTML($html);
-
-$mpdf->Output();
-exit;
-?>
