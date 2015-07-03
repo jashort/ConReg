@@ -53,3 +53,10 @@ h2 {
     margin-bottom: 20px !important;
 }
 
+.align-middle {
+    vertical-align: middle !important;
+}
+
+legend a {
+    font-size:.8em;
+}

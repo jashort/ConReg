@@ -121,7 +121,7 @@ if (array_key_exists('action', $_GET) && $_GET['action'] == "clear") {
             var day = parseInt($('#birth_day').val());
             var year = parseInt($('#birth_year').val());
 
-
+            console.log(month, day, year);
             if (1 <= month && month <= 12 && 1 <= day && day <= 31 && 1900 <= year && year <= 2100) {
                 var today = new Date();
                 var birthDate = new Date(year, month-1, day);
@@ -165,6 +165,10 @@ if (array_key_exists('action', $_GET) && $_GET['action'] == "clear") {
             document.getElementById('MPAmount').value = amount;
             document.getElementById('Notes').value = reason;
         }
+
+        function clearManualPrice() {
+            document.getElementById('paid_amount').value = '';
+        }
     </script>
 </head>
 
@@ -197,24 +201,23 @@ if (array_key_exists('action', $_GET) && $_GET['action'] == "clear") {
                     <div class="row">
                             <label for="PhoneNumber" class="control-label col-sm-1">Phone</label>
                             <div class="col-sm-4">
-                                <input name="phone" type="text" maxlength="60" class="form-control" id="PhoneNumber"
-                                       value="<?php echo $_SESSION['current']->phone; ?>" />
+                                <input name="phone" pattern="\+?\d{10,}" type="text" maxlength="60" class="form-control"
+                                       id="PhoneNumber" value="<?php echo $_SESSION['current']->phone; ?>" />
                             </div>
-
                             <div class="form-group">
                                 <label for="Birth Month" class="control-label col-sm-1">Birth Date:</label>
                                 <div class="col-sm-4 form-inline">
                                     <?php // If a birthdate has been set, display it. Otherwise, display blank fields
-                                    if ($_SESSION['current']->getAge() == -1) { ?>
-                                        <input type="number" class="form-control two-character" maxlength="2" name="birth_month" id="Birth Month"
+                                    if ($_SESSION['current']->getAge() != -1) { ?>
+                                        <input type="number" class="form-control two-character" maxlength="2" name="birth_month" id="birth_month"
                                                value="<?php echo $_SESSION['current']->getBirthMonth() ?>" min="1" max="12" placeholder="MM"
                                                required autocomplete="off">
                                         /
-                                        <input type="number" class="form-control two-character" maxlength="2" name="birth_day" id="Birth Day"
+                                        <input type="number" class="form-control two-character" maxlength="2" name="birth_day" id="birth_day"
                                                value="<?php echo $_SESSION['current']->getBirthDay() ?>" min="1" max="31" placeholder="DD"
                                                required autocomplete="off">
                                         /
-                                        <input type="number" class="form-control four-character" maxlength="4" name="birth_year" id="Birth Year"
+                                        <input type="number" class="form-control four-character" maxlength="4" name="birth_year" id="birth_year"
                                                value="<?php echo $_SESSION['current']->getBirthYear()?>" min="1900" max="2015" placeholder="YYYY"
                                                required autocomplete="off">
                                         (Month / Day / Year)
@@ -284,7 +287,7 @@ if (array_key_exists('action', $_GET) && $_GET['action'] == "clear") {
                                 <label for="PCFullName" class="control-label col-sm-2">Full Name</label>
                                 <div class="col-sm-8">
                                     <input name="parent_fullname" id="PCFullName" type="text" class="form-control" maxlength="250"
-                                           value="<?php echo $_SESSION['current']->ec_fullname; ?>" required />
+                                           value="<?php echo $_SESSION['current']->parent_fullname; ?>" required />
                                 </div>
                             </div>
 
@@ -292,7 +295,7 @@ if (array_key_exists('action', $_GET) && $_GET['action'] == "clear") {
                                 <label for="PCPhoneNumber" class="control-label col-sm-2">Phone</label>
                                 <div class="col-sm-8">
                                     <input name="parent_phone" id="PCPhoneNumber" type="tel" class="form-control" maxlength="10"
-                                           value="<?php echo $_SESSION['current']->ec_phone; ?>" autocomplete="off" required
+                                           value="<?php echo $_SESSION['current']->parent_phone; ?>" autocomplete="off" required
                                            pattern="\+?\d{10,}" title="Requires at least 10 digits" />
                                 </div>
                             </div>
@@ -320,7 +323,7 @@ if (array_key_exists('action', $_GET) && $_GET['action'] == "clear") {
                     <div class="form-group">
                         <label for="pass_type_id" class="control-label col-sm-5">Select Pass Type:</label>
                         <div class="col-sm-2">
-                            <select name="pass_type_id" required class="form-control">
+                            <select name="pass_type_id" required class="form-control" onchange="clearManualPrice();">
                                 <?php
                                 $passTypeList = passTypeForAgeList($_SESSION['current']->getAge());
                                 while ($passType = $passTypeList->fetch()) { ?>
@@ -355,7 +358,7 @@ if (array_key_exists('action', $_GET) && $_GET['action'] == "clear") {
             </form>
         <?php } elseif (array_key_exists('part', $_GET) && $_GET["part"]=="3") { ?>
             <fieldset id="personalinfo">
-                <legend>Attendee Info</legend>
+                <legend>Attendee Info <a class="btn-link" href="reg_add.php?part=1">Edit</a></legend>
                 <label>Name: </label>
                 <?php echo $_SESSION['current']->first_name; ?>
                 <?php echo $_SESSION['current']->last_name; ?>
@@ -374,7 +377,7 @@ if (array_key_exists('action', $_GET) && $_GET['action'] == "clear") {
             </fieldset>
             <br />
             <fieldset id="emergencyinfo">
-                <legend>Emergency Contact Info</legend>
+                <legend>Emergency Contact Info <a class="btn-link" href="reg_add.php?part=1">Edit</a></legend>
                 <label>Full Name: </label>
                 <?php echo $_SESSION['current']->ec_fullname ?>
                 <br />
@@ -385,7 +388,7 @@ if (array_key_exists('action', $_GET) && $_GET['action'] == "clear") {
             <?php if ($_SESSION['current']->isMinor()) { ?>
                 <br />
                 <fieldset id="parentinfo">
-                    <legend>Parent Contact Info</legend>
+                    <legend>Parent Contact Info <a class="btn-link" href="reg_add.php?part=1">Edit</a></legend>
                     <label>Full Name: </label>
                     <?php echo $_SESSION['current']->parent_fullname ?>
                     <br />
@@ -398,13 +401,20 @@ if (array_key_exists('action', $_GET) && $_GET['action'] == "clear") {
             <?php } ?>
             <br />
             <fieldset id="paymentinfo">
-                <legend>PASS TYPE</legend>
-                <?php echo $_SESSION['current']->pass_type ?> - $<?php echo $_SESSION['current']->paid_amount ?>
+                <legend>PASS TYPE <a class="btn-link" href="reg_add.php?part=2">Edit</a></legend>
+                <?php
+                $pass = getPassType($_SESSION['current']->pass_type_id);
+                echo $pass->name; ?> - $<?php echo money_format("%i", $_SESSION['current']->paid_amount) ?><br>
+                <?php
+                if ($pass->cost != $_SESSION['current']->paid_amount) { ?>
+                    <b>Manual price set: $<?php echo money_format("%i", $_SESSION['current']->paid_amount); ?>.
+                        Normal price is: $<?php echo money_format("%i", $pass->cost) ?></b>
+                <? } ?>
             </fieldset>
 
             <br />
             <fieldset id="notes">
-                <legend>NOTES</legend>
+                <legend>NOTES <a class="btn-link" href="reg_add.php?part=2">Edit</a></legend>
                 <?php echo $_SESSION['current']->notes; ?>
             </fieldset>
 
@@ -429,6 +439,7 @@ if (array_key_exists('action', $_GET) && $_GET['action'] == "clear") {
     $('#birth_month').on('input', adultCheck);
     $('#birth_day').on('input', adultCheck);
     $('#birth_year').on('input', adultCheck);
+    adultCheck();   // Run on page load, in case we're editing an existing person
 </script>
 
 </body>

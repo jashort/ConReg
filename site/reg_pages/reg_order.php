@@ -12,10 +12,24 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Finish")) {
     $_SESSION["currentOrder"] = Array();
     unset ($_SESSION["current"]);
     redirect("/reg_pages/reg_add.php");
+} elseif (isset($_GET["action"]) && ($_GET["action"] == "EditAttendee")) {
+    // Load the given attendee in to the $_SESSION["current"] variable and
+    // send back to the reg_add.php page to for editing
+    if (isset($_GET["id"])) {
+        $_SESSION["current"] = $_SESSION["currentOrder"][intval($_GET["id"])];
+        unset($_SESSION["currentOrder"][intval($_GET["id"])]);
+        redirect("/reg_pages/reg_add.php?part=1");
+    }
+} elseif (isset($_POST["action"]) && ($_POST["action"] == "DeleteAttendee")) {
+    // Remove the given attendee from the order
+    if (isset($_POST["id"])) {
+        unset($_SESSION["currentOrder"][intval($_POST["id"])]);
+        $_SESSION["currentOrder"] = array_values($_SESSION["currentOrder"]); // reindex the array
+    }
+    redirect("/reg_pages/reg_order.php");
 } elseif ((isset($_POST["action"])) && ($_POST["action"] == "Paid")) {
     $orderId = regAddOrder($_SESSION['currentOrder']);
     logMessage($_SESSION['username'], 120, "At-Con Registration order ID ". $orderId);
-
     orderCheckIn($orderId);
     // If the auth number in the form isn't in the notes for some reason, add it.
     $notes = $_POST["notes"];
@@ -135,17 +149,32 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Finish")) {
                     </tr>
                     <?php
                     $total = 0;
-                    foreach ($_SESSION['currentOrder'] as $attendee) {
+                    for ($i=0; $i<count($_SESSION['currentOrder']); $i++) {
+                        $attendee = $_SESSION['currentOrder'][$i];
                         $total += $attendee->paid_amount; ?>
                         <tr>
-                            <td><?php echo $attendee->first_name . ' ' . $attendee->last_name ?></td>
-                            <td><?php echo $attendee->pass_type ?></td>
-                            <td>$<?php echo $attendee->paid_amount ?></td>
+                            <td class="align-middle"><?php echo $attendee->first_name . ' ' . $attendee->last_name ?></td>
+                            <td class="align-middle"><?php echo $attendee->pass_type ?></td>
+                            <td class="align-middle">$<?php echo money_format("%i", $attendee->paid_amount) ?></td>
+                            <td>
+                                <form action="reg_order.php" method="get" class="col-xs-2 form-inline">
+                                    <input type="hidden" name="action" value="EditAttendee">
+                                    <input type="hidden" name="id" value="<?php echo $i;?>">
+                                    <input type="submit" class="btn btn-link" name="edit" value="Edit">
+                                </form>
+                                <form action="reg_order.php" method="post" class="col-xs-2 form-inline">
+                                    <input type="hidden" name="action" value="DeleteAttendee">
+                                    <input type="hidden" name="id" value="<?php echo $i;?>">
+                                    <input type="submit" class="btn btn-danger btn-link" name="delete" value="Delete">
+                                </form>
+                            </td>
                         </tr>
                     <?php } ?>
                     <tr>
                         <td colspan="2" style="text-align: right;">Total:</td>
-                        <td>$<?php echo $total?></td></tr>
+                        <td>$<?php echo money_format("%i", $total)?></td>
+                        <td colspan="2"></td>
+                    </tr>
                 </table>
 
             </fieldset>
@@ -179,8 +208,10 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Finish")) {
                 </fieldset>
                 <br>
                 <input name="Clear" type="button" class="btn btn-danger" onclick="clearVerify()" value="Cancel Order" />
-                <input name="Paid" type="submit" class="btn btn-primary col-xs-offset-5" value="Take Money" />
-            </form>
+                <?php if (count($_SESSION["currentOrder"]) > 0) { ?>
+                    <input name="Paid" type="submit" class="btn btn-primary col-xs-offset-5" value="Take Money" />
+                <?php } ?>
+                </form>
         <?php } ?>
         
     </div>
