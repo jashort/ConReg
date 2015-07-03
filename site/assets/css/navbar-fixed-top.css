@@ -60,3 +60,7 @@ h2 {
 legend a {
     font-size:.8em;
 }
+
+.rowheader {
+    text-align: right;
+}

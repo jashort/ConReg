@@ -357,67 +357,82 @@ if (array_key_exists('action', $_GET) && $_GET['action'] == "clear") {
 
             </form>
         <?php } elseif (array_key_exists('part', $_GET) && $_GET["part"]=="3") { ?>
-            <fieldset id="personalinfo">
-                <legend>Attendee Info <a class="btn-link" href="reg_add.php?part=1">Edit</a></legend>
-                <label>Name: </label>
-                <?php echo $_SESSION['current']->first_name; ?>
-                <?php echo $_SESSION['current']->last_name; ?>
-                <br />
-                <label>Phone Number: </label>
-                <?php echo $_SESSION['current']->phone; ?>
-                <br />
-                <label>Email: </label>
-                <?php echo $_SESSION['current']->email; ?>
-                <br />
-                <label>Zip: </label>
-                <?php echo $_SESSION['current']->zip; ?>
-                <br />
-                <label>Birth Date</label>
-                <?php echo $_SESSION['current']->getBirthDate() ?>
-            </fieldset>
-            <br />
-            <fieldset id="emergencyinfo">
-                <legend>Emergency Contact Info <a class="btn-link" href="reg_add.php?part=1">Edit</a></legend>
-                <label>Full Name: </label>
-                <?php echo $_SESSION['current']->ec_fullname ?>
-                <br />
-                <label>Phone Number: </label>
-                <?php echo $_SESSION['current']->ec_phone ?>
-                <br />
-            </fieldset>
-            <?php if ($_SESSION['current']->isMinor()) { ?>
-                <br />
-                <fieldset id="parentinfo">
-                    <legend>Parent Contact Info <a class="btn-link" href="reg_add.php?part=1">Edit</a></legend>
-                    <label>Full Name: </label>
-                    <?php echo $_SESSION['current']->parent_fullname ?>
-                    <br />
-                    <label>Phone Number: </label>
-                    <?php echo $_SESSION['current']->parent_phone ?>
-                    <br />
-                    <label>Parental Permission Form Submitted: </label>
-                    <?php echo $_SESSION['current']->parent_form; ?>
-                </fieldset>
-            <?php } ?>
-            <br />
-            <fieldset id="paymentinfo">
-                <legend>PASS TYPE <a class="btn-link" href="reg_add.php?part=2">Edit</a></legend>
-                <?php
-                $pass = getPassType($_SESSION['current']->pass_type_id);
-                echo $pass->name; ?> - $<?php echo money_format("%i", $_SESSION['current']->paid_amount) ?><br>
-                <?php
-                if ($pass->cost != $_SESSION['current']->paid_amount) { ?>
-                    <b>Manual price set: $<?php echo money_format("%i", $_SESSION['current']->paid_amount); ?>.
-                        Normal price is: $<?php echo money_format("%i", $pass->cost) ?></b>
-                <? } ?>
-            </fieldset>
+            <legend>Attendee Info <a class="btn-link" href="reg_add.php?part=1">Edit</a></legend>
+            <div class="row">
+                <div class="col-sm-2 rowheader"><label>First Name</label></div>
+                <div class="col-sm-4"><?php echo $_SESSION['current']->first_name; ?></div>
+                <div class="col-sm-2 rowheader"><label>Last Name</label></div>
+                <div class="col-sm-4"><?php echo $_SESSION['current']->last_name; ?></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2 rowheader"><label>Phone Number</label></div>
+                <div class="col-sm-4"><?php echo $_SESSION['current']->phone; ?></div>
+                <div class="col-sm-2 rowheader"><label>Birth Date</label></div>
+                <div class="col-sm-4"><?php echo $_SESSION['current']->getBirthDate(); ?></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2 rowheader"><label>Email</label></div>
+                <div class="col-sm-4"><?php echo $_SESSION['current']->email; ?></div>
+                <div class="col-sm-2 rowheader"><label>Zip</label></div>
+                <div class="col-sm-4"><?php echo $_SESSION['current']->zip; ?></div>
+            </div>
+            <br>
 
+            <div class="row">
+                <div class="col-md-6">
+                        <legend>Emergency Contact Info <a class="btn-link" href="reg_add.php?part=1">Edit</a></legend>
+                        <div class="row">
+                            <div class="col-sm-4 rowheader"><label>Full Name</label></div>
+                            <div class="col-sm-8"><?php echo $_SESSION['current']->ec_fullname ?></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4 rowheader"><label>Phone</label></div>
+                            <div class="col-sm-8"><?php echo $_SESSION['current']->ec_phone ?></div>
+                        </div>
+                </div>
+                <div class="col-md-6">
+                    <?php if ($_SESSION['current']->isMinor()) { ?>
+                        <legend>Parent Contact Info <a class="btn-link" href="reg_add.php?part=1">Edit</a></legend>
+                        <div class="row">
+                            <div class="col-sm-4 rowheader"><label>Full Name</label></div>
+                            <div class="col-sm-8"><?php echo $_SESSION['current']->parent_fullname ?></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4 rowheader"><label>Phone</label></div>
+                            <div class="col-sm-8"><?php echo $_SESSION['current']->parent_phone ?></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4 rowheader"><label>Parental Permission Form Submitted</label></div>
+                            <div class="col-sm-8"><?php echo $_SESSION['current']->parent_form; ?></div>
+                        </div>
+                    <?php } ?>
+                </div>
+            </div>
             <br />
-            <fieldset id="notes">
-                <legend>NOTES <a class="btn-link" href="reg_add.php?part=2">Edit</a></legend>
-                <?php echo $_SESSION['current']->notes; ?>
-            </fieldset>
 
+            <legend>PASS TYPE <a class="btn-link" href="reg_add.php?part=2">Edit</a></legend>
+            <div class="row">
+                <div class="col-sm-2 rowheader"><label>Pass</label></div>
+                <div class="col-sm-4">
+                    <?php
+                    $pass = getPassType($_SESSION['current']->pass_type_id);
+                    echo $pass->name; ?> - $<?php echo money_format("%i", $_SESSION['current']->paid_amount) ?><br>
+                    <?php
+                    if ($pass->cost != $_SESSION['current']->paid_amount) { ?>
+                        <b>Manual price set: $<?php echo money_format("%i", $_SESSION['current']->paid_amount); ?>.
+                            Normal price is: $<?php echo money_format("%i", $pass->cost) ?></b>
+                    <? } ?>
+                </div>
+            </div>
+            <br>
+
+            <legend>NOTES <a class="btn-link" href="reg_add.php?part=2">Edit</a></legend>
+            <div class="row">
+                <div class="col-sm-2 rowheader"><label>Notes</label></div>
+                <div class="col-sm-4">
+                    <?php echo $_SESSION['current']->notes; ?>
+                </div>
+            </div>
             <br>
             <form name="reg_add" action="reg_add.php" method="post">
                 <input type="hidden" name="SubmitNow" value="Yes" />
