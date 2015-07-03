@@ -112,11 +112,14 @@ class Attendee {
     }
 
     /**
-     * Attendee age in years
+     * Attendee age in years or -1 if birthdate isn't set
      *
      * @return int
      */
     public function getAge() {
+        if ($this->birthdate == null) {
+            return -1;
+        }
         try {
             $date = new DateTime($this->birthdate);
             $now = new DateTime();
