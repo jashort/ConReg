@@ -61,13 +61,13 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Finish")) {
     <script type="text/javascript">
         function creditAuth() {
             do {
-                var number=prompt("Please enter the 6 digit authorization number","ex 123456");
-            } while (number.match("^[0-9]{6}$") === null);
+                var number=prompt("Please enter the 6 character authorization number","ex 123456");
+            } while (number.match("^[0-9a-zA-Z]{6}$") === null);
 
             if (document.getElementById('Notes').value == "") {
-                document.getElementById('Notes').value = "The Credit Card Authorization Number is: " + number;
+                document.getElementById('Notes').value = "The credit card authorization number is: " + number;
             } else {
-                document.getElementById('Notes').value = document.getElementById('Notes').value + "---" + "The Credit Card Authorization Number is: " + number;
+                document.getElementById('Notes').value = document.getElementById('Notes').value + "---" + "The credit card authorization number is: " + number;
             }
 
             document.getElementById("AuthDisplay").value = number;
@@ -166,7 +166,7 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Finish")) {
                     <br />
                     <input type="radio" name="PayType" value="Credit/Debit" id="Credit" onchange="requireCreditField();" onclick="creditAuth()" />
                     <label for="Credit" class="control-label">Credit Card</label>
-                    <input name="AuthDisplay" type="text" id="AuthDisplay" pattern="\d{6}" /> (6 digit authorization number)
+                    <input name="AuthDisplay" type="text" id="AuthDisplay" pattern="[0-9a-zA-Z]{6}" /> (6 alphanumeric character authorization number)
                     <br />
                     <?php if ($total == 0) { ?>
                         <input name='PayType' type='radio' id='Manual' checked='checked' value='Free' onchange="requireCreditField();" />
