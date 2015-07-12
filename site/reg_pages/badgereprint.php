@@ -3,6 +3,18 @@ require_once('../includes/functions.php');
 require_once('../includes/authcheck.php');
 requireRight('badge_reprint');
 
+/* If the delay variable is set, pause execution for that many seconds.
+   This is an ugly hack to make sure that the database record is updated when
+   reprinting a badge from the "Update and Reprint Badge" button on reg_update.php.
+   Since that button will open this page before the form is submitted, have to
+   do this though I would like a more elegant solution.
+*/
+flush();
+if (isset($_POST['delay'])) {
+    sleep((int) $_POST['delay']);
+}
+
+
 $attendees = array();
 if (isset($_POST['print'])) {
     $attendees = getAttendeePDO($_POST['print']);
