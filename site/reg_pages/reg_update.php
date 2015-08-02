@@ -10,7 +10,7 @@ if (isset($_GET['id'])) {
     $attendee = new Attendee();
     $attendee->fromArray($_POST);
     $pass = getPassType($_POST["pass_type_id"]);
-    $attendee->pass_type = $pass->category;
+    $attendee->pass_type = $pass->day_text;
     if (trim($_POST["paid_amount"]) == '') {
         $attendee->paid_amount = $pass->cost;
     } else {
@@ -20,7 +20,6 @@ if (isset($_GET['id'])) {
             die('Manual price amount must contain numbers only. Ex: 19.99');
         }
     }
-
     regUpdate($attendee);
     logMessage($_SESSION['username'], 60, "Modified attendee " .
         $attendee->first_name . ' ' . $attendee->last_name . "(ID " . $attendee->id . ")");

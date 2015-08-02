@@ -3,18 +3,6 @@ require_once('../includes/functions.php');
 require_once('../includes/authcheck.php');
 requireRight('badge_reprint');
 
-/* If the delay variable is set, pause execution for that many seconds.
-   This is an ugly hack to make sure that the database record is updated when
-   reprinting a badge from the "Update and Reprint Badge" button on reg_update.php.
-   Since that button will open this page before the form is submitted, have to
-   do this though I would like a more elegant solution.
-*/
-flush();
-if (isset($_POST['delay'])) {
-    sleep((int) $_POST['delay']);
-}
-
-
 $attendees = array();
 if (isset($_POST['print'])) {
     $attendees = getAttendeePDO($_POST['print']);
@@ -38,22 +26,19 @@ if (isset($_POST['print'])) {
         if ($attendee->checked_in != "Yes") {
             die("Error: attendee " . $attendee->first_name . " " . $attendee->last_name . " hasn't checked in yet.");
         }
+        $pass = getPassType($attendee->pass_type_id);
         logMessage($_SESSION['username'], 50, "Reprinted badge for " .
             $attendee->first_name . ' ' . $attendee->last_name . " (ID " . $attendee->id . ")");
-
-        $age = $attendee->getAge();
-        if ($age >= 18) {
-            $ageClass = "adult";
-        } elseif (($age > 12) && ($age <= 17)) {
-            $ageClass = "minor";
-        } else {
-            $ageClass = "child";
-        }?>
+        ?>
 
 	<div class="badge">
-		<div class="colorbar <?php echo $ageClass;?>"></div>
-		<div class="name"><?php echo $attendee->getNameForBadge(); ?>
-		</div>
+		<div class="colorbar" style="background-color: #<?php echo $pass->stripe_color; ?>">
+            <div class="colorbarText"><?php echo $pass->stripe_text; ?></div>
+        </div>
+		<div class="name"><?php echo $attendee->getNameForBadge(); ?></div>
+        <div class="smallName"><?php echo $attendee->getSmallNameForBadge(); ?></div>
+        <div class="badgeNumber"><?php echo $attendee->badge_number ?></div>
+        <div class="dayText"><?php echo $pass->day_text ?></div>
 	</div>
 <?php } ?>
 

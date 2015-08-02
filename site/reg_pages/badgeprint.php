@@ -27,22 +27,19 @@ if (isset($_POST['print'])) {
 	<body>
 	<?php
 	while ($attendee = $attendees->fetch(PDO::FETCH_CLASS)) {
-		logMessage($_SESSION['username'], 40, "Printed badge for " .
-			$attendee->first_name . ' ' . $attendee->last_name . " (ID " . $attendee->id . ")");
+        $pass = getPassType($attendee->pass_type_id);
 
-		$age = $attendee->getAge();
-		if ($age >= 18) {
-			$ageClass = "adult";
-		} elseif (($age > 12) && ($age <= 17)) {
-			$ageClass = "minor";
-		} else {
-			$ageClass = "child";
-		}?>
+        logMessage($_SESSION['username'], 40, "Printed badge for " .
+			$attendee->first_name . ' ' . $attendee->last_name . " (ID " . $attendee->id . ")"); ?>
 
         <div class="badge">
-            <div class="colorbar <?php echo $ageClass;?>"></div>
-            <div class="name"><?php echo $attendee->getNameForBadge(); ?>
+            <div class="colorbar" style="background-color: #<?php echo $pass->stripe_color; ?>">
+                <div class="colorbarText"><?php echo $pass->stripe_text; ?></div>
             </div>
+            <div class="name"><?php echo $attendee->getNameForBadge(); ?></div>
+            <div class="smallName"><?php echo $attendee->getSmallNameForBadge(); ?></div>
+            <div class="badgeNumber"><?php echo $attendee->badge_number ?></div>
+            <div class="dayText"><?php echo $pass->day_text ?></div>
         </div>
     <?php } ?>
 

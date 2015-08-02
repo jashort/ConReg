@@ -42,6 +42,22 @@ class Attendee {
         }
     }
 
+
+    /**
+     * If badge name is set, returns Firstname Lastname. If badge name is empty, return an empty string
+     * because the real name will have been printed in place of the badge name (via getNameForBadge())
+     *
+     * @return string Name
+     */
+    public function getSmallNameForBadge() {
+        if (trim($this->badge_name) != '') {
+            return $this->first_name . ' ' . $this->last_name;
+        } else {
+            return "";
+        }
+    }
+
+
     /**
      * @return string Birthdate in MM/DD/YYYY format
      */
@@ -201,10 +217,12 @@ class Staff {
 class PassType {
     public $id;
     public $name;
-    public $category; // weekend, friday, saturday, vip, etc. Lower case. Used when printing badges
-    public $visible;
-    public $min_age;  // Minimum age >= years for this pass type.
-    public $max_age; // Maximum age <= years for this pass type.
+    public $stripe_color;  // RGB color for badge stripe, without "#". Ex: 323E99
+    public $stripe_text;   // Text to print in badge stripe (Adult, youth, child)
+    public $day_text;      // Friday, saturday, vip, etc. Used when printing badges
+    public $visible;       // Is this type visible in the UI?
+    public $min_age;       // Minimum age >= years for this pass type.
+    public $max_age;       // Maximum age <= years for this pass type.
     public $cost;
 
     /**
@@ -217,7 +235,9 @@ class PassType {
             $this->id = $array['id'];
         }
         $this->name = $array['name'];
-        $this->category = $array['category'];
+        $this->stripe_color = $array['stripe_color'];
+        $this->stripe_text = $array['stripe_text'];
+        $this->day_text = $array['day_text'];
         $this->visible = $array['visible'];
         $this->min_age = $array['min_age'];
         $this->max_age = $array['max_age'];

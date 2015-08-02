@@ -1,18 +1,5 @@
 /* CSS for printing badges on half sheets */
 @media screen, print {
-    .adult {
-        background-color: #323e99;  /* Adult badge color bar */
-    }
-
-    .minor {
-        background-color: #e39426;  /* Minor (6 - 18) badge color bar */
-    }
-
-    .child {
-        background-color: #cc202a; /* Child (5 or under) badge color bar */
-    }
-
-
     .badge {
         width: 4in;
         height: 3.127in;
@@ -25,6 +12,7 @@
         border: 1px solid #000;
         position: relative;
         page-break-after: always;
+        font-family: "Copperplate Gothic Bold", serif;
     }
 
     .colorbar {
@@ -35,6 +23,22 @@
         bottom: .1in;
         width: 0.6in;
         height: 3.327in;
+        color: #FFFFFF;
+    }
+
+    .colorbarText {
+        transform: rotate(270deg);
+        padding-top:2em;
+        padding-bottom:2em;
+        margin-top: 1em;
+        margin-bottom: auto;
+        font-weight: bold;
+        font-size: 3em;
+        text-shadow:
+        -1px -1px 0 #000,
+        1px -1px 0 #000,
+        -1px 1px 0 #000,
+        1px 1px 0 #000;
     }
 
     .name {
@@ -45,8 +49,40 @@
         padding-top: 1.25in;
         padding-bottom: 1.25in;
         padding-left: .25in;
-        font-family: "Copperplate Gothic Bold", serif;
         font-size: 24px;
+    }
+
+    .smallName {
+        position: absolute;
+        width: 3.32in;
+        height: .627in;
+        margin-left: .59in;
+        top: 1.7in;
+        padding-bottom: 1.25in;
+        padding-left: .25in;
+        font-size: 20px;
+    }
+
+    .badgeNumber {
+        position: absolute;
+        width: 3.32in;
+        height: .627in;
+        margin-left: .59in;
+        top: 2.5in;
+        padding-bottom: 1.25in;
+        padding-left: 2.25in;
+        font-size: 14px;
+        color: black;
+    }
+
+    .dayText {
+        position: absolute;
+        width: 3.32in;
+        height: .25in;
+        margin-left: .59in;
+        top: 2.75in;
+        padding-left: 1.5in;
+        font-size: 18px;
     }
 
     @page {

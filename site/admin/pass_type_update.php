@@ -86,11 +86,27 @@ if (isset($_GET['id'])) {
                 </div>
             </div>
             <div class="form-group">
-                <label for="Category" class="col-sm-3 control-label">Category</label>
+                <label for="day_text" class="col-sm-3 control-label">Day Text</label>
                 <div class="col-sm-4">
-                    <input type="text" class="form-control" name="category" id="category"
-                           placeholder="Name" maxlength="10" required="required"
-                           value="<?php echo $passType->category; ?>">
+                    <input type="text" class="form-control" name="day_text" id="day_text"
+                           placeholder="Weekend/Friday/Saturday/etc" maxlength="10" required="required"
+                           value="<?php echo $passType->day_text; ?>">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="stripe_color" class="col-sm-3 control-label">Stripe Color</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" name="stripe_color" id="stripe_color"
+                           placeholder="323E99" maxlength="6" required="required"
+                           value="<?php echo $passType->stripe_color; ?>">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="stripe_text" class="col-sm-3 control-label">Stripe Text</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" name="stripe_text" id="stripe_text"
+                           placeholder="Adult/Youth/Child" maxlength="10" required="required"
+                           value="<?php echo $passType->stripe_text; ?>">
                 </div>
             </div>
             <div class="form-group">

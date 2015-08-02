@@ -32,27 +32,36 @@ CREATE TABLE pass_types
 (
     id                  INT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
     name                VARCHAR(250) NOT NULL,
-    category            CHAR(10) NOT NULL COMMENT 'weekend, friday, saturday, vip, etc (lower case)',
-    visible             CHAR(1) COMMENT 'Y or N',
+    day_text            CHAR(10) COMMENT 'Friday, Saturday, VIP, etc',
+    stripe_color        CHAR(7) NOT NULL COMMENT 'HTML color code for badge stripe',
+    stripe_text         CHAR(10) NOT NULL COMMENT 'Message printed in badge stripe',
+    visible             CHAR(1) DEFAULT 'Y' COMMENT 'Y or N',
     min_age             TINYINT UNSIGNED NOT NULL COMMENT 'Minimum age in years',
     max_age             TINYINT UNSIGNED NOT NULL COMMENT 'Max age in years',
     cost                DECIMAL(7,2) NOT NULL
 );
 
-INSERT INTO pass_types (name, category, visible, min_age, max_age, cost)
+INSERT INTO pass_types (name, stripe_color, stripe_text, day_text, visible, min_age, max_age, cost)
 VALUES
-    ('Full Weekend - Adult', 'weekend', 'Y', 13, 255, 55),
-    ('Friday Only - Adult', 'friday', 'Y', 13, 255, 30),
-    ('Saturday Only - Adult', 'saturday', 'Y', 13, 255, 40),
-    ('Sunday Only - Adult', 'sunday', 'Y', 13, 255, 40),
-    ('Monday Only - Adult', 'monday', 'Y', 13, 255, 30),
-    ('Full Weekend - Child', 'weekend', 'Y', 6, 12, 45),
-    ('Friday - Child', 'friday', 'Y', 6, 12, 20),
-    ('Saturday - Child', 'saturday', 'Y', 6, 12, 30),
-    ('Sunday - Child', 'sunday', 'Y', 6, 12, 30),
-    ('Monday - Child', 'monday', 'Y', 6, 12, 20),
-    ('Child Under 5', 'weekend', 'Y', 0, 5, 0),
-    ('VIP', 'vip', 'Y', 0, 255, 300);
+    ('Full Weekend - Adult', '323E99', 'Adult', 'Weekend', 'Y', 18, 255, 55),
+    ('Friday Only - Adult', '323E99', 'Adult', 'Friday', 'Y', 18, 255, 30),
+    ('Saturday Only - Adult', '323E99', 'Adult', 'Saturday', 'Y', 18, 255, 40),
+    ('Sunday Only - Adult', '323E99', 'Adult', 'Sunday', 'Y', 18, 255, 40),
+    ('Monday Only - Adult', '323E99', 'Adult', 'Monday', 'Y', 18, 255, 30),
+    ('Full Weekend - Youth', 'FFFF00', 'Youth', 'Weekend', 'Y', 13, 17, 45),
+    ('Friday - Youth', 'FFFF00', 'Youth', 'Friday', 'Y', 13, 17, 55),
+    ('Saturday - Youth', 'FFFF00', 'Youth', 'Saturday', 'Y', 13, 17, 40),
+    ('Sunday - Youth', 'FFFF00', 'Youth', 'Sunday', 'Y', 13, 17, 40),
+    ('Monday - Youth', 'FFFF00', 'Youth', 'Monday', 'Y', 13, 17, 30),
+    ('Full Weekend - Child', 'CC202A', 'Child', 'Weekend', 'Y', 6, 12, 45),
+    ('Friday - Child', 'CC202A', 'Child', 'Friday', 'Y', 6, 12, 20),
+    ('Saturday - Child', 'CC202A', 'Child', 'Saturday', 'Y', 6, 12, 30),
+    ('Sunday - Child', 'CC202A', 'Child', 'Sunday', 'Y', 6, 12, 30),
+    ('Monday - Child', 'CC202A', 'Child', 'Monday', 'Y', 6, 12, 20),
+    ('Child Under 5', 'CC202A', 'Child', 'Weekend', 'Y', 0, 5, 0),
+    ('Panelist - Adult', '323E99', 'Adult', 'Panelist', 'Y', 18, 255, 30),
+    ('Panelist - Youth', 'FFFF00', 'Youth', 'Panelist', 'Y', 13, 17, 30),
+    ('VIP - Adult', '323E99', 'Adult', 'VIP', 'N', 18, 255, 300);
 
 CREATE TABLE attendees
 (

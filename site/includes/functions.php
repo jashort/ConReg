@@ -108,8 +108,8 @@ function logMessage($user, $typeId, $message) {
 	global $conn;
 
 	try {
-		$stmt = $conn->prepare("INSERT INTO history (username, type_id, description) VALUES (:username, :type, :message)");
-		$stmt->execute(array('username' => $user, 'type' => $typeId, 'message' => $message));
+		$stmt = $conn->prepare("INSERT INTO history (username, type_id, description) VALUES (:username, :type, :day_text)");
+		$stmt->execute(array('username' => $user, 'type' => $typeId, 'day_text' => $message));
 	} catch(PDOExecption $e) {
 		die('ERROR: ' . $e->getMessage());
 	}
@@ -340,13 +340,21 @@ function regUpdate($attendee) {
 	global $conn;
 
 	try {
-		$stmt = $conn->prepare("UPDATE attendees SET first_name=:firstname, last_name=:lastname, badge_number=:badgenumber, zip=:zip, phone=:phone, email=:email, birthdate=:bdate, ec_fullname=:ecname, ec_phone=:ecphone, ec_same=:same, parent_fullname=:pcname, parent_phone=:pcphone, parent_form=:pform, paid_amount=:amount, pass_type=:passtype, pass_type_id=:passtypeid, order_id=:orderid, notes=:notes, checked_in=:checkedin WHERE id=:id");
+		$stmt = $conn->prepare("UPDATE attendees SET first_name=:firstname, last_name=:lastname, badge_name=:badge_name,
+ 								badge_number=:badgenumber, zip=:zip, phone=:phone, email=:email, country=:country,
+ 								birthdate=:bdate, ec_fullname=:ecname, ec_phone=:ecphone, ec_same=:same,
+ 								parent_fullname=:pcname, parent_phone=:pcphone, parent_form=:pform, paid_amount=:amount,
+ 								pass_type=:passtype, pass_type_id=:passtypeid, order_id=:orderid, notes=:notes,
+ 								checked_in=:checkedin
+ 								WHERE id=:id");
 		$stmt->execute(array('firstname' => $attendee->first_name,
 			'lastname' => $attendee->last_name,
+			'badge_name' => $attendee->badge_name,
 			'badgenumber' => $attendee->badge_number,
 			'zip' => $attendee->zip,
 			'phone' => $attendee->phone,
 			'email' => $attendee->email,
+			'country' => $attendee->country,
 			'bdate' => $attendee->birthdate,
 			'ecname' => $attendee->ec_fullname,
 			'ecphone' => $attendee->ec_phone,
@@ -361,8 +369,9 @@ function regUpdate($attendee) {
 			'notes' => $attendee->notes,
 			'checkedin' => $attendee->checked_in,
 			'id' => $attendee->id));
+
 	} catch(PDOException $e) {
-		echo 'ERROR: ' . $e->getMessage();
+		die('ERROR: ' . $e->getMessage());
 	}
 }
 
@@ -740,7 +749,7 @@ function importPreRegCsvFile(&$handle, $staffId) {
 
 
 /**
- * Insert the given staff member in to the database
+ * Insert the given pass type in to the database
  *
  * @param PassType $passType
  */
@@ -749,11 +758,13 @@ function passTypeAdd($passType) {
 
 	try {
 		$stmt = $conn->prepare("INSERT INTO pass_types
-							(name, category, visible, min_age, max_age, cost)
+							(name, stipe_color, stripe_text, day_text, visible, min_age, max_age, cost)
 							VALUES
-							(:name, :category, :visible, :min_age, :max_age, :cost)");
+							(:name, :stripe_color, :stripe_text, :day_text, :visible, :min_age, :max_age, :cost)");
 		$stmt->execute(array('name' => $passType->name,
-			'category' => $passType->category,
+			'stripe_color' => $passType->stripe_color,
+			'stripe_text' => $passType->stripe_text,
+			'day_text' => $passType->day_text,
 			'visible' => $passType->visible,
 			'min_age' => $passType->min_age,
 			'max_age' => $passType->max_age,
@@ -772,11 +783,14 @@ function passTypeUpdate($passType) {
 	global $conn;
 
 	try {
-		$stmt = $conn->prepare("UPDATE pass_types SET name = :name, category = :category, 
+		$stmt = $conn->prepare("UPDATE pass_types SET name = :name, stripe_color = :stripe_color,
+ 								stripe_text = :stripe_text, day_text = :day_text,
 								visible = :visible, min_age = :min_age, max_age = :max_age, cost = :cost
 								WHERE id=:id");
 		$stmt->execute(array('name' => $passType->name,
-			'category' => $passType->category,
+			'stripe_color' => $passType->stripe_color,
+			'stripe_text' => $passType->stripe_text,
+			'day_text' => $passType->day_text,
 			'visible' => $passType->visible,
 			'min_age' => $passType->min_age,
 			'max_age' => $passType->max_age,

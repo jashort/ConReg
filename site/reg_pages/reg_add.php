@@ -53,7 +53,7 @@ if (array_key_exists('action', $_GET) && $_GET['action'] == "clear") {
 
     } elseif ($_POST['part'] == 2) {
         $pass = getPassType($_POST["pass_type_id"]);
-        $_SESSION['current']->pass_type = $pass->category;
+        $_SESSION['current']->pass_type = $pass->day_text;
         $_SESSION['current']->pass_type_id = $_POST["pass_type_id"];
         if (trim($_POST["paid_amount"]) == '') {
             $_SESSION['current']->paid_amount = $pass->cost;
