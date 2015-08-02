@@ -642,7 +642,7 @@ function passwordReset($username, $password) {
 		}
 
 	} catch(PDOException $e) {
-		echo 'ERROR: ' . $e->getMessage();
+		die('ERROR: ' . $e->getMessage());
 	}
 }
 
