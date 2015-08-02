@@ -140,7 +140,7 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Finish")) {
         <?php } else { ?>
             <fieldset id="attendees">
                 <legend>Attendees</legend>
-                <a href="/reg_pages/reg_add.php">Add Another</a><br>
+                <a href="/reg_pages/reg_add.php" class="btn btn-primary">Add Another Attendee</a><br>
                 <table id="attendee_table" class="table report">
                     <tr>
                         <th>Name</th>
