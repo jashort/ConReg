@@ -435,7 +435,7 @@ function attendeeSearch($searchString) {
 
 /**
  * Search pre-registered attendees by first name, last name, or order ID
- * 
+ *
  * @param string $name First name, last name, or order ID
  * @param string $field Field to search. fn = first name, ln = last name, ord = order id
  * @return PDOStatement
@@ -462,6 +462,28 @@ function preRegSearch($name, $field) {
 	$stmt->setFetchMode(PDO::FETCH_CLASS, "Attendee");
 	return $stmt;
 }
+
+
+/**
+ * Search pre-registered attendees by phone number. Returns all attendees with the given phone number. Will strip
+ * any non-numeric characters before searching.
+ *
+ * @param string $phone Phone Number
+ * @return PDOStatement
+ */
+function preRegPhoneSearch($phone) {
+    $phone = preg_replace('/[^0-9]/','',$phone);
+	global $conn;
+    $stmt = $conn->prepare("SELECT id, first_name, last_name, badge_name, checked_in, order_id
+								FROM attendees
+								WHERE phone LIKE :phone AND reg_type='PreReg'
+								ORDER BY first_name");
+
+	$stmt->execute(array('phone' => $phone));
+	$stmt->setFetchMode(PDO::FETCH_CLASS, "Attendee");
+	return $stmt;
+}
+
 
 
 /**
