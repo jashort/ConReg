@@ -53,9 +53,7 @@ if ($_FILES && $_FILES['csv']['size'] > 0) {
 		<h2>PreReg CSV Import</h2>
 
 		<?php if (!empty($_GET['complete'])) { ?>
-
-			<?php echo $_GET['count'] ?> lines imported. <a href="/">Continue</a><br>
-
+			<?php echo $_GET['count'] ?> attendees imported. <a href="/">Continue</a><br>
 		<?php } else { ?>
 			<form action="" method="post" enctype="multipart/form-data" name="form1" id="form1" class="form-inline">
 				<p>Import Pre-registered Attendees. Note: Importing the same file multiple times may create duplicates.</p>

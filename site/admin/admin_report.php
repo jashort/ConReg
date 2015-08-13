@@ -74,7 +74,7 @@ $regStats = registrationStatistics();
         <th colspan="2">Pass Types</th>
       </tr>
       <tr>
-        <td>Weekend/VIP:</td>
+        <td>Weekend/VIP/Panelist:</td>
         <td><?php echo $regStats['passtypeweekend']; ?></td>
       </tr>
       <tr>
@@ -109,7 +109,7 @@ $regStats = registrationStatistics();
         <td>
           <?php echo $regStats['checkedintotal']; ?>
           <?php if (hasRight('report_view_revenue')) { ?>
-            ($<?php echo $regStats['sumregtotal']; ?>)
+            ($<?php echo $regStats['sumregtotal']; ?> At Con)
           <?php } ?>
         </td>
       </tr>

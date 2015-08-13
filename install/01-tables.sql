@@ -61,7 +61,10 @@ VALUES
     ('Child Under 5', 'CC202A', 'Child', 'Weekend', 'Y', 0, 5, 0),
     ('Panelist - Adult', '323E99', 'Adult', 'Panelist', 'Y', 18, 255, 30),
     ('Panelist - Youth', 'FFFF00', 'Youth', 'Panelist', 'Y', 13, 17, 30),
-    ('VIP - Adult', '323E99', 'Adult', 'VIP', 'N', 18, 255, 300);
+    ('Panelist - Child', 'CC202A', 'Child', 'Panelist', 'Y', 6, 12, 30),
+    ('VIP - Adult', '323E99', 'Adult', 'VIP', 'N', 18, 255, 300),
+    ('VIP - Youth', 'FFFF00', 'Youth', 'VIP', 'N', 13, 17, 300),
+    ('VIP - Child', 'CC202A', 'Child', 'VIP', 'N', 6, 12, 300);
 
 CREATE TABLE attendees
 (
