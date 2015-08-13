@@ -667,7 +667,7 @@ function importPreRegCsvFile(&$handle, $staffId) {
 	try {
 		$conn->beginTransaction();
 
-		while (($data = fgetcsv($handle,1000,"\t","'")) !== FALSE) {
+		while (($data = fgetcsv($handle,1000,"\t")) !== FALSE) {
 			// Skip the first line
 			if ($first == true) {
 				$first = false;
@@ -676,7 +676,6 @@ function importPreRegCsvFile(&$handle, $staffId) {
 			// Skip empty lines and lines where the first field starts with "#"
 			if (count($data) != 19) {
 				die("Error: Line " . $count . " does not have 19 columns.");
-
 			}
 			if (count($data) > 1 && substr($data[0], 0, 1) != '#') {
 				if ($data[3] == "" || $data[3] == "NULL") {
@@ -732,6 +731,7 @@ function importPreRegCsvFile(&$handle, $staffId) {
 		}
 		$conn->commit();
 	} catch(Exception $e) {
+		$conn->rollBack();
 		echo 'Error Importing line ' . $count . ':<br>';
 		echo 'Message: ' . $e->getMessage();
 		echo '<br><pre>';
