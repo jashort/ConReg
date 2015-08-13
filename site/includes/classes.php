@@ -128,7 +128,7 @@ class Attendee {
     }
 
     /**
-     * Attendee age in years or -1 if birthdate isn't set
+     * Attendee age in years as of today or -1 if birthdate isn't set
      *
      * @return int
      */
@@ -144,6 +144,27 @@ class Attendee {
             return -1;
         }
     }
+
+    /**
+     * Attendee age in years on September 4, 2015 (first day of con) or -1 if birthdate isn't set
+     * Used to handle the corner case where an attendee is being imported before the convention, use
+     * getAge() for calculating the age otherwise
+     *
+     * @return int
+     */
+    public function getAgeAtCon() {
+        if ($this->birthdate == null) {
+            return -1;
+        }
+        try {
+            $date = new DateTime($this->birthdate);
+            $con = new DateTime("2015-09-04");
+            return $con->diff($date)->y;
+        } catch (Exception $e) {
+            return -1;
+        }
+    }
+
 
     /**
      * Loads data in to this object from the given array. Usually used with a $_POST object.
