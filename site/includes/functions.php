@@ -365,9 +365,9 @@ function regUpdate($attendee) {
 		$stmt = $conn->prepare("UPDATE attendees SET first_name=:firstname, last_name=:lastname, badge_name=:badge_name,
  								badge_number=:badgenumber, zip=:zip, phone=:phone, email=:email, country=:country,
  								birthdate=:bdate, ec_fullname=:ecname, ec_phone=:ecphone, ec_same=:same,
- 								parent_fullname=:pcname, parent_phone=:pcphone, parent_form=:pform, paid_amount=:amount,
- 								pass_type=:passtype, pass_type_id=:passtypeid, order_id=:orderid, notes=:notes,
- 								checked_in=:checkedin
+ 								parent_fullname=:pcname, parent_phone=:pcphone, parent_form=:pform, paid=:paid,
+ 								paid_amount=:amount, pass_type=:passtype, pass_type_id=:passtypeid, reg_type=:regtype,
+ 								order_id=:orderid, notes=:notes, checked_in=:checkedin, added_by=:addedby
  								WHERE id=:id");
 		$stmt->execute(array('firstname' => $attendee->first_name,
 			'lastname' => $attendee->last_name,
@@ -384,14 +384,16 @@ function regUpdate($attendee) {
 			'pcname' => $attendee->parent_fullname,
 			'pcphone' => $attendee->parent_phone,
 			'pform' => $attendee->parent_form,
+            'paid' => $attendee->paid,
 			'amount' => $attendee->paid_amount,
 			'passtype' => $attendee->pass_type,
-			'passtypeid' =>$attendee->pass_type_id,
+			'passtypeid' => $attendee->pass_type_id,
+            'regtype' => $attendee->reg_type,
 			'orderid' => $attendee->order_id,
 			'notes' => $attendee->notes,
 			'checkedin' => $attendee->checked_in,
+            'addedby' => $attendee->added_by,
 			'id' => $attendee->id));
-
 	} catch(PDOException $e) {
 		die('ERROR: ' . $e->getMessage());
 	}
