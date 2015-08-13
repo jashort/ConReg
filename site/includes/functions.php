@@ -648,6 +648,14 @@ function passwordReset($username, $password) {
 
 
 /**
+ * Given a pass type and birthdate, finds the appropriate pass type ID. This is hard coded for
+ * now, and depends on the pass types being the default ones defined in install/01-tables.sql
+ */
+function findPassTypeId($birthDate, $passType) {
+    if
+}
+
+/**
  * Import attendees from the given file handle (used when a CSV file is uploaded. Use the given
  * staff ID for badge numbers. If there is a failure, roll back all imported items
  *
@@ -683,7 +691,7 @@ function importPreRegCsvFile(&$handle, $staffId) {
 				}
 
 				$PhoneNumber = $data[6];
-				$Phone_Stripped = preg_replace("/[^a-zA-Z0-9s]/","",$PhoneNumber);
+				$Phone_Stripped = preg_replace("/[^0-9s]/","",$PhoneNumber);
 
 				$orderStmt = $conn->prepare("INSERT INTO orders (order_id, total_amount, paid, paytype)
 									VALUES (:orderid, :amount, :paid, :paytype)
@@ -691,10 +699,10 @@ function importPreRegCsvFile(&$handle, $staffId) {
 				$attendeeStmt = $conn->prepare("
 							INSERT INTO attendees (first_name, last_name, badge_number, badge_name, zip, country,
 						   phone, email, birthdate, ec_fullname, ec_phone, ec_same, parent_fullname, parent_phone,
-						   parent_form, paid, paid_amount, pass_type, reg_type, checked_in, added_by, order_id, notes) VALUES
+						   parent_form, paid, paid_amount, pass_type, pass_type_id, reg_type, checked_in, added_by, order_id, notes) VALUES
 						   (:firstname, :lastname, :bnumber, :bname, :zip, :country,
 						   :phone, :email, :bdate, :ecname, :ecphone, :same, :pcname, :pcphone,
-						   :parentform, :paid, :amount, :passtype, :regtype, :checkedin, :staffAdd, :orderid, :notes)");
+						   :parentform, :paid, :amount, :passtype, :passtypeid, :regtype, :checkedin, :staffAdd, :orderid, :notes)");
 
 				// Create order if it doesn't exist. If it does, increment the total amount
 				$orderStmt->execute(array('orderid' => $data[17],
@@ -720,6 +728,7 @@ function importPreRegCsvFile(&$handle, $staffId) {
 					'paid' => $data[14],
 					'amount' => $data[15],
 					'passtype' => $data[16],
+                    'passtypeid' => findPassTypeId($data[8], $data[16]);
 					'regtype' => 'PreReg',
 					'checkedin' => 'No',
 					'staffAdd' => 'ONLINE',
