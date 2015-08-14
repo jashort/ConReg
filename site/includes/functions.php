@@ -241,6 +241,7 @@ function generateOrderId() {
 
 /**
  * Add the given attendee to the database
+ * @param Attendee $attendee
  */
 function addAttendee($attendee) {
     global $conn;
@@ -270,7 +271,7 @@ function addAttendee($attendee) {
                 'amount' => $attendee->paid_amount,
                 'passtype' => $attendee->pass_type,
                 'passtypeid' => $attendee->pass_type_id,
-                'orderId' => $attendee->orderId,
+                'orderId' => $attendee->order_id,
                 'regtype' => $attendee->reg_type,
                 'checked' => $attendee->checked_in,
                 'notes' => $attendee->notes,
