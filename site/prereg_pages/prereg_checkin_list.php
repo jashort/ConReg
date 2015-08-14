@@ -45,13 +45,22 @@ if (isset($_GET['id']) && isset($_GET['field'])) {
     <?php if (!isset($_GET["id"])) { // Show if no search term ?>
       <form name="ln" action="/prereg_pages/prereg_checkin_list.php" method="get" target="_self" class="form-inline">
         <fieldset id="list_table_search">
-          <label for="id" class="control-label">Last Name</label>
+          <label for="id" class="control-label">Search</label>
+          <input name="id" type="text" class="form-control" autocomplete="off" maxlength="60" placeholder="Name" autofocus />
+          <input name="Submit" type="submit" class="btn btn-primary" value="Search" /><br>
+          (Full name or last name only)
+          <input name="field" type="hidden" value="ln" />
+        </fieldset>
+      </form>
+    <?php } else {  // There is a search term, display results ?>
+      <form name="ln" action="/prereg_pages/prereg_checkin_list.php" method="get" target="_self" class="form-inline">
+        <fieldset id="list_table_search">
+          <label for="id" class="control-label">Search</label>
           <input name="id" type="text" class="form-control" autocomplete="off" maxlength="60" placeholder="Last Name" autofocus />
           <input name="Submit" type="submit" class="btn btn-primary" value="Search" />
           <input name="field" type="hidden" value="ln" />
         </fieldset>
       </form>
-    <?php } else {  // There is a search term, display results ?>
       <table id="list_table" class="table">
         <tr>
           <th scope="col">Name</th>

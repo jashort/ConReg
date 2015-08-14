@@ -472,17 +472,12 @@ function attendeeSearch($searchString) {
  * Search pre-registered attendees by first name, last name, or order ID
  * 
  * @param string $name First name, last name, or order ID
- * @param string $field Field to search. fn = first name, ln = last name, ord = order id
+ * @param string $field Field to search. ord = order id, otherwise search by name
  * @return PDOStatement
  */
 function preRegSearch($name, $field) {
 	global $conn;
-	if ($field == 'fn') {
-		$stmt = $conn->prepare("SELECT id, first_name, last_name, badge_name, checked_in, order_id
-								FROM attendees
-								WHERE first_name LIKE :name AND reg_type LIKE 'PreReg'
-								ORDER BY order_id");
-	} elseif ($field == 'ord') {
+    if ($field == 'ord') {
 		$stmt = $conn->prepare("SELECT id, first_name, last_name, badge_name, checked_in, order_id
 								FROM attendees
 								WHERE order_id LIKE :name AND reg_type LIKE 'PreReg'
@@ -490,8 +485,12 @@ function preRegSearch($name, $field) {
 	} else {
 		$stmt = $conn->prepare("SELECT id, first_name, last_name, badge_name, checked_in, order_id
 								FROM attendees
-								WHERE last_name LIKE :name AND reg_type LIKE 'PreReg'
-								ORDER BY order_id");
+								WHERE
+								 reg_type LIKE 'PreReg' AND
+                                (CONCAT_WS(' ', first_name, last_name) = :name OR
+                                first_name LIKE :name OR
+                                last_name LIKE :name)
+                                ORDER BY first_name, last_name");
 	}
 	$stmt->execute(array('name' => $name));
 	$stmt->setFetchMode(PDO::FETCH_CLASS, "Attendee");
