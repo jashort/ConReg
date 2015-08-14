@@ -287,11 +287,11 @@ function addAttendee($attendee) {
  * Add one or more attendees to the database and create an order record for them
  *
  * @param Array $attendees Array containing Attendee objects
- * @return int The order ID that was created
+ * @return string The order ID that was created
  */
 function regAddOrder($attendees) {
 	global $conn;
-
+	$orderId = null;
 	try {
 		$conn->beginTransaction();
 		$orderId = generateOrderId();
@@ -304,7 +304,7 @@ function regAddOrder($attendees) {
 		$conn->commit();
 	} catch(Execption $e) {
 		$conn->rollback();
-		echo 'ERROR: ' . $e->getMessage();
+		die('ERROR: ' . $e->getMessage());
 	}
 	return $orderId;
 }
@@ -316,13 +316,15 @@ function regAddOrder($attendees) {
  * @param int $orderId
  */
 function orderCheckIn($orderId) {
+	global $conn;
 	try {
-		global $conn;
-
+		$conn->beginTransaction();
 		$stmt = $conn->prepare("UPDATE attendees SET checked_in='Yes' WHERE order_id= :orderid");
 		$stmt->execute(array('orderid' => $orderId));
+		$conn->commit();
 	} catch(PDOException $e) {
-		echo 'ERROR: ' . $e->getMessage();
+		$conn->rollback();
+		die('ERROR: ' . $e->getMessage());
 	}
 
 }
@@ -348,7 +350,7 @@ function orderPaid($orderId, $paymentType, $total, $notes) {
 		$conn->commit();
 	} catch(PDOException $e) {
 		$conn->rollBack();
-		echo 'ERROR: ' . $e->getMessage();
+		die('ERROR: ' . $e->getMessage());
 	}
 
 }
@@ -408,8 +410,12 @@ function regUpdate($attendee) {
  */
 function regCheckIn($id) {
 	global $conn;
-	$stmt = $conn->prepare("UPDATE attendees SET checked_in='Yes' WHERE id= :id");
-	$stmt->execute(array('id' => $id));
+	try {
+		$stmt = $conn->prepare("UPDATE attendees SET checked_in='Yes' WHERE id= :id");
+		$stmt->execute(array('id' => $id));
+	} catch(PDOException $e) {
+		die('ERROR: ' . $e->getMessage());
+	}
 }
 
 
@@ -420,8 +426,12 @@ function regCheckIn($id) {
  */
 function regCheckInParentFormReceived($id) {
 	global $conn;
-	$stmt = $conn->prepare("UPDATE attendees SET parent_form='Yes' WHERE id= :id");
-	$stmt->execute(array('id' => $id));
+	try {
+		$stmt = $conn->prepare("UPDATE attendees SET parent_form='Yes' WHERE id= :id");
+		$stmt->execute(array('id' => $id));
+	} catch(PDOException $e) {
+		die('ERROR: ' . $e->getMessage());
+	}
 }
 
 
