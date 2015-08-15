@@ -49,7 +49,7 @@ VALUES
     ('Sunday Only - Adult', '323E99', 'Adult', 'Sunday', 'Y', 18, 255, 40),
     ('Monday Only - Adult', '323E99', 'Adult', 'Monday', 'Y', 18, 255, 30),
     ('Full Weekend - Youth', 'FFFF00', 'Youth', 'Weekend', 'Y', 13, 17, 45),
-    ('Friday - Youth', 'FFFF00', 'Youth', 'Friday', 'Y', 13, 17, 55),
+    ('Friday - Youth', 'FFFF00', 'Youth', 'Friday', 'Y', 13, 17, 30),
     ('Saturday - Youth', 'FFFF00', 'Youth', 'Saturday', 'Y', 13, 17, 40),
     ('Sunday - Youth', 'FFFF00', 'Youth', 'Sunday', 'Y', 13, 17, 40),
     ('Monday - Youth', 'FFFF00', 'Youth', 'Monday', 'Y', 13, 17, 30),
