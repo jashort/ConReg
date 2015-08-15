@@ -891,8 +891,7 @@ function passTypeList(){
  */
 function passTypeVisibleList(){
 	global $conn;
-
-	$stmt = $conn->prepare("SELECT * FROM pass_types WHERE visible = 'Y' ORDER BY min_age DESC, name");
+	$stmt = $conn->prepare("SELECT * FROM pass_types WHERE visible = 'Y' ORDER BY day_text DESC, min_age DESC, name");
 	$stmt->execute();
 	$stmt->setFetchMode(PDO::FETCH_CLASS, "PassType");
 	return $stmt;
