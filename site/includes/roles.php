@@ -30,7 +30,6 @@ $ROLES = array(
             'prereg_checkin' => true,
             'registration_add' => true,
             'registration_modify' => true,
-            'registration_manual_price' => true,
             'badge_print' => true,
             'attendee_search' => true,
             'badge_reprint' => true,
