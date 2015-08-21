@@ -182,10 +182,16 @@ function orderUpdate($id, $amount, $payType, $paid) {
  * @return PDOStatement
  */
 function orderListAttendees($orderId) {
+    if (is_null($orderId)) {
+        die("orderListAttendees() called with null order ID");
+    } elseif (trim($orderId) == "") {
+        die("orderListAttendees() called with empty order ID");
+    }
 	global $conn;
 
-	$stmt = $conn->prepare("SELECT * FROM attendees WHERE order_id = :orderid");
-	$stmt->execute(array('orderid' => $orderId));
+	$stmt = $conn->prepare("SELECT * FROM attendees WHERE order_id = :id");
+
+	$stmt->execute(array('id' => $orderId));
 	$stmt->setFetchMode(PDO::FETCH_CLASS, "Attendee");
 	return $stmt;
 }
@@ -298,7 +304,7 @@ function regAddOrder($attendees) {
 		$stmt = $conn->prepare("INSERT INTO orders (order_id, paid) VALUES (:id, :paid)");
 		$stmt->execute(array('id' => $orderId, 'paid' => 'no'));
 		foreach ($attendees as $attendee) {
-            $attendee->orderId = $orderId;
+            $attendee->order_id = $orderId;
             addAttendee($attendee);
         }
 		$conn->commit();
