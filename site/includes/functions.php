@@ -943,6 +943,37 @@ function passTypeDelete($id) {
 
 
 /**
+ * Mark the given pass type as hidden
+ *
+ * @param int $id
+ */
+function passTypeHide($id) {
+    global $conn;
+    try {
+        $stmt = $conn->prepare("UPDATE pass_types SET visible = 'N' WHERE id = :id");
+        $stmt->execute(array('id' => $id));
+    } catch(PDOExecption $e) {
+        die('ERROR: ' . $e->getMessage());
+    }
+}
+
+/**
+ * Mark the given pass type as visible
+ *
+ * @param int $id
+ */
+function passTypeShow($id) {
+    global $conn;
+    try {
+        $stmt = $conn->prepare("UPDATE pass_types SET visible = 'Y' WHERE id = :id");
+        $stmt->execute(array('id' => $id));
+    } catch(PDOExecption $e) {
+        die('ERROR: ' . $e->getMessage());
+    }
+}
+
+
+/**
  * Redirect to the given URL and stop running the current page
  * @param string $location Location to redirect to
  * @param int $statusCode HTTP status code

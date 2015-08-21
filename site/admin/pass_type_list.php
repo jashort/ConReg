@@ -6,6 +6,17 @@ requireRight('manage_pass_types');
 
 $passTypeList = passTypeList();
 
+if (isset($_POST["action"])) {
+    if ($_POST["action"] == "hide") {
+        passTypeHide($_POST["id"]);
+        logMessage($_SESSION['username'], 140, "Set pass type " . $_POST['id'] . " to hidden");
+    } elseif ($_POST["action"] == "show") {
+        passTypeShow($_POST["id"]);
+        logMessage($_SESSION['username'], 140, "Set pass type " . $_POST['id'] . " to visible");
+    }
+    redirect("/admin/pass_type_list.php");
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -50,6 +61,7 @@ $passTypeList = passTypeList();
             <thead>
             <tr>
                 <th class="text-center">Name</th>
+                <th class="text-center">Visible?</th>
                 <th class="text-center">Age Range (Years)</th>
                 <th class="text-center">Cost</th>
                 <th class="text-center"><a href="pass_type_update.php">Add New</a></th>
@@ -58,11 +70,29 @@ $passTypeList = passTypeList();
             <?php while ($passType = $passTypeList->fetch()) { ?>
                 <tr>
                     <td>
-                        <?php if ($passType->visible != "Y") { ?>
-                            <i><?php echo $passType->name ?> (hidden)</i>
-                        <?php } else { ?>
+                        <?php if ($passType->visible == "Y") { ?>
                             <?php echo $passType->name ?>
-                        <?php } ?>
+                        <?php } else { ?>
+                        <i><?php echo $passType->name ?></i>
+                        <? } ?>
+                    </td>
+                    <td class="text-center">
+                        <?php if ($passType->visible != "Y") { ?>
+                            <form action="pass_type_list.php" method="post">
+                                <i>No</i>
+                                <input type="hidden" name="action" value="show" />
+                                <input type="hidden" name="id" value="<?php echo $passType->id ?>"/>
+                                <input type="submit" name="Show" value="Show" class="btn-link" />
+                            </form>
+                        <?php } else { ?>
+                            <form action="pass_type_list.php" method="post" class="form-inline">
+                                Yes
+                                <input type="hidden" name="action" value="hide" />
+                                <input type="hidden" name="id" value="<?php echo $passType->id ?>"/>
+                                <input type="submit" name="Hide" value="Hide" class="btn-link" />
+                            </form>
+
+                        <? } ?>
                     </td>
                     <td class="text-center">
                         <?php echo $passType->getAgeRange() ?>
