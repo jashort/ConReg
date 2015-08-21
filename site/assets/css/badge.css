@@ -1,16 +1,13 @@
 /* CSS for printing badges on half sheets */
 @media screen, print {
     .badge {
-        width: 4in;
-        height: 3.127in;
-        padding: 0;
-        margin-top: 0.09in;
-        margin-bottom: .25in;
-        margin-right: auto;
-        margin-left: auto;
-        white-space: nowrap;
-        border: 1px solid #000;
         position: relative;
+        margin-top: 1.25in;
+        margin-left: 2.35in;
+        width: 4in;
+        height: 3in;
+        padding: 0;
+        white-space: nowrap;
         page-break-after: always;
         font-family: "Copperplate Gothic Bold", serif;
     }
@@ -24,16 +21,18 @@
         width: 0.6in;
         height: 3.327in;
         color: #FFFFFF;
+        word-break: break-all;
+        white-space: normal;
+        text-align: center;
+        vertical-align: middle;
+        text-transform: uppercase;
+        padding-top:1em;
     }
 
     .colorbarText {
-        transform: rotate(270deg);
-        padding-top:2em;
-        padding-bottom:2em;
-        margin-top: 1em;
-        margin-bottom: auto;
         font-weight: bold;
-        font-size: 3em;
+        font-size: 3.1em;
+        text-align: center;
         text-shadow:
         -1px -1px 0 #000,
         1px -1px 0 #000,
@@ -43,45 +42,33 @@
 
     .name {
         position: absolute;
-        width: 3.32in;
-        height: .627in;
-        margin-left: .59in;
-        padding-top: 1.25in;
-        padding-bottom: 1.25in;
-        padding-left: .25in;
+        top: 0.965in;
+        left: 1.3in;
         font-size: 24px;
     }
 
     .smallName {
         position: absolute;
-        width: 3.32in;
-        height: .627in;
-        margin-left: .59in;
-        top: 1.7in;
-        padding-bottom: 1.25in;
-        padding-left: .25in;
+        top: 1.4in;
+        left: 1.5in;
         font-size: 20px;
     }
 
     .badgeNumber {
+        top: 2.6in;
+        left: 3in;
         position: absolute;
-        width: 3.32in;
-        height: .627in;
-        margin-left: .59in;
-        top: 2.5in;
-        padding-bottom: 1.25in;
-        padding-left: 2.25in;
         font-size: 14px;
         color: black;
     }
 
     .dayText {
         position: absolute;
-        width: 3.32in;
-        height: .25in;
-        margin-left: .59in;
         top: 2.75in;
-        padding-left: 1.5in;
+        left: 1.8125in;
+        width: 2.125in;
+        height: .1875in;
+        text-align: center;
         font-size: 18px;
     }
 

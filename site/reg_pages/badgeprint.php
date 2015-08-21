@@ -12,7 +12,6 @@ if (isset($_POST['print'])) {
 } else {
 	die("No parameters");
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
