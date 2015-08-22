@@ -30,7 +30,7 @@ if (isset($_POST['print'])) {
 
         logMessage($_SESSION['username'], 40, "Printed badge for " .
 			$attendee->first_name . ' ' . $attendee->last_name . " (ID " . $attendee->id . ")"); ?>
-
+        <div class="spacer"> </div>
         <div class="badge">
             <div class="colorbar" style="background-color: #<?php echo $pass->stripe_color; ?>">
                 <div class="colorbarText"><?php echo $pass->stripe_text; ?></div>

@@ -1,8 +1,13 @@
 /* CSS for printing badges on half sheets */
 @media screen, print {
+    .spacer {  /* Without this spacer div, badge wouldn't be in the correct spot on pages 2+
+                  absolute positioning didn't work in Firefox. */
+        height: 1.25in;
+        width: 5in;
+    }
+
     .badge {
         position: relative;
-        margin-top: 1.25in;
         margin-left: 2.35in;
         width: 4in;
         height: 3in;
