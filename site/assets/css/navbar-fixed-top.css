@@ -27,7 +27,9 @@ body {
     color: #111;
     background-color: #FFFFFF;
     min-height: 720px;
+    height: auto;
     border: 1px solid #666;
+    overflow: hidden;
 }
 
 .mascot {
