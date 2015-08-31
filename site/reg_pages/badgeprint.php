@@ -33,7 +33,7 @@ if (isset($_POST['print'])) {
         <div class="spacer"> </div>
         <div class="badge">
             <div class="colorbar" style="background-color: #<?php echo $pass->stripe_color; ?>">
-                <div class="colorbarText"><?php echo $pass->stripe_text; ?></div>
+                <div class="colorbarText"><?php echo implode("<br />", str_split($pass->stripe_text)); ?></div>
             </div>
             <div class="name"><?php echo $attendee->getNameForBadge(); ?></div>
             <div class="smallName"><?php echo $attendee->getSmallNameForBadge(); ?></div>
