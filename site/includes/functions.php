@@ -484,12 +484,12 @@ function attendeeSearch($searchString) {
 function preRegSearch($name, $field) {
 	global $conn;
     if ($field == 'ord') {
-		$stmt = $conn->prepare("SELECT id, first_name, last_name, badge_name, checked_in, order_id
+		$stmt = $conn->prepare("SELECT id, first_name, last_name, badge_name, birthdate, checked_in, order_id
 								FROM attendees
 								WHERE order_id LIKE :name AND reg_type LIKE 'PreReg'
 								ORDER BY order_id");
 	} else {
-		$stmt = $conn->prepare("SELECT id, first_name, last_name, badge_name, checked_in, order_id
+		$stmt = $conn->prepare("SELECT id, first_name, last_name, badge_name, birthdate, checked_in, order_id
 								FROM attendees
 								WHERE
 								 reg_type LIKE 'PreReg' AND

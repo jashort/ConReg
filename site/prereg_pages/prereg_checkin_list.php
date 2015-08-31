@@ -65,6 +65,7 @@ if (isset($_GET['id']) && isset($_GET['field'])) {
         <tr>
           <th scope="col">Name</th>
           <th scope="col">Badge Name</th>
+          <th scope="col">Birthdate / Age</i></th>
           <th scope="col">Order</th>
           <th scope="col">Checked In</th>
         </tr>
@@ -84,6 +85,7 @@ if (isset($_GET['id']) && isset($_GET['field'])) {
                 <?php echo $attendee->first_name . " " . $attendee->last_name; ?></a>
             </td>
             <td class="<?php echo $rowClass ?>"><?php echo $attendee->badge_name; ?></td>
+            <td class="<?php echo $rowClass ?>"><?php echo $attendee->getBirthDate(); ?> (<?php echo $attendee->getAge(); ?>)</td>
             <td class="<?php echo $rowClass ?>"><?php echo $attendee->order_id; ?></td>
             <td class="<?php echo $rowClass ?>"><?php echo $attendee->checked_in; ?></td>
           </tr>

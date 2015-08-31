@@ -106,6 +106,9 @@ if (isset($_GET['id'])) {
         <label>Badge Name: </label>
         <span class="input-xlarge uneditable-input"><?php echo $attendee->badge_name; ?></span>
         <br />
+        <label>Badge Number: </label>
+        <span class="input-xlarge uneditable-input"><?php echo $attendee->badge_number; ?></span>
+        <br />
         <label>Zip : </label>
         <span class="input-xlarge uneditable-input"><?php echo $attendee->zip; ?></span>
         <label>Country : </label>
