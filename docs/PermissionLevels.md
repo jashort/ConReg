@@ -9,7 +9,7 @@ roles numerically lower on the list. (Permission names are in parenthesis)
     + Can check in preregistered attendees (prereg_add)
     + Can only print badges when adding an attendee (badge_print)
   
-- 2: Super User
+- 2: Coordinator
     + Can add attendees (registration_add)
     + Can modify attendees (registration_modify)
     + Can set price manually for a attendee (registration_manual_price)
@@ -28,11 +28,22 @@ roles numerically lower on the list. (Permission names are in parenthesis)
     + Can add or modify staff users (manage_staff)
     + Can view staff phone list (manage_staff)
     + Can search attendee list (attendee_search)
-    + Can view reports (report_view)
-    + Can edit/hide pass types (manage_pass_types)
   
 - 4: Operations
     + Can search for attendees and view limited information (attendee_search)
+
+- 5: Director
+    + Can add attendees (registration_add)
+    + Can modify attendees (registration_modify)
+    + Can set price manually for a attendee (registration_manual_price)
+    + Can check in preregistered attendees (prereg_add)
+    + Can print badges (badge_print)
+    + Can reprint badges (badge_reprint)
+    + Can add or modify staff users (manage_staff)
+    + Can view staff phone list (manage_staff)
+    + Can search attendee list (attendee_search)
+    + Can view reports (report_view)
+    + Can edit/hide pass types (manage_pass_types)
   
 - 99: Super Admin
     + All rights granted by override in the hasRight() function.
