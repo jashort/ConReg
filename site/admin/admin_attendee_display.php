@@ -50,15 +50,16 @@ if (isset($_GET['id'])) {
       <br />
       <label>Badge Name: </label>
       <span class="display_text"><?php echo $attendee->badge_name; ?></span>
-      <!--
+      <br />
       <label>Badge Number: </label>
-      <span class="display_text"><?php echo $attendee->badge_number; ?></span>-->
+      <span class="display_text"><?php echo $attendee->badge_number; ?></span>
       <br />
       <label>E-Mail : </label>
       <span class="display_text"><?php echo $attendee->email; ?></span>
       <br />
       <label>Phone Number: </label>
       <span class="display_text"><?php echo $attendee->phone; ?></span>
+      <br />
       <label>Birth Date: </label>
       <span class="display_text"><?php echo $attendee->getBirthDate(); ?></span>
     </fieldset><br />
