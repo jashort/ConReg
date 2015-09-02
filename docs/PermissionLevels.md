@@ -17,6 +17,7 @@ roles numerically lower on the list. (Permission names are in parenthesis)
     + Can print badges (badge_print)
     + Can reprint badges (badge_reprint)
     + Can search attendee list (attendee_search)
+    + Can edit notes on an attendee (attendee_edit_notes)
   
 - 3: Manager
     + Can add attendees (registration_add)
@@ -28,9 +29,11 @@ roles numerically lower on the list. (Permission names are in parenthesis)
     + Can add or modify staff users (manage_staff)
     + Can view staff phone list (manage_staff)
     + Can search attendee list (attendee_search)
+    + Can edit notes on an attendee (attendee_edit_notes)
   
 - 4: Operations
     + Can search for attendees and view limited information (attendee_search)
+    + Can edit notes on an attendee (attendee_edit_notes)
 
 - 5: Director
     + Can add attendees (registration_add)
@@ -44,6 +47,7 @@ roles numerically lower on the list. (Permission names are in parenthesis)
     + Can search attendee list (attendee_search)
     + Can view reports (report_view)
     + Can edit/hide pass types (manage_pass_types)
+    + Can edit notes on an attendee (attendee_edit_notes)
   
 - 99: Super Admin
     + All rights granted by override in the hasRight() function.

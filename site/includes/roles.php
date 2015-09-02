@@ -33,6 +33,7 @@ $ROLES = array(
             'badge_print' => true,
             'attendee_search' => true,
             'badge_reprint' => true,
+            'attendee_edit_notes' => true,
         )),
     3 => array('name' => 'Manager',
         'rights' => Array(
@@ -45,11 +46,13 @@ $ROLES = array(
             'attendee_search' => true,
             'manage_staff' => true,
             'report_view' => false,
-            'manage_pass_types' => false
+            'manage_pass_types' => false,
+            'attendee_edit_notes' => true,
         )),
     4 => array('name' => 'Operations',
         'rights' => Array(
-            'attendee_search' => true
+            'attendee_search' => true,
+            'attendee_edit_notes' => true,
         )),
     5 => array('name' => 'Director',
         'rights' => Array(
@@ -62,7 +65,8 @@ $ROLES = array(
             'attendee_search' => true,
             'manage_staff' => true,
             'report_view' => true,
-            'manage_pass_types' => true
+            'manage_pass_types' => true,
+            'attendee_edit_notes' => true,
         )),
     99 => array('name' => 'Super Admin',
         'rights' => Array(
