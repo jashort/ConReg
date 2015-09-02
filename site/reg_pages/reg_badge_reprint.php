@@ -63,7 +63,7 @@ if (isset($_GET['search'])) {
         <?php while ($attendee = $attendees->fetch(PDO::FETCH_CLASS)) { ?>
           <tr>
             <td><?php echo $attendee->first_name . " " . $attendee->last_name ?></td>
-            <td><?php echo $attendee->getBirthDate(); ?></td>
+            <td><?php echo $attendee->getBirthDate(); ?> (<?php echo $attendee->getAge();?> years old)</td>
             <td><?php echo $attendee->checked_in; ?></td>
             <td><?php if ($attendee->checked_in == "Yes") { ?>
                 <form action="badgereprint.php" method="post" target="_blank">

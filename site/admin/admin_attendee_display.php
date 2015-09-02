@@ -61,7 +61,7 @@ if (isset($_GET['id'])) {
       <span class="display_text"><?php echo $attendee->phone; ?></span>
       <br />
       <label>Birth Date: </label>
-      <span class="display_text"><?php echo $attendee->getBirthDate(); ?></span>
+      <span class="display_text"><?php echo $attendee->getBirthDate(); ?> (<?php echo $attendee->getAge();?> years old)</span>
     </fieldset><br />
     <fieldset id="emergencyinfo">
       <legend>Emergency Contact Info</legend>
