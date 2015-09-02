@@ -57,6 +57,8 @@ if (isset($_GET['search'])) {
                     <th scope="col">Name</th>
                     <th scope="col">Badge Name</th>
                     <th scope="col">Checked In?</th>
+                    <th></th>
+                    <th></th>
                 </tr>
 
                 <?php while ($attendee = $attendees->fetch(PDO::FETCH_CLASS)) { ?>
@@ -64,6 +66,19 @@ if (isset($_GET['search'])) {
                         <td><a href="/admin/admin_attendee_display.php?id=<?php echo $attendee->id ?>" ><?php echo $attendee->first_name . " " . $attendee->last_name ?></a></td>
                         <td><?php echo $attendee->badge_name; ?></td>
                         <td><?php echo $attendee->checked_in; ?></td>
+                        <td><?php if (hasRight("registration_modify")) { ?>
+                                <a class="btn btn-sm btn-primary"
+                                   href="/reg_pages/reg_update.php?id=<?php echo $attendee->id?>">Edit</a>
+                            <? } ?>
+                        </td>
+                        <td><?php if (hasRight("badge_reprint") && $attendee->checked_in == "Yes") { ?>
+                                <form action="/reg_pages/badgereprint.php" method="post" target="_blank">
+                                    <input type="hidden" name="print" value="<?php echo $attendee->id?>" />
+                                    <input type="submit" id="print<?php echo $attendee->id?>" value="Reprint Badge" class="btn btn-sm btn-primary">
+                                </form>
+                            <?php } ?>
+                        </td>
+
                     </tr>
                 <?php } ?>
             </table>
