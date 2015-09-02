@@ -273,12 +273,13 @@ if (array_key_exists('action', $_GET) && $_GET['action'] == "clear") {
 
                                 </div>
                             </div>
+                            <small>Note: Attendees may not be an emergency contact for themselves</small>
                         </div>
 
                         <div class="col-md-5">
                             <legend>Parent Contact Info</legend>
                             <div class="form-group">
-                                <label for="Same" class="control-label col-sm-5">Same as Emergency Contact Info</label>
+                                <label for="Same" class="control-label col-sm-8">Same as Emergency Contact Info</label>
                                 <input name="same" id="Same" type="checkbox" class="checkbox-inline" value="Y" onClick="sameInfo();"
                                     <?php if ($_SESSION['current']->ec_same == "Y") { echo "checked"; } ?> />
                             </div>
@@ -301,7 +302,7 @@ if (array_key_exists('action', $_GET) && $_GET['action'] == "clear") {
                             </div>
 
                             <div class="form-group">
-                                <label for="PCFormVer" class="control-label col-sm-5">Parental Consent Form Received</label>
+                                <label for="PCFormVer" class="control-label col-sm-8">Parental Consent Form Received</label>
                                 <div class="col-sm-2">
                                     <input name="parent_form" type="checkbox" value="Y"
                                         <?php if ($_SESSION['current']->parent_form == "Y") { echo "checked"; } ?>
