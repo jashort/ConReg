@@ -66,10 +66,8 @@ if (isset($_GET['search'])) {
             <td><?php echo $attendee->getBirthDate(); ?> (<?php echo $attendee->getAge();?> years old)</td>
             <td><?php echo $attendee->checked_in; ?></td>
             <td><?php if ($attendee->checked_in == "Yes") { ?>
-                <form action="badgereprint.php" method="post" target="_blank">
-                  <input type="hidden" name="print" value="<?php echo $attendee->id?>" />
-                  <input type="submit" id="print<?php echo $attendee->id?>" value="Reprint Badge" class="btn btn-sm">
-                </form>
+                <a class="btn btn-sm btn-primary"
+                   href="/reg_pages/reg_update.php?id=<?php echo $attendee->id?>">Reprint Badge</a>
               <?php } ?>
             </td>
           </tr>

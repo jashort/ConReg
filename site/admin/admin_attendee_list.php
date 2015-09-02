@@ -69,13 +69,11 @@ if (isset($_GET['search'])) {
                         <td><?php if (hasRight("registration_modify")) { ?>
                                 <a class="btn btn-sm btn-primary"
                                    href="/reg_pages/reg_update.php?id=<?php echo $attendee->id?>">Edit</a>
-                            <? } ?>
+                            <?php } ?>
                         </td>
                         <td><?php if (hasRight("badge_reprint") && $attendee->checked_in == "Yes") { ?>
-                                <form action="/reg_pages/badgereprint.php" method="post" target="_blank">
-                                    <input type="hidden" name="print" value="<?php echo $attendee->id?>" />
-                                    <input type="submit" id="print<?php echo $attendee->id?>" value="Reprint Badge" class="btn btn-sm btn-primary">
-                                </form>
+                                <a class="btn btn-sm btn-primary"
+                                   href="/reg_pages/reg_update.php?id=<?php echo $attendee->id?>">Reprint Badge</a>
                             <?php } ?>
                         </td>
 

@@ -37,7 +37,7 @@ if (isset($_GET['id'])) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="../favicon.ico">
 
-  <title>Edit Attendee</title>
+  <title>Edit Attendee / Reprint Badge</title>
 
   <!-- Bootstrap core CSS -->
   <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -98,7 +98,7 @@ if (isset($_GET['id'])) {
 
   <!-- Main component for a primary marketing message or call to action -->
     <div class="jumbotron">
-        <h2>Update Attendee</h2>
+        <h2>Update Attendee / Reprint Badge</h2>
 
         <?php if (isset($_POST["action"]) && $_POST["action"] == "reprint") { ?>
             <div class="row">
@@ -314,9 +314,12 @@ if (isset($_GET['id'])) {
                 <input name="Cancel" type="button" class="btn btn-danger" onclick="cancelVerify()" value="Cancel" />
                 <input name="Update" type="submit" value="Update" class="btn btn-primary col-xs-offset-5"
                        onclick="updateClicked();" />
-                <input name="Reprint" type="submit" id="reprint" value="Reprint Badge" class="btn"
+                <input name="Reprint" type="submit" id="reprint" value="Reprint Badge" class="btn btn-primary"
                        onclick="reprintClicked();" />
             </form>
+            <small>Changing or reprinting a badge? Don't forget to put a note on the person's record for the number of
+                the reprint (first reprint free, second reprint $20, third reprint full price) and your initials
+                initials along with a date and time</small>
         <? } ?>
     </div>
 
