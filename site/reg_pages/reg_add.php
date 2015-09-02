@@ -422,7 +422,7 @@ if (array_key_exists('action', $_GET) && $_GET['action'] == "clear") {
                     if ($pass->cost != $_SESSION['current']->paid_amount) { ?>
                         <b>Manual price set: $<?php echo money_format("%i", $_SESSION['current']->paid_amount); ?>.
                             Normal price is: $<?php echo money_format("%i", $pass->cost) ?></b>
-                    <? } ?>
+                    <?php } ?>
                 </div>
             </div>
             <br>

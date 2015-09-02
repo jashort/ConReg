@@ -116,7 +116,7 @@ if (isset($_GET['id'])) {
             </div>
 
 
-        <? } else { ?>
+        <?php } else { ?>
             <form name="reg_update" action="reg_update.php" method="post" class="form-horizontal">
                 <input name="id" type="hidden" value="<?php echo $attendee->id ?>" />
                 <input name="action" id="action" type="hidden" value="update" />
@@ -320,7 +320,7 @@ if (isset($_GET['id'])) {
             <small>Changing or reprinting a badge? Don't forget to put a note on the person's record for the number of
                 the reprint (first reprint free, second reprint $20, third reprint full price) and your initials
                 initials along with a date and time</small>
-        <? } ?>
+        <?php } ?>
     </div>
 
   <?php require '../includes/template/footer.php' ?>

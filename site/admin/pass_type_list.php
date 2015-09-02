@@ -74,7 +74,7 @@ if (isset($_POST["action"])) {
                             <?php echo $passType->name ?>
                         <?php } else { ?>
                         <i><?php echo $passType->name ?></i>
-                        <? } ?>
+                        <?php } ?>
                     </td>
                     <td class="text-center">
                         <?php if ($passType->visible != "Y") { ?>
@@ -92,7 +92,7 @@ if (isset($_POST["action"])) {
                                 <input type="submit" name="Hide" value="Hide" class="btn-link" />
                             </form>
 
-                        <? } ?>
+                        <?php } ?>
                     </td>
                     <td class="text-center">
                         <?php echo $passType->getAgeRange() ?>
