@@ -2,6 +2,7 @@
 require_once('../includes/functions.php');
 
 require_once('../includes/authcheck.php');
+require_once('../includes/roles.php');
 requireRight('manage_staff');
 
 $staffList = staffList();
@@ -45,11 +46,13 @@ $staffList = staffList();
       <tr>
         <th scope="col">Name</th>
         <th scope="col">Phone Number</th>
+        <th scope="col">Access Level</th>
       </tr>
       <?php while ($staff = $staffList->fetch()) { ?>
         <tr>
           <td><?php echo $staff->first_name ?> <?php echo $staff->last_name ?></td>
           <td><?php echo $staff->phone_number ?></td>
+          <td><?php echo getRoleName($staff->access_level); ?></td>
         </tr>
       <?php } ?>
 

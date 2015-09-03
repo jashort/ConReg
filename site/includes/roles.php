@@ -89,3 +89,17 @@ function get_rights($roleID) {
         return array();
     }
 }
+
+/**
+ * Returns the name of the given role, or an empty string if not found
+ * @param int $roleID
+ * @return string
+ */
+function getRoleName($roleID) {
+    global $ROLES;
+    if (array_key_exists($roleID, $ROLES)) {
+        return $ROLES[$roleID]['name'];
+    } else {
+        return "";
+    }
+}
