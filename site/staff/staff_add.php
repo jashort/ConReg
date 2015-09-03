@@ -30,6 +30,23 @@ if (isset($_POST["create"])) {
   <!-- Custom styles for this template -->
   <link href="../assets/css/navbar-fixed-top.css" rel="stylesheet">
 
+  <script type="text/javascript">
+    function autoFill() {
+      // Auto fill the initials and username based on the first and last name
+      var first = document.getElementById("First Name");
+      var last = document.getElementById("last_name");
+      var initials = document.getElementById("initials");
+      var username = document.getElementById("username");
+      if (first.value != "" && last.value != "") {
+        if (initials.value == "") {
+          initials.value = first.value.charAt(0).toUpperCase() + last.value.charAt(0).toUpperCase();
+        }
+        if (username.value == "") {
+          username.value = first.value.charAt(0).toLowerCase() + last.value.toLowerCase();
+        }
+      }
+    }
+  </script>
 
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
   <!--[if lt IE 9]>
@@ -52,31 +69,36 @@ if (isset($_POST["create"])) {
       <div class="form-group">
         <label for="First Name" class="col-sm-2 control-label">First Name</label>
         <div class="col-sm-4">
-          <input type="text" class="form-control" name="first_name" id="First Name" placeholder="First Name" maxlength="60" required="required">
+          <input type="text" class="form-control" name="first_name" id="First Name"  autofocus="autofocus"
+                 placeholder="First Name" maxlength="60" required="required" onchange="autoFill()" autocomplete="off">
         </div>
       </div>
       <div class="form-group">
         <label for="last_name" class="col-sm-2 control-label">Last Name</label>
         <div class="col-sm-4">
-          <input type="text" class="form-control" name="last_name" id="last_name" placeholder="Last Name" maxlength="60" required="required">
+          <input type="text" class="form-control" name="last_name" id="last_name" placeholder="Last Name"
+                 maxlength="60" required="required" onchange="autoFill()" autocomplete="off">
         </div>
       </div>
       <div class="form-group">
         <label for="initials" class="col-sm-2 control-label">Initials</label>
         <div class="col-sm-4">
-          <input type="text" class="form-control" name="initials" id="initials" placeholder="Initials" maxlength="3" required="required">
+          <input type="text" class="form-control" name="initials" id="initials" placeholder="Initials"
+                 maxlength="3" required="required" autocomplete="off">
         </div>
       </div>
       <div class="form-group">
         <label for="username" class="col-sm-2 control-label">Username</label>
         <div class="col-sm-4">
-          <input type="text" class="form-control" name="username" id="username" placeholder="Username" maxlength="60" required="required">
+          <input type="text" class="form-control" name="username" id="username" placeholder="Username"
+                 maxlength="60" required="required" autocomplete="off">
         </div>
       </div>
       <div class="form-group">
         <label for="cellnumber" class="col-sm-2 control-label">Cell Phone Number</label>
         <div class="col-sm-4">
-          <input type="tel" class="form-control" name="phone_number" id="cellnumber" placeholder="xxx-xxx-xxxx" pattern="^\d{3}-?\d{3}-?\d{4}$">
+          <input type="tel" class="form-control" name="phone_number" id="cellnumber" placeholder="xxx-xxx-xxxx"
+                 pattern="^\d{3}-?\d{3}-?\d{4}$" autocomplete="off">
         </div>
       </div>
       <div class="form-group">
