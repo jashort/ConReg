@@ -38,6 +38,11 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Finish")) {
             $notes .= "\n---" . "The Credit Card Authorization Number is: " . $_POST["AuthDisplay"];
         }
     }
+    if (isset($_POST["CheckNumber"]) && $_POST["CheckNumber"] != "") {
+        if (strpos($notes, (string)$_POST["CheckNumber"]) === false) {
+            $notes .= "\n---" . "The Check Number is: " . $_POST["CheckNumber"];
+        }
+    }
     orderPaid($orderId, $_POST["PayType"], $_POST["total"], $notes);
 
     foreach ($_SESSION["currentOrder"] as $attendee) {
@@ -92,7 +97,11 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Finish")) {
                 document.getElementById("AuthDisplay").required = true;
             } else {
                 document.getElementById("AuthDisplay").required = false;
-                
+            }
+            if (document.getElementById("Check").checked) {
+                document.getElementById("CheckNumber").required = true;
+            } else {
+                document.getElementById("CheckNumber").required = false;
             }
         }
         function clearVerify() {
@@ -189,6 +198,7 @@ if ((isset($_POST["action"])) && ($_POST["action"] == "Finish")) {
                     <br />
                     <input type="radio" name="PayType" value="Check" id="Check" onchange="requireCreditField();" />
                     <label for="Check" class="control-label">Check</label>
+                    <input name="CheckNumber" type="text" id="CheckNumber" pattern="[0-9]{0,10}" /> (check number)
                     <br />
                     <input type="radio" name="PayType" value="Money Order" id="Money Order" onchange="requireCreditField();" />
                     <label for="Money Order" class="control-label">Money Order</label>
