@@ -473,6 +473,22 @@ function attendeeSearch($searchString) {
     return $stmt;
 }
 
+/**
+ * Update the notes field for the given attendee
+ * @param int $id
+ * @param string $notes
+ */
+function attendeeUpdateNotes($id, $notes) {
+	global $conn;
+
+	try {
+		$stmt = $conn->prepare("UPDATE attendees SET notes = :notes WHERE id = :id");
+		$stmt->execute(array('notes' => $notes, 'id' => $id));
+	} catch(PDOException $e) {
+		die('ERROR: ' . $e->getMessage());
+	}
+}
+
 
 /**
  * Search pre-registered attendees by first name, last name, or order ID
