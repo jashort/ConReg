@@ -27,7 +27,7 @@ if (isset($_POST["action"])) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Update User</title>
+    <title>Update Pass Types</title>
 
     <!-- Bootstrap core CSS -->
     <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
