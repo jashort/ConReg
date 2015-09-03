@@ -556,10 +556,11 @@ function staffUpdate($staff) {
 
 	try {
 		$stmt = $conn->prepare("UPDATE reg_staff SET first_name = :fname, last_name = :lname, initials = :initials,
-								phone_number = :cell, access_level=:access, enabled=:enabled WHERE staff_id=:id");
+								username = :username, phone_number = :cell, access_level=:access, enabled=:enabled WHERE staff_id=:id");
 		$stmt->execute(array('fname' => $staff->first_name,
 			'lname' => $staff->last_name,
 			'initials' => $staff->initials,
+			'username' => $staff->username,
 			'cell' => $staff->phone_number,
 			'access' => $staff->access_level,
 			'enabled' => $staff->enabled,

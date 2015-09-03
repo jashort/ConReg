@@ -91,7 +91,7 @@ if (isset($_GET['staff_id'])) {
                 <label for="username" class="col-sm-2 control-label">Username</label>
                 <div class="col-sm-4">
                     <input type="text" class="form-control" name="username" id="username" 
-                           placeholder="Username" maxlength="60" required="required" readonly="readonly"
+                           placeholder="Username" maxlength="60" required="required"
                            value="<?php echo $staff->username; ?>">
                 </div>
             </div>
