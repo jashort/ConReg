@@ -899,7 +899,7 @@ function passTypeUpdate($passType) {
 function passTypeList(){
 	global $conn;
 
-	$stmt = $conn->prepare("SELECT * FROM pass_types ORDER BY min_age DESC, name");
+	$stmt = $conn->prepare("SELECT * FROM pass_types ORDER BY day_text DESC, min_age DESC, name");
 	$stmt->execute();
 	$stmt->setFetchMode(PDO::FETCH_CLASS, "PassType");
 	return $stmt;
