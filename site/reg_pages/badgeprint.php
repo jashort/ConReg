@@ -1,6 +1,6 @@
 <?php
 require_once('../includes/functions.php');
-
+require_once('../includes/printers.php');
 require_once('../includes/authcheck.php');
 requireRight('badge_print');
 
@@ -21,7 +21,7 @@ if (isset($_POST['print'])) {
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="icon" href="../favicon.ico">
         <title></title>
-        <link href="../assets/css/badge.css" rel="stylesheet">
+        <link href="../assets/css/<?php echo getBadgeStylesheet(); ?>" rel="stylesheet">
 	</head>
 	<body>
 	<?php
