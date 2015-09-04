@@ -84,6 +84,7 @@ if (isset($_POST['username'])) {
 		</form>
 	</div>
 
+
 	<?php require 'includes/template/footer.php' ?>
 
 </div> <!-- /container -->
