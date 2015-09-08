@@ -4,7 +4,9 @@
 
 $PRINTERS = array(
     "default" => "badge.css",
-    "10.0.2.2" => "newbadge.css"
+    "10.0.2.2" => "newbadge.css",
+    "10.0.30.46" => "badge-inkjet.css",
+    "10.0.30.30" => "badge-inkjet.css"
 );
 
 

@@ -1,0 +1,84 @@
+/* CSS for printing badges on half sheets */
+@media screen, print {
+    .spacer {  /* Without this spacer div, badge wouldn't be in the correct spot on pages 2+
+                  absolute positioning didn't work in Firefox. */
+        height: 0.9in;
+        width: 5in;
+    }
+
+    .badge {
+        position: relative;
+        margin-left: 2.05in;
+        width: 4in;
+        height: 3in;
+        padding: 0;
+        white-space: nowrap;
+        page-break-after: always;
+        font-family: "Copperplate Gothic Bold", serif;
+    }
+
+    .colorbar {
+        position: absolute;
+        top: -.1in; /* Overprint the edges of the badge */
+        left: -.1in;
+        right: 0.55in;
+        bottom: .1in;
+        width: 0.66in;
+        height: 3.327in;
+        color: #FFFFFF;
+        word-break: break-all;
+        white-space: normal;
+        text-align: center;
+        vertical-align: middle;
+        text-transform: uppercase;
+        padding-top:.6em;
+    }
+
+    .colorbarText {
+        font-weight: bold;
+        font-size: 3.1em;
+        text-align: center;
+        text-shadow:
+        -1px -1px 0 #000,
+        1px -1px 0 #000,
+        -1px 1px 0 #000,
+        1px 1px 0 #000;
+    }
+
+    .name {
+        position: absolute;
+        top: 0.965in;
+        left: 1.3in;
+        font-size: 24px;
+    }
+
+    .smallName {
+        position: absolute;
+        top: 1.45in;
+        left: 1.5in;
+        font-size: 20px;
+    }
+
+    .badgeNumber {
+        top: 2.6in;
+        left: 3in;
+        position: absolute;
+        font-size: 14px;
+        color: black;
+    }
+
+    .dayText {
+        position: absolute;
+        top: 2.8in;
+        left: 1.8125in;
+        width: 2.125in;
+        height: .1875in;
+        text-align: center;
+        font-size: 18px;
+    }
+
+    @page {
+        size: 8.5in 5.5in;  /* width height -- landscape page half sheet */
+        margin: 0;
+    }
+}
