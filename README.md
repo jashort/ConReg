@@ -3,6 +3,8 @@ ConReg
 
 Convention attendee management software (registration/check in)
 
+Superseded by [KumoReg](http://github.com/jashort/kumoreg/)
+
 - Pre-registration check in and badge printing
 - At-con registration and badge printing
 - Attendee search for operations
